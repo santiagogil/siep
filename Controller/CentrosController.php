@@ -90,7 +90,7 @@ class CentrosController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Centro->read(null, $id);
 		}
-		$empleados = $this->Centro->Empleado->find('list');
+		$empleados = $this->Centro->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado')));
 		$this->set(compact('empleados'));
 	}
 

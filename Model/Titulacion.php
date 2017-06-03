@@ -4,17 +4,7 @@ class Titulacion extends AppModel {
     var $displayField = 'nombre';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-	var $belongsTo = array(
-		'Centro' => array(
-			'className' => 'Centro',
-			'foreignKey' => 'centro_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
-
-  var $hasMany = array(
+	var $hasMany = array(
 		'Disenocurricular' => array(
       'className' => 'Disenocurricular',
       'foreignKey' => 'titulacion_id',
@@ -34,7 +24,25 @@ class Titulacion extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		)
+		),
+  );
+
+  var $hasAndBelongsToMany = array(
+    'Centro' => array(
+      'className' => 'Centro',
+      'joinTable' => 'centros_titulacions',
+      'foreignKey' => 'titulacion_id',
+      'associationForeignKey' => 'centro_id',
+      'unique' => true,
+      'conditions' => '',
+      'fields' => '',
+      'order' => '',
+      'limit' => '',
+      'offset' => '',
+      'finderQuery' => '',
+      'deleteQuery' => '',
+      'insertQuery' => ''
+    )
   );
 
 	//Validaciones

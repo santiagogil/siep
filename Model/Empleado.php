@@ -124,7 +124,7 @@ class Empleado extends AppModel {
 			'finderQuery' => '',
 			'deleteQuery' => '',
 			'insertQuery' => ''
-		),
+		)
 );		
 		
 	//Validaciones

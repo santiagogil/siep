@@ -1,17 +1,28 @@
 <?php
 class TitulacionsController extends AppController {
 
-	var $name = 'Titulacions';
-    var $helpers = array('Session');
-	var $components = array('Auth','Session');
+	public $name = 'Titulacions';
+    public $helpers = array('Session');
+	public $components = array('Auth','Session');
 	var $paginate = array('Titulacion' => array('limit' => 4, 'order' => 'Titulacion.nombre DESC'));
+
+    function beforeFilter(){
+	    parent::beforeFilter();
+		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
+        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
+	        $this->Auth->allow();
+	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	        $this->Auth->allow('index', 'view');
+	    }
+    }	
 
 	function index() {
 		$this->Titulacion->recursive = -1;
 		$titulacions = $this->Titulacion->find('list', array('fields'=>array('id', 'nombre')));
 		$userCentroId = $this->getUserCentroId();
 		if($this->Auth->user('role') === 'admin') {
-			$this->paginate['Titulacion']['conditions'] = array('Titulacion.centro_id' => $userCentroId);
+			$this->paginate['Titulacion']['conditions'] = array('Titulacion.nombre' => $userCentroId);
 		}
 
 		$this->redirectToNamed();
@@ -22,11 +33,7 @@ class TitulacionsController extends AppController {
 		}
 		$titulacions = $this->paginate('Titulacion', $conditions);
 		
-		$this->loadModel('Centro');
-		$centrosId = $this->Titulacion->find('list', array('fields'=>array('centro_id')));
-        $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
-		$this->set(compact('titulacions', 'centros'));
-
+		$this->set(compact('titulacions'));
 	}
 
 	function view($id = null) {
@@ -34,7 +41,13 @@ class TitulacionsController extends AppController {
 			$this->Session->setFlash(__('Titulación no valida.'));
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->set('titulacions', $this->Titulacion->read(null, $id));
+		$this->set('titulacion', $this->Titulacion->read(null, $id));
+		
+		$resolucionsId = $this->Titulacion->Disenocurricular->find('list', array('fields'=>array('resolucion_id')));
+        $this->loadModel('Resolucion');
+        $resolucions = $this->Resolucion->find('list', array('fields'=>array('numero_completo_resolucion'), 'conditions' => array('id' => $resolucionsId)));
+		
+		$this->set(compact('resolucions'));	
 	}
 
 	function add() {
@@ -45,6 +58,7 @@ class TitulacionsController extends AppController {
 		  }
 		  if (!empty($this->data)) {
 		    $this->Titulacion->create();
+			
 			if ($this->Titulacion->save($this->data)) {
 				$this->Session->setFlash('La titulacion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));

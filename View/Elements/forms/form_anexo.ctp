@@ -12,6 +12,12 @@
 		 	echo $this->Form->input('numero', array('label'=>'Número', 'between' => '<br>', 'class' => 'form-control'));
 		 	echo $this->Form->input('anio', array('label'=>'Anio', 'between' => '<br>', 'class' => 'form-control'));
 		 	echo $this->Form->input('resolucion_id', array('label' => 'Resolución N°*', 'empty' => 'Ingrese una resolución...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+		?>
+		</div>
+	</div>
+	<div class="col-md-6 col-sm-6 col-xs-12">
+  		<div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />	
+  	  	<?php
 		 	echo $this->Form->input('descripcion', array('label'=>'Descripción', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control'));
 		 	echo $this->Form->input('documento', array('label' => 'Documento', 'type' => 'file', 'class' => 'file', 'data-show-upload' => 'false', 'data-show-caption' => 'true'));
         ?>

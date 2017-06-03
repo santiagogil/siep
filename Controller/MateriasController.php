@@ -68,7 +68,7 @@ class MateriasController extends AppController {
 
 	public function view($id = null) {
 		if (!$id) {
-			$this->Session->setFlash(__('Materia no valida.'));
+			$this->Session->setFlash(__('Unidad no valida.'));
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('materia', $this->Materia->read(null, $id));
@@ -77,13 +77,20 @@ class MateriasController extends AppController {
 		$horarioCicloId = $this->Materia->Horario->find('list', array('fields'=>array('ciclo_id')));
 		$this->loadModel('Ciclo');
 		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions'=>array('id'=>$horarioCicloId)));
+		
 		$horarioMateriaId = $this->Materia->Horario->find('list', array('fields'=>array('materia_id')));
 		$this->loadModel('Materia');
 		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$horarioMateriaId)));
+		
 		$inscripcionAlumnoId = $this->Materia->Inscripcion->find('list', array('fields'=>array('alumno_id')));
 		$this->loadModel('Alumno');
 		$alumnoNombre = $this->Alumno->find('list', array('fields'=>array('nombre_completo_alumno'), 'conditions'=>array('id'=>$inscripcionAlumnoId)));
-		$this->set(compact('cicloNombre', 'materiaAlia', 'alumnoNombre'));
+		
+		$disenocurricularId = $this->Materia->find('list', array('fields'=>array('disenocurricular_id')));
+		$this->loadModel('Disenocurricular');
+		$disenocurriculars = $this->Disenocurricular->find('list', array('fields'=>array('anio'), 'conditions'=>array('id'=>$disenocurricularId))); 
+		
+		$this->set(compact('cicloNombre', 'materiaAlia', 'alumnoNombre', 'disenocurriculars'));
 	}
 
 	
@@ -122,11 +129,11 @@ class MateriasController extends AppController {
 			$this->Materia->create();
 			
 			if ($this->Materia->save($this->request->data)) {
-				$this->Session->setFlash('El espacio ha sido grabado', 'default', array('class' => 'alert alert-success'));
+				$this->Session->setFlash('La unidad ha sido grabada', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Materia->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
-				$this->Session->setFlash('El espacio no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash('La unidad no fue grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
         $cursos = $this->Materia->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
@@ -135,7 +142,7 @@ class MateriasController extends AppController {
 	
 	public function edit($id = null) {
 		if (!$id && empty($this->data)) {
-			$this->Session->setFlash('Materia no valida.', 'default', array('class' => 'alert alert-warning'));
+			$this->Session->setFlash('Unidad no valida.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
@@ -145,32 +152,35 @@ class MateriasController extends AppController {
                 $this->redirect( array( 'action' => 'index' ));
 		  }
 		  if ($this->Materia->save($this->data)) {
-				$this->Session->setFlash('La materia ha sido grabada.', 'default', array('class' => 'alert alert-success'));
+				$this->Session->setFlash('La unidad ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
 				$inserted_id = $this->Materia->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
-				$this->Session->setFlash('La materia no ha sido grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash('La unidad no ha sido grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		if (empty($this->data)) {
 			$this->data = $this->Materia->read(null, $id);
 		}
+		$disenocurricularId = $this->Materia->find('list', array('fields'=>array('disenocurricular_id')));
+		$this->loadModel('Disenocurricular');
+		$disenocurriculars = $this->Disenocurricular->find('list', array('fields'=>array('anio'), 'conditions'=>array('id'=>$disenocurricularId)));
 		$cursos = $this->Materia->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
-		$this->set(compact('cursos', 'alumnos'));
+		$this->set(compact('disenocurriculars', 'alumnos'));
 	}
    
 
 	public function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash('Id no valido para materia.', 'default', array('class' => 'alert alert-warning'));
+			$this->Session->setFlash('Id no valido para unidad.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
 		}
 		if ($this->Materia->delete($id)) {
-			$this->Session->setFlash('La materia ha sido borrada.', 'default', array('class' => 'alert alert-success'));
+			$this->Session->setFlash('La unidad ha sido borrada.', 'default', array('class' => 'alert alert-success'));
 			$this->redirect(array('action'=>'index'));
 		}
-		$this->Session->setFlash('Materia no fue borrada.', 'default', array('class' => 'alert alert-danger'));
+		$this->Session->setFlash('Unidad no fue borrada.', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
 }

@@ -98,7 +98,9 @@ class DisenoCurricularsController extends AppController {
 				$this->Session->setFlash('El diseño curricular no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$resolucions = $this->Disenocurricular->Resolucion->find('list');
+		$resolucionId = $this->Disenocurricular->find('list', array('fields'=>array('resolucion_id')));
+        $this->loadModel('Resolucion');
+        $resolucions = $this->Resolucion->find('list', array('fields'=>array('numero_completo_resolucion')));
 		$titulacions = $this->Disenocurricular->Titulacion->find('list');
 		$this->set(compact('resolucions', 'titulacions'));
 	}
@@ -133,7 +135,9 @@ class DisenoCurricularsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Disenocurricular->read(null, $id);
 		}
-		$resolucions = $this->Disenocurricular->Resolucion->find('list');
+		$resolucionId = $this->Disenocurricular->find('list', array('fields'=>array('resolucion_id')));
+        $this->loadModel('Resolucion');
+        $resolucions = $this->Resolucion->find('list', array('fields'=>array('numero_completo_resolucion')));
 		$titulacions = $this->Disenocurricular->Titulacion->find('list');
 		$this->set(compact('resolucions', 'titulacions'));
 	}

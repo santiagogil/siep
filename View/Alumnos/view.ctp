@@ -61,10 +61,10 @@
       <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['Alumno']['id'])); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['Alumno']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['Alumno']['nombre_completo_alumno'])); ?></div>
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add', $alumno['Alumno']['id'])); ?></div>-->
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
+        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>-->
+        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add', $alumno['Alumno']['id'])); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
+        <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Calificación'), array('controller' => 'notas', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Inasistencia'), array('controller' => 'inasistencias', 'action' => 'add')); ?></div>-->
       <?php endif; ?>	
@@ -72,7 +72,7 @@
   </div>
 </div> 
 <!-- end main -->
-<!-- Familiares Relacionados 
+<!-- Familiares Relacionados -->
 <div id="click_01" class="titulo_acordeon">Familiares Relacionadas <span class="caret"></span></div>
 <div id="acordeon_01">
 	<div class="row">
@@ -83,10 +83,10 @@
                 <div class="unit">
                     <?php echo '<b>Vinculo:</b> '.$familiar['vinculo'];?><br>
                     <?php echo '<b>Nombre:</b> '.$familiar['nombre_completo'];?><br>
-                    <!--<?php echo '<b>Cuil/Cuit:</b> '.$familiar['cuit_cuil'];?><br>
+                    <?php echo '<b>Cuil/Cuit:</b> '.$familiar['cuit_cuil'];?><br>
                     <?php echo '<b>Telefono:</b> '.$familiar['telefono_nro'];?><br>
                     <?php echo '<b>Email:</b> '.$familiar['email'];?><br>
-                    <?php echo '<b>Domicilio:</b> '.$familiar['domicilio'];?><br>
+                    <!--<?php echo '<b>Domicilio:</b> '.$familiar['domicilio'];?><br>-->
                 <div class="text-right">
                     <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $familiar['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
                     <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $familiar['id']), array('class' => 'btn btn-success','escape' => false)); ?>
@@ -94,7 +94,7 @@
                 </div>
 		    </div>
 	    </div>
-	       <?php endforeach; ?>
+	    <?php endforeach; ?>
     </div>
 	<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
     <?php endif; ?>
@@ -107,37 +107,37 @@
 		<div class="row">
 			<?php if (!empty($alumno['Inscripcion'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
-	<?php foreach ($alumno['Inscripcion'] as $inscripcion):	?>
-	<div class="col-md-4">
-		<div class="unit">
-			<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
-			<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
-			<!--<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>-->
-			<?php echo '<b>Fecha de alta:</b> '.$this->Html->formatTime($inscripcion['fecha_alta']);?><br>
-			<!--<?php echo '<b>Cursa:</b> '.$inscripcion['cursa'];?><br>
-            <?php echo '<b>Fecha de baja:</b> '.$this->Html->formatTime($inscripcion['fecha_baja']);?><br>
-			<?php echo '<b>Tipo de baja:</b> '.$inscripcion['tipo_baja'];?><br>
-            <?php echo '<b>Fecha de egreso:</b> '.$this->Html->formatTime($inscripcion['fecha_egreso']);?><br>
-            <!--<?php echo '<b>Nota:</b> '.$inscripcion['nota'];?><br>-->
-            <b>Estado:</b> <?php if($inscripcion['estado'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado']; ?></span><?php } ?></br>
-            <hr>
-            <div class="text-right">
-            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-            <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
-            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
-			<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
-			<?php endif; ?>
+				<?php foreach ($alumno['Inscripcion'] as $inscripcion):	?>
+			<div class="col-md-4">
+				<div class="unit">
+					<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
+					<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
+					<!--<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>-->
+					<?php echo '<b>Fecha de alta:</b> '.$this->Html->formatTime($inscripcion['fecha_alta']);?><br>
+					<!--<?php echo '<b>Cursa:</b> '.$inscripcion['cursa'];?><br>
+		            <?php echo '<b>Fecha de baja:</b> '.$this->Html->formatTime($inscripcion['fecha_baja']);?><br>
+					<?php echo '<b>Tipo de baja:</b> '.$inscripcion['tipo_baja'];?><br>
+		            <?php echo '<b>Fecha de egreso:</b> '.$this->Html->formatTime($inscripcion['fecha_egreso']);?><br>
+		            <!--<?php echo '<b>Nota:</b> '.$inscripcion['nota'];?><br>-->
+		            <b>Estado:</b> <?php if($inscripcion['estado'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado']; ?></span><?php } ?></br>
+		            <hr>
+		            <div class="text-right">
+			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+			            <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+						<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+						<?php endif; ?>
+					</div>
+				</div>
 			</div>
+			<?php endforeach; ?>
 		</div>
-	</div>
-		<?php endforeach; ?>
-			</div>
 		<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
 		<?php endif; ?>
 	</div>
 </div>
 <!-- end Inscripciones Relacionadas -->
-<!-- Integraciones Relacionadas 
+<!-- Integraciones Relacionadas -->
 	<div id="click_03" class="titulo_acordeon">Integraciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_03">
 		<div class="row">
@@ -146,12 +146,11 @@
 	<?php foreach ($alumno['Integracion'] as $integracion):	?>
 	<div class="col-md-6">
 		<div class="unit">
-			<!--<?php echo '<b>Ciclo ID:</b> '.($this->Html->link($integracion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $integracion['ciclo_id'])));?><br>
+			<?php echo '<b>Ciclo ID:</b> '.($this->Html->link($integracion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $integracion['ciclo_id'])));?><br>
 			<?php echo '<b>Centro integrador:</b> '.($this->Html->link($integracion['centro_id'], array('controller' => 'centros', 'action' => 'view', $integracion['centro_id'])));?><br>
 			<?php echo '<b>Docente integrador:</b> '.$integracion['docente_nombre_completo'];?><br>
 			<?php echo '<b>Fecha de inicio:</b> '.$this->Html->formatTime($integracion['fecha_inicio']);?><br>
             <?php echo '<b>Fecha de fin:</b> '.$this->Html->formatTime($integracion['fecha_fin']);?><br>
-
             <div class="text-right">
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'integracions', 'action' => 'edit', $integracion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
 			<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'integracions', 'action' => 'view', $integracion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
@@ -165,8 +164,8 @@
 		<?php endif; ?>
 	</div>
 </div>
-<!-- end Integraciones Relacionadas 
-<!-- Servicios Complementarios Relacionadas 
+<!-- end Integraciones Relacionadas -->
+<!-- Servicios Complementarios Relacionadas -->
 	<div id="click_04" class="titulo_acordeon">Servicios Complementarios Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_04">
 		<div class="row">
@@ -175,13 +174,12 @@
 	<?php foreach ($alumno['Servicio'] as $servicio): ?>
 	<div class="col-md-6">
 		<div class="unit">
-			<!--<?php echo '<b>Ciclo ID:</b> '.($this->Html->link($servicio['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $servicio['ciclo_id'])));?><br>
+			<?php echo '<b>Ciclo ID:</b> '.($this->Html->link($servicio['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $servicio['ciclo_id'])));?><br>
 			<?php echo '<b>Tipo:</b> '.$servicio['tipo_servicio'];?><br>
-			<!--<?php echo '<b>Estado:</b> '.$servicio['estado'];?><br>
-			<!--<?php echo '<b>Docente/Profesional a cargo:</b> '.$servicio['docente_profesional_acargo'];?><br>
+			<?php echo '<b>Estado:</b> '.$servicio['estado'];?><br>
+			<?php echo '<b>Docente/Profesional a cargo:</b> '.$servicio['docente_profesional_acargo'];?><br>
             <?php echo '<b>Fecha de alta:</b> '.$this->Html->formatTime($servicio['fecha_alta']);?><br>
             <?php echo '<b>Fecha de baja:</b> '.$this->Html->formatTime($servicio['fecha_baja']);?><br>
-
             <div class="text-right">
             <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-edit"></i>'), array('controller' => 'servicios', 'action' => 'edit', $servicio['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
 			<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'servicios', 'action' => 'view', $servicio['id']), array('class' => 'btn btn-success','escape' => false)); ?>
@@ -195,8 +193,8 @@
 		<?php endif; ?>
 	</div>
 </div>
-<!-- end Servicios Complementarios Relacionadas 
-<!-- Inasistencias Relacionadas 
+<!-- end Servicios Complementarios Relacionadas -->
+<!-- Inasistencias Relacionadas --> 
 	<div id="click_06" class="titulo_acordeon">Inasistencias Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_06">
 		<div class="row">
@@ -205,16 +203,15 @@
 	<?php foreach ($alumno['Inasistencia'] as $inasistencia): ?>
 	<div class="col-md-6">
 		<div class="unit">
-			<!--<?php echo '<b>Ciclo Id:</b> '.($this->Html->link($inasistencia['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inasistencia['ciclo_id'])));?><br>
+			<?php echo '<b>Ciclo Id:</b> '.($this->Html->link($inasistencia['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inasistencia['ciclo_id'])));?><br>
 			<?php echo '<b>Tipo:</b> '. $inasistencia['tipo'];?><br>
 			<?php echo '<b>Causa:</b> '.$inasistencia['causa'];?><br>
             <?php echo '<b>Justificado:</b> '.$inasistencia['justificado'];?><br>
             <?php echo '<b>Fecha:</b> '.$this->Html->formatTime($inasistencia['created']);?><br>
-
             <div class="text-right">
-            <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-edit"></I>'), array('controller' => 'inasistencias', 'action' => 'edit', $inasistencia['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
-			<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inasistencias', 'action' => 'view', $inasistencia['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-			<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-trash"></i>'), array('controller' => 'inasistencias', 'action' => 'delete', $inasistencia['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+	            <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-edit"></I>'), array('controller' => 'inasistencias', 'action' => 'edit', $inasistencia['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+				<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inasistencias', 'action' => 'view', $inasistencia['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+				<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-trash"></i>'), array('controller' => 'inasistencias', 'action' => 'delete', $inasistencia['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
 			</div>
 		</div>
 	</div>
@@ -224,15 +221,15 @@
 		<?php endif; ?>
 	</div>
 </div>
-<!-- end Inasistencias Relacionadas 
-<!-- Calificaciones Relacionadas 
+<!-- end Inasistencias Relacionadas -->
+<!-- Calificaciones Relacionadas -->
 <div id="click_05" class="titulo_acordeon">Calificaciones Relacionadas 
 	<span class="caret"></span>
 </div>
 <div id="acordeon_05">
 	<div class="row">
 		<?php if (!empty($alumno['Nota'])):?>
-  	<!-- Swiper 
+  	<!-- Swiper -->
 	    <div class="swiper-container" style="height: 200px;">
     	    <div class="swiper-wrapper" >
 				<?php foreach ($alumno['Nota'] as $nota): ?>
@@ -252,16 +249,16 @@
             </div>
 		<?php endforeach; ?>
 	</div>
-	<!-- Add Pagination 
+	<!-- Add Pagination --> 
     <div class="swiper-pagination"></div>
-    <!-- Include plugin after Swiper 
+    <!-- Include plugin after Swiper --> 
 	<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
 	<?php endif; ?>
     </div>
   </div>
-<!-- end Calificaciones Relacionadas 
+<!-- end Calificaciones Relacionadas -->
 </div>
-    <!-- Initialize Swiper -->
+<!-- Initialize Swiper -->
     <script>
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',

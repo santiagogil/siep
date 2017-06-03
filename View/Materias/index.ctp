@@ -1,5 +1,5 @@
 <!-- start main -->
-<div class="TituloSec">Espacios Curriculares</div>
+<div class="TituloSec">Unidades Curriculares</div>
 <div id="ContenidoSec">
     <div id="main">
     <!-- start second nav -->

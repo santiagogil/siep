@@ -49,7 +49,7 @@
 </div>
 <!-- end main -->
 <!-- Espacios Relacionados -->
-<div id="click_03" class="titulo_acordeon">Espacios Relacionados <span class="caret"></span></div>
+<div id="click_03" class="titulo_acordeon">Unidades Curriculares Relacionadas <span class="caret"></span></div>
 <div id="acordeon_03">
     <div class="row">
   <?php if (!empty($disenocurricular['Materia'])):?>

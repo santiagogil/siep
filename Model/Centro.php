@@ -57,19 +57,6 @@ class Centro extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'Titulacion' => array(
-			'className' => 'Titulacion',
-			'foreignKey' => 'centro_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
 		'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'centro_id',
@@ -86,11 +73,26 @@ class Centro extends AppModel {
 	);
 
 	var $hasAndBelongsToMany = array(
-		'Empleado' => array(
+				'Empleado' => array(
 			'className' => 'Empleado',
 			'joinTable' => 'centros_empleados',
 			'foreignKey' => 'centro_id',
 			'associationForeignKey' => 'empleado_id',
+			'unique' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		),
+		'Titulacion' => array(
+			'className' => 'Titulacion',
+			'joinTable' => 'centros_titulacions',
+			'foreignKey' => 'centro_id',
+			'associationForeignKey' => 'titulacion_id',
 			'unique' => true,
 			'conditions' => '',
 			'fields' => '',

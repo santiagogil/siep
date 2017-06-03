@@ -29,109 +29,106 @@ class Familiar extends AppModel {
   //Validaciones
 
         var $validate = array(
-                   'vinculo' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),                          
-                           'allowEmpty' => false,
-                           'message' => 'Indicar una de las opciones de la lista.'
-                           )
-                   ),
-				   'nombre_completo' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un nombre.'
-                           )
+          'vinculo' => array(
+              'minLength' => array(
+                'rule' => array('minLength',5),                          
+                'allowEmpty' => false,
+                'message' => 'Indicar una de las opciones de la lista.'
+                )
+          ),
+				  'nombre_completo' => array(
+                'required' => array(
+    					    'rule' => 'notBlank',
+                  'required' => 'create',
+  						    'message' => 'Indicar un nombre.'
+                )
 					),
-				   'cuit_cuil' => array(
-                          'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un CUIT/CUIL.'
-                           ),
-                           'maxlength' => array(
-                           'rule' => array('maxLength',11),
-                           'allowEmpty' => false,
-                           'message' => 'Indicar sin puntos ni espacios.'
-                           ),
+				  'cuit_cuil' => array(
+                'required' => array(
+    						    'rule' => 'notBlank',
+                    'required' => 'create',
+    						    'message' => 'Indicar un CUIT/CUIL.'
+                ),
+                'maxlength' => array(
+                    'rule' => array('maxLength',11),
+                    'allowEmpty' => false,
+                    'message' => 'Indicar sin puntos ni espacios.'
+                ),
 						   'isUnique' => array(
-	                       'rule' => 'isUnique',
-	                       'message' => 'Este CUIT/CUIL esta siendo usado.'
-	                     )
-                   ),
-				   'ocupacion' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar una ocupación.'
-                           )
-                   ),
-				   'lugar_de_trabajo' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un lugar de trabajo.'
-                           )
-                   ),
+	                  'rule' => 'isUnique',
+	                  'message' => 'Este CUIT/CUIL esta siendo usado.'
+	              )
+            ),
+				    'ocupacion' => array(
+                'required' => array(
+  						    'rule' => 'notBlank',
+                  'required' => 'create',
+  						    'message' => 'Indicar una ocupación.'
+                )
+            ),
+				    'lugar_de_trabajo' => array(
+                'required' => array(
+    						    'rule' => 'notBlank',
+                    'required' => 'create',
+    						    'message' => 'Indicar un lugar de trabajo.'
+                )
+            ),
 				   'nacionalidad' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar una nacionalidad.'
-                           )
-                   ),
+                'required' => array(
+  						    'rule' => 'notBlank',
+                  'required' => 'create',
+  						    'message' => 'Indicar una nacionalidad.'
+                )
+            ),
 				   'telefono_nro' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un nº de teléfono.'
-                           )
-                   ),
-                   'email' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un email.'
-                           ),
+                'required' => array(
+  						    'rule' => 'notBlank',
+                  'required' => 'create',
+  						    'message' => 'Indicar un nº de teléfono.'
+                )
+            ),
+            'email' => array(
+                'required' => array(
+    						    'rule' => 'notBlank',
+                    'required' => 'create',
+    						    'message' => 'Indicar un email.'
+                ),
 						   'email' => array(
-                           'rule' => 'email',
-                           'allowEmpty' => true,
-                           'message' => 'Indicar un email válido.'
-                           ),
-                   ),
-                   'domicilio' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un domicilio.'
-                           ),
-						   'alphaNumeric' => array(
-						   'rule' => 'alphaNumeric',
-						   'message' => 'Sólo se permiten letras y números.',
-						   'last' => false
-						   )
-                   ),
-				   'asentamiento' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un asentamiento.'
-                           )
-                   ),	   
-				   'barrio' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un barrio.'
-                           )
-                   ),	   
-                   'ciudad' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar una ciudad.'
-                           )
-                   )                   
+                    'rule' => 'email',
+                    'allowEmpty' => true,
+                    'message' => 'Indicar un email válido.'
+                ),
+            ),
+             'domicilio' => array(
+                'required' => array(
+    						    'rule' => 'notBlank',
+                    'required' => 'create',
+    						    'message' => 'Indicar un domicilio.'
+                ),
+            ),
+				    /*
+            'asentamiento' => array(
+                'required' => array(
+      						  'rule' => 'notBlank',
+                    'required' => 'create',
+      						  'message' => 'Indicar un asentamiento.'
+                )
+            ),
+            */	   
+				    'barrio' => array(
+                'required' => array(
+    						    'rule' => 'notBlank',
+                    'required' => 'create',
+    						    'message' => 'Indicar un barrio.'
+                )
+            ),	   
+            'ciudad' => array(
+                'required' => array(
+    						    'rule' => 'notBlank',
+                    'required' => 'create',
+    						    'message' => 'Indicar una ciudad.'
+            )
+          )      
         );
 }
 ?>

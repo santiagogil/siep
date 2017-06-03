@@ -15,6 +15,8 @@
                            <?php echo $resolucion['Resolucion']['tipo']; ?></p>
                         <b><?php echo __('Creación del registro:'); ?></b>
                            <?php echo h($resolucion['Resolucion']['created']); ?></p>
+                        <b><?php echo __('Documento:'); ?></b>
+                           <?php echo h($resolucion['Resolucion']['documento']); ?></p>
                     </div><!--/Datos generales-->
                     <div class="col-md-6 col-sm-4 col-xs-12">
                     <!--Datos específicos-->

@@ -164,7 +164,7 @@
 </div>
 <!-- end Cursos Relacionados -->
 <!-- Materias Relacionados --> 
-<div id="click_02" class="titulo_acordeon">Espacios Relacionados <span class="caret"</span></div>
+<div id="click_02" class="titulo_acordeon">Unidades Curriculares Relacionadas <span class="caret"</span></div>
 <div id="acordeon_02">
 		<div class="row">
 	        <?php if (!empty($inscripcion['Materia'])):?>

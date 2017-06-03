@@ -1,7 +1,7 @@
 <?php echo $this->Html->script(array('acordeon', 'slider')); ?>
 <?php echo $this->Html->css('slider'); ?>
 <!-- start main -->
-<div class="TituloSec">Espacio: <?php echo ($materia['Materia']['alia']); ?></div>
+<div class="TituloSec">Unidad: <?php echo ($materia['Materia']['alia']); ?></div>
 <div id="ContenidoSec">
 <div class="row">
    <div class="col-md-8">	
@@ -12,10 +12,11 @@
 			<?php echo ($materia['Materia']['nombre']); ?></p>
 
 			<b><?php echo __('Diseño Curricular:'); ?></b>
-			<?php echo ($materia['Materia']['disenocurricular_id']); ?></p>
+			<?php echo $this->Html->link(($disenocurriculars[$materia['Materia']['disenocurricular_id']]), array('action' => 'view', 'controller' => 'disenocurriculars', $materia['Materia']['disenocurricular_id'])); ?></p>
             
             <b><?php echo __('Sección:'); ?></b>
 			<?php echo ($this->Html->link($materia['Curso']['nombre_completo_curso'], array('controller' => 'cursos', 'action' => 'view', $materia['Curso']['id']))); ?></p>
+            
             <b><?php echo __('Campo de formación:'); ?></b>
 			<?php echo ($materia['Materia']['campo_formacion']); ?></p>
 
@@ -29,8 +30,7 @@
 			<?php echo ($materia['Materia']['dictado']); ?></p>
 
 			<!--<b><?php echo __('Contenido:'); ?></b>
-			<?php echo $this->Html->link('View File', '../files/materias/'.$materia['Materia']['contenido'], 
-						           array('class' => 'button', 'target' => '_blank')); ?></p>-->
+			<?php echo $this->Html->link('View File', '../files/materias/'.$materia['Materia']['contenido'], array('class' => 'button', 'target' => '_blank')); ?></p>-->
             
   </div><div class="col-md-4 col-sm-6 col-xs-8">	
 
@@ -62,7 +62,7 @@
 <div class="col-md-4">
  	<div class="unit">
  		<div class="subtitulo">Opciones</div>
- 			<div class="opcion"><?php echo $this->Html->link(__('Listar Materias'), array('action' => 'index')); ?></div>
+ 			<div class="opcion"><?php echo $this->Html->link(__('Listar Unidades Curriculares'), array('action' => 'index')); ?></div>
  			<?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
 			<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $materia['Materia']['id'])); ?></div>
 			<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $materia['Materia']['id']), null, sprintf(__('Esta seguro de borrar la materia %s?'), $materia['Cargo']['nombre'])); ?></div>
@@ -118,7 +118,7 @@
 		</ul>
 	</div>
 </div>-->
-<!-- Horarios Relacionados 
+<!-- Horarios Relacionados  
 <div id="click_01" class="titulo_acordeon">Horarios Relacionados <span class="caret"></span></div>
 <div id="acordeon_01">
    <div class="table-responsive">
