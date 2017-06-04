@@ -60,7 +60,7 @@
           echo $this->Form->input('norma_homologacion_tipo', array('label' => 'Norma de homologación nacional tipo*', 'empty' => 'Ingrese un tipo de norma...', 'options' => $norma_homologación_tipos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
           echo $this->Form->input('norma_homologacion_nro', array('label' => 'Norma de homologación nacional Nro*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca una número', 'Placeholder' => 'Ingrese un número'));
           echo $this->Form->input('norma_homologacion_anio', array('label' => 'Norma de homologación nacional año*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Introduzca un año', 'Placeholder' => 'Ingrese un año'));		
-          echo $this->Form->input('Centro', array('label' => 'Centro*', 'default' => 'CPLA', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
+          echo $this->Form->input('Titulacion.Centro', array('label' => 'Centro*', 'multiple' => true, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
       ?>
   </div> 
   </div>

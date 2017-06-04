@@ -5,6 +5,7 @@ App::uses('AppController', 'Controller');
 class CentrosController extends AppController {
 
 	var $name = 'Centros';
+    public $uses = array('Centro', 'Titulacion');
     public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
 	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Centro' => array('limit' => 4, 'order' => 'Centro.cue ASC'));
@@ -15,7 +16,7 @@ class CentrosController extends AppController {
         //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) { 
 	        $this->Auth->allow('index', 'view');
 	    } 
     }
@@ -63,6 +64,8 @@ class CentrosController extends AppController {
 			  }
 		}
 		$empleados = $this->Centro->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado')));
+		$titulacions = $this->Titulacion->find('list');
+		$this->set(compact('titulacions', $titulacions));
 		$this->set(compact('empleados'));
 	}
 
@@ -91,6 +94,8 @@ class CentrosController extends AppController {
 			$this->data = $this->Centro->read(null, $id);
 		}
 		$empleados = $this->Centro->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado')));
+		$titulacions = $this->Titulacion->find('list');
+		$this->set(compact('titulacions', $titulacions));
 		$this->set(compact('empleados'));
 	}
 

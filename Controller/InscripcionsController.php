@@ -4,10 +4,10 @@ App::uses('AppController', 'Controller');
 class InscripcionsController extends AppController {
 
 	var $name = 'Inscripcions';
-    
+    public $uses = array('Inscripcion', 'Curso', 'Materia');
 	public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
 	public $components = array('Session', 'RequestHandler');
-	public $paginate = array('Inscripcion' => array('limit' => 4, 'order' => 'Inscripcion.fecha_alta DESC'));
+	var $paginate = array('Inscripcion' => array('limit' => 4, 'order' => 'Inscripcion.fecha_alta DESC'));
 		
 	function beforeFilter(){
 	    parent::beforeFilter();
@@ -94,7 +94,7 @@ class InscripcionsController extends AppController {
             { 
                 $this->Session->setFlash('El alumno ya está inscripto en este ciclo.', 'default', array('class' => 'alert alert-danger'));
 			}else{
-				$this->request->data['Inscripcion']['legajo_nro'] = $this->__getCodigo($ciclo, $alumnoDoc);
+				$this->request->data['Inscripcion,']['legajo_nro'] = $this->__getCodigo($ciclo, $alumnoDoc);
 			//Antes de guardar genera el estado de la inscripción
 			    if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true){
 			        $estado = "COMPLETA";	
@@ -113,6 +113,11 @@ class InscripcionsController extends AppController {
 				}
 			}
 		}
+		
+		$userCentroId = $this->getUserCentroId();
+		$cursos = $this->Curso->find('list', array('fields'=>array('nombre_completo_curso'), array('conditions' => array('centro_id' => $userCentroId))));
+		$materias = $this->Materia->find('list');
+        $this->set(compact('cursos',$cursos, 'materias',$materias));
     }
 
 	public function edit($id = null) {
@@ -145,6 +150,9 @@ class InscripcionsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Inscripcion->read(null, $id);
 		}
+		$cursos = $this->Curso->find('list', array('fields'=>array('nombre_completo_curso')));
+        $materias = $this->Materia->find('list');
+        $this->set(compact('cursos',$cursos, 'materias',$materias));
 	}
 
 	public function delete($id = null) {

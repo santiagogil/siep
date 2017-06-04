@@ -1,8 +1,10 @@
 <?php
 class Titulacion extends AppModel {
 	var $name = 'Titulacion';
-    var $displayField = 'nombre';
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
+  public $displayField = 'nombre';
+	public $actsAs = array('Containable');
+
+  //The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $hasMany = array(
 		'Disenocurricular' => array(

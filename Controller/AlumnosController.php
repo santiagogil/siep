@@ -6,7 +6,7 @@ class AlumnosController extends AppController {
 	var $name = 'Alumnos';
     public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
 	public $components = array('Session', 'RequestHandler');
-	public $paginate = array('Alumno' => array('limit' => 4, 'order' => 'Alumno.created DESC'));
+	var $paginate = array('Alumno' => array('limit' => 4, 'order' => 'Alumno.created DESC'));
 
     public function beforeFilter() {
         parent::beforeFilter();

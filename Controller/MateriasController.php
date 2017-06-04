@@ -2,9 +2,10 @@
 class MateriasController extends AppController {
 
 	var $name = 'Materias';
-    var $helpers = array('Form', 'Time', 'Js');
-	var $components = array('Session', 'RequestHandler');
-	public $paginate = array('Materia' => array('limit' => 6, 'order' => 'Materia.alia DESC'));
+    public $uses = array('Materia', 'Inscripcion');
+    public $helpers = array('Form', 'Time', 'Js');
+	public $components = array('Session', 'RequestHandler');
+	var $paginate = array('Materia' => array('limit' => 6, 'order' => 'Materia.alia DESC'));
 
     public function beforeFilter() {
         parent::beforeFilter();

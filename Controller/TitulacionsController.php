@@ -1,7 +1,8 @@
 <?php
 class TitulacionsController extends AppController {
 
-	public $name = 'Titulacions';
+	var $name = 'Titulacions';
+    public $uses = array('Titulacion', 'Centro');
     public $helpers = array('Session');
 	public $components = array('Auth','Session');
 	var $paginate = array('Titulacion' => array('limit' => 4, 'order' => 'Titulacion.nombre DESC'));
@@ -33,7 +34,9 @@ class TitulacionsController extends AppController {
 		}
 		$titulacions = $this->paginate('Titulacion', $conditions);
 		
-		$this->set(compact('titulacions'));
+		$centros = $this->Titulacion->CentrosTitulacion->find('list', array('fields' => array('centro_id'), array('conditions' => array('titulacion_id' => $titulacions))));
+		
+		$this->set(compact('titulacions', 'centros', $centros));
 	}
 
 	function view($id = null) {
@@ -68,8 +71,8 @@ class TitulacionsController extends AppController {
 				$this->Session->setFlash('La titulacion no ha sido grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$centros = $this->Titulacion->Centro->find('list');
-		$this->set(compact('centros'));
+		$centros = $this->Centro->find('list');
+		$this->set(compact('centros', $centros));
 	}
 
 	function edit($id = null) {
@@ -95,8 +98,8 @@ class TitulacionsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Titulacion->read(null, $id);
 		}
-		$centros = $this->Titulacion->Centro->find('list');
-		$this->set(compact('centros'));
+		$centros = $this->Centro->find('list');
+		$this->set(compact('centros', $centros));
 	}
 
 	function delete($id = null) {

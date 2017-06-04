@@ -1,28 +1,31 @@
 <?php
 App::uses('AppController', 'Controller');
-/**
- * MesaExamens Controller
- *
- * @property MesaExamen $MesaExamen
- * @property PaginatorComponent $Paginator
- * @property FlashComponent $Flash
- * @property SessionComponent $Session
- */
+
 class MesaExamensController extends AppController {
 
    	var $name = 'Mesaexamens';
-    var $helpers = array('Session', 'Form', 'Time', 'Js');
+    public $helpers = array('Session', 'Form', 'Time', 'Js');
 	public $components = array('Paginator', 'Flash', 'Auth','Session', 'RequestHandler');
 	var $paginate = array('Mesaexamen' => array('limit' => 4, 'order' => 'Mesaexamen.fecha DESC'));
 
+    function beforeFilter(){
+	    parent::beforeFilter();
+		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
+        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
+	        $this->Auth->allow();
+	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	        $this->Auth->allow('index', 'view');
+	    }
+    }
+  
 /**
  * index method
  *
  * @return void
  */
 	public function index() {
-	    
-		//$this->MesaExamen->recursive = 0;
+		$this->MesaExamen->recursive = -1;
 		$this->set('mesaexamens', $this->paginate());
         $ciclos = $this->Mesaexamen->Ciclo->find('list');
 		$titulacions = $this->Mesaexamen->Titulacion->find('list');

@@ -14,36 +14,38 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-      <?php if($current_user['role'] == 'superadmin'): ?>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Carga <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CUEs <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
+            <li><?php echo $this->Html->link(__('Establecimientos'),'/'); ?></li>
+            <li><?php echo $this->Html->link(__('Infraestructura'),'/'); ?></li>
+            <li><?php echo $this->Html->link(__('Inventario'),'/'); ?></li>
             <li><?php echo $this->Html->link(__('Agentes'),'/empleados'); ?></li>
             <li><?php echo $this->Html->link(__('Usuarios'),'/users'); ?></li>
-            <li><?php echo $this->Html->link(__('Ciclos'),'/ciclos'); ?></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Normativas <span class="caret"></span></a>
+          <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Resoluciones'), '/resolucions'); ?></li>
             <li><?php echo $this->Html->link(__('Anexos'), '/anexos'); ?></li>
-            <li><?php echo $this->Html->link(__('Titulaciones'),'/titulacions'); ?></li>
-            <li><?php echo $this->Html->link(__('Diseños Curriculares'), '/disenocurriculars'); ?></li>
-            <li><?php echo $this->Html->link(__('Secciones'), '/cursos'); ?></li>
-            <li><?php echo $this->Html->link(__('Unidades Curriculares'),'/materias'); ?></li>
-            <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
-            <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
-            <li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>
-            <li><?php echo $this->Html->link(__('Calificaciones'), '/notas'); ?></li>
-            <li><?php echo $this->Html->link(__('Mesa de Exámenes'), '/mesaexamens'); ?></li>
           </ul>
         </li>
-      <?php endif; ?>
-      <?php if($current_user['role'] == 'admin'): ?>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Carga <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ofertas <span class="caret"></span></a>
           <ul class="dropdown-menu">
+            <li><?php echo $this->Html->link(__('Ciclos'),'/ciclos'); ?></li>
             <li><?php echo $this->Html->link(__('Titulaciones'),'/titulacions'); ?></li>
             <li><?php echo $this->Html->link(__('Diseños Curriculares'), '/disenocurriculars'); ?></li>
             <li><?php echo $this->Html->link(__('Secciones'), '/cursos'); ?></li>
             <li><?php echo $this->Html->link(__('Unidades Curriculares'),'/materias'); ?></li>
+            <li><?php echo $this->Html->link(__('Horarios'),'/'); ?></li>
+          </ul>
+        </li>  
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnos <span class="caret"></span></a>
+          <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
             <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
             <li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>
@@ -51,31 +53,31 @@
             <li><?php echo $this->Html->link(__('Mesa de Exámenes'), '/mesaexamens'); ?></li>
           </ul>
         </li>
-		  <?php endif; ?>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver <span class="caret"></span></a>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Docentes <span class="caret"></span></a>
           <ul class="dropdown-menu">
-           <?php if($current_user['role'] == 'usuario'): ?> 
-            <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
-            <li><?php echo $this->Html->link(__('Titulaciones'),'/titulacions'); ?></li>
-            <li><?php echo $this->Html->link(__('Diseños Curriculares'), '/disenocurriculars'); ?></li>
-            <li><?php echo $this->Html->link(__('Secciones'),'/cursos'); ?></li>
-            <li><?php echo $this->Html->link(__('Unidades Curriculares'),'/materias'); ?></li>
-            <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
-            <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
-           <?php endif; ?>
+            <li><?php echo $this->Html->link(__('Docentes'),'/'); ?></li>
+            <li><?php echo $this->Html->link(__('Cargos'), '/'); ?></li>
+            <li><?php echo $this->Html->link(__('Altas y Bajas'), '/'); ?></li>
+            <li><?php echo $this->Html->link(__('Licencias'), '/'); ?></li>
+            <li><?php echo $this->Html->link(__('Jornadas Institucionales'), '/'); ?></li>
+            <li><?php echo $this->Html->link(__('Capacitaciones'), '/'); ?></li>
+          </ul>
+        </li>
+      <li>
+      <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver <span class="caret"></span></a>
+          <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
             <li><?php echo $this->Html->link(__('Alumnos por Unidad'), '/inscripcions_materias');?></li>
-           <?php if($current_user['role'] == 'superadmin'): ?> 
             <li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>
             <li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>
-           <?php endif; ?> 
             <li><?php echo $this->Html->link(__('Gráficos'), '/graficos'); ?></li>
-            <li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>
+            <li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li> 
           </ul>
-      </li>
+        </li>
       <li>
-		  <?php echo $this->Html->link('CERRAR SESIÓN', '/logout', array('class' => 'btn btn-success navbar-btn btn-lg', 'escape' => false)); ?>
+      <?php echo $this->Html->link('CERRAR SESIÓN', '/logout', array('class' => 'btn btn-success navbar-btn btn-lg', 'escape' => false)); ?>
       </li>
     </div> <!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

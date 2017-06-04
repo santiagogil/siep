@@ -4,7 +4,7 @@ class NotasController extends AppController {
 	var $name = 'Notas';
     public $helpers = array('Session');
 	public $components = array('Auth','Session');
-    public $paginate = array('Nota' => array('limit' => 4, 'order' => 'Nota.created DESC'));
+    var $paginate = array('Nota' => array('limit' => 4, 'order' => 'Nota.created DESC'));
 
 	function beforeFilter(){
 	    parent::beforeFilter();
@@ -14,7 +14,7 @@ class NotasController extends AppController {
 	}
 
 	public function index() {
-		$this->Nota->recursive = 1;
+		$this->Nota->recursive = -1;
 		
         $this->paginate['Nota']['limit'] = 6;
 		$this->paginate['Nota']['order'] = array('Nota.ciclo' => 'DESC');

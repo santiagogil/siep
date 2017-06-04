@@ -1,7 +1,8 @@
 <?php
 class Inscripcion extends AppModel {
 	var $name = 'Inscripcion';
-	var $displayField = 'legajo_nro';
+	public $displayField = 'legajo_nro';
+	public $actsAs = array('Containable');
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 

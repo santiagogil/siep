@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 
 class ResolucionsController extends AppController {
 
-   	public $name = 'Resolucions';
+   	var $name = 'Resolucions';
     public $helpers = array('Session', 'Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
 	public $components = array('Flash', 'Auth','Session', 'RequestHandler');
 	var $paginate = array('Resolucion' => array('limit' => 4, 'order' => 'Resolucion.numero DESC'));

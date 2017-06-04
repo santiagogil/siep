@@ -2,9 +2,20 @@
 class ServiciosController extends AppController {
 
 	var $name = 'Servicios';
-    var $helpers = array('Session');
+    public $helpers = array('Session');
 	public $components = array('Auth','Session', 'RequestHandler');
 	var $paginate = array('Servicio' => array('limit' => 3, 'order' => 'Servicio.id DESC'));
+
+	function beforeFilter(){
+	    parent::beforeFilter();
+		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
+        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
+	        $this->Auth->allow();
+	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	        $this->Auth->allow('index', 'view');
+	    }
+    }
 
 	function view($id = null) {
 		if (!$id) {

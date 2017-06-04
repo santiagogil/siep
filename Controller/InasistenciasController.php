@@ -4,7 +4,7 @@ class InasistenciasController extends AppController {
 	var $name = 'Inasistencias';
     public $helpers = array('Session');
 	public $components = array('Auth','Session');
-	public $paginate = array('Inasistencia' => array('limit' => 4, 'order' => 'Inasistencia.created DESC'));
+	var $paginate = array('Inasistencia' => array('limit' => 4, 'order' => 'Inasistencia.created DESC'));
 
     function beforeFilter(){
 	    parent::beforeFilter();

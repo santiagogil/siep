@@ -4,8 +4,9 @@ App::uses('AppController', 'Controller');
 class CursosController extends AppController {
 
 	var $name = 'Cursos';
-    var $helpers = array('Form', 'Time', 'Js');
-	var $components = array('Session', 'RequestHandler');
+    public $uses = array('Curso', 'Inscripcion');
+    public $helpers = array('Form', 'Time', 'Js');
+	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Curso' => array('limit' => 6, 'order' => 'Curso.anio ASC'));
 
 	public function beforeFilter() {
@@ -47,6 +48,7 @@ class CursosController extends AppController {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
 		}
 		$cursos = $this->paginate('Curso',$conditions);
+	
 		$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla')));
 		$this->set(compact('cursos', 'centros'));
 	}
@@ -94,11 +96,14 @@ class CursosController extends AppController {
 				$this->Session->setFlash('La sección no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
+		
 		$centros = $this->Curso->Centro->find('list');
 		$titulacions = $this->Curso->Titulacion->find('list');
 		$materias = $this->Curso->Materia->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
-		$this->set(compact('centros', 'titulacions', 'materias', 'ciclos'));
+		$inscripcions = $this->Inscripcion->find('list');
+        
+		$this->set(compact('centros', 'titulacions', 'materias', 'ciclos', 'inscripcions', $inscripcions));
 	}
 
 	function edit($id = null) {
@@ -124,11 +129,13 @@ class CursosController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Curso->read(null, $id);
 		}
+		
 		$centros = $this->Curso->Centro->find('list');
 		$titulacions = $this->Curso->Titulacion->find('list');
-		//$modalidads = $this->Curso->Modalidad->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
-		$this->set(compact('centros', 'titulacions', 'modalidads', 'ciclos'));
+		$inscripcions = $this->Inscripcion->find('list');
+
+		$this->set(compact('centros', 'titulacions', 'modalidads', 'ciclos', 'inscripcions', $inscripcions));
 	}
 
 	function delete($id = null) {

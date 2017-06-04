@@ -1,8 +1,9 @@
 <?php
 class Materia extends AppModel {
 	var $name = 'Materia';
-    var $displayField = 'alia';
-
+    public $displayField = 'alia';
+    public $actsAs = array('Containable');
+    
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $hasOne = array(

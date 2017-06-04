@@ -2,11 +2,21 @@
 class HorariosController extends AppController {
 
 	var $name = 'Horarios';
-    var $helpers = array('Session', 'Html');
+    public $helpers = array('Session', 'Html');
 	public $components = array('Auth','Session', 'RequestHandler');
 	var $paginate = array('Horario' => array('limit' => 6, 'order' => 'Horario.dia DESC'));
 
-
+    function beforeFilter(){
+	    parent::beforeFilter();
+		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
+        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
+	        $this->Auth->allow();
+	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	        $this->Auth->allow('index', 'view');
+	    }
+    }
+	
 	function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Horario no valido.'));

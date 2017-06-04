@@ -2,9 +2,20 @@
 class IntegracionsController extends AppController {
 
 	var $name = 'Integracions';
-    var $helpers = array('Session');
-	var $components = array('Auth','Session');
+    public $helpers = array('Session');
+	public $components = array('Auth','Session');
 	var $paginate = array('Integracions' => array('limit' => 4, 'order' => 'Integracions.id'));
+
+	function beforeFilter(){
+	    parent::beforeFilter();
+		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
+        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
+	        $this->Auth->allow();
+	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	        $this->Auth->allow('index', 'view');
+	    }
+    }
 
 	function view($id = null) {
 		if (!$id) {
