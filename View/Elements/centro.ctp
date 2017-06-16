@@ -4,6 +4,8 @@
 
 	   	<span class="name"><span class="glyphicon glyphicon-user"></span> <b>Nombre:</b> <?php echo ($centro['Centro']['sigla']); ?></span><br/>
 
+        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Sector:</b> <?php echo ($centro['Centro']['sector']); ?></span><br/>    	    
+
    	    <span class="name"><span class="glyphicon glyphicon-map-marker"></span> <b>Dirección:</b> <?php echo ($centro['Centro']['direccion']); ?></span><br/> 
 
    	    <span class="name"><span class="glyphicon glyphicon-map-marker"></span> <b>Ciudad:</b> <?php echo ($centro['Centro']['ciudad']); ?></span><br/>

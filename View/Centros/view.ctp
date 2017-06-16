@@ -10,27 +10,51 @@
 			  	<!--<div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
 			  		<img src="http://ipam.com.br/2012/fotos/image/facebook-silueta-perfil-300x203.jpg"/>
 			  	</div>-->
-   					<div class="col-md-8 col-sm-6 col-xs-8">	
-						<!--<b><?php echo __('Nombre: '); ?></b>
-						<?php echo ($centro['Centro']['sigla']); ?></p>-->
-						<b><?php echo __('Director: '); ?></b>
-			    			<?php echo $centro['Centro']['equipoDirectivo']; ?></p>
-						<b><?php echo __('Ciudad: '); ?></b>
-							<?php echo $centro['Centro']['ciudad']; ?></p>
-			            <b><?php echo __('Domicilio: '); ?></b>
-							<?php echo $centro['Centro']['direccion']; ?></p>
-   					</div>
-   					<div class="col-md-8 col-sm-6 col-xs-8">
-					    <b><?php echo __('Telefono: '); ?></b>
-							<?php echo $centro['Centro']['telefono']; ?></p>
-                        <b><?php echo __('Email: '); ?></b>
-							<?php echo ($this->Html->link($centro['Centro']['email'],'mailto:'.$centro['Centro']['email'])); ?></p>
-                        <b><?php echo __('URL: '); ?></b>
-							<?php echo ($this->Html->link($centro['Centro']['url'],'href:'.$centro['Centro']['url'])); ?></p>
-          			</div>
+   					<div class="col-md-6 col-sm-6 col-xs-8">
+                      <div id="click_01" class="titulo_acordeon_datos">Datos Generales <span class="caret"></span></div>
+                      <div id="acordeon_01">
+                        <div class="unit">	
+							<b><?php echo __('Fecha de Fundación: '); ?></b>
+							<?php echo ($centro['Centro']['fechaFundacion']); ?></p>
+							<b><?php echo __('Sector: '); ?></b>
+							<?php echo ($centro['Centro']['sector']); ?></p>
+							<b><?php echo __('Nivel - Servicio: '); ?></b>
+							<?php echo ($centro['Centro']['nivel_servicio']); ?></p>
+							<b><?php echo __('Director: '); ?></b>
+				    			<?php echo $centro['Centro']['equipoDirectivo']; ?></p>
+							<b><?php echo __('Ámbito: '); ?></b>
+								<?php echo $centro['Centro']['ambito']; ?></p>	
+				        </div>
+	   				</div>    
+                    </div>            
+                    <div class="col-md-6 col-sm-6 col-xs-8">
+                      	<div id="click_02" class="titulo_acordeon_datos">Datos de Contacto <span class="caret"></span></div>
+                      	<div id="acordeon_02">
+	                        <div class="unit">
+	                        	<b><?php echo __('Domicilio: '); ?></b>
+								<?php echo $centro['Centro']['direccion']; ?></p>
+								<b><?php echo __('Barrio: '); ?></b>
+									<?php echo $centro['Centro']['barrio']; ?></p>
+								<b><?php echo __('Código Postal: '); ?></b>
+									<?php echo $centro['Centro']['cp']; ?></p>
+								<b><?php echo __('Código de Localidad: '); ?></b>
+									<?php echo $centro['Centro']['codigo_localidad']; ?></p>	
+								<b><?php echo __('Ciudad: '); ?></b>
+									<?php echo $centro['Centro']['ciudad']; ?></p>
+								<b><?php echo __('Departamento: '); ?></b>
+								<?php echo $centro['Centro']['departamento']; ?></p>
+							    <b><?php echo __('Telefono: '); ?></b>
+									<?php echo $centro['Centro']['telefono']; ?></p>
+		                        <b><?php echo __('Email: '); ?></b>
+									<?php echo ($this->Html->link($centro['Centro']['email'],'mailto:'.$centro['Centro']['email'])); ?></p>
+		                        <b><?php echo __('URL: '); ?></b>
+									<?php echo ($this->Html->link($centro['Centro']['url'],'href:'.$centro['Centro']['url'])); ?></p>
+		          			</div>
+ 				        </div>
+ 					</div>
  				</div>
- 			</div>
-		</div>
+			</div>
+		</div>	
 <!-- star sidebar -->
 		<div class="col-md-4">
  			<div class="unit">
@@ -120,8 +144,8 @@
 	</div>
 </div>-->
 <!-- Titulaciones Relacionadas -->
-<div id="click_01" class="titulo_acordeon">Titulaciones Relacionadas <span class="caret"></span></div>
-<div id="acordeon_01">
+<div id="click_03" class="titulo_acordeon">Titulaciones Relacionadas <span class="caret"></span></div>
+<div id="acordeon_03">
 	<div class="row">
 	<?php if (!empty($centro['Titulacion'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">
@@ -152,8 +176,8 @@
 </div>
 <!-- end Titulaciones Relacionadas -->
 <!-- Cursos Relacionados --> 
-<div id="click_02" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
-<div id="acordeon_02">
+<div id="click_04" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
+<div id="acordeon_04">
 	<div class="row">
 	<?php if (!empty($centro['Curso'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">
@@ -220,8 +244,8 @@
 </div>
 <!-- end Inscripciones Relacionadas -->
 <!-- Empleados Relacionados -->
-<div id="click_03" class="titulo_acordeon">Usuarios Relacionados <span class="caret"></span></div>
-<div id="acordeon_03">
+<div id="click_05" class="titulo_acordeon">Usuarios Relacionados <span class="caret"></span></div>
+<div id="acordeon_05">
 	<div class="row">
 	<?php if (!empty($centro['User'])):?>
 	<div class="col-xs-12 col-sm-6 col-md-8">
