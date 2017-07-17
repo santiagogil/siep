@@ -2,9 +2,14 @@
 class TitulacionsController extends AppController {
 
 	var $name = 'Titulacions';
+<<<<<<< HEAD
     public $uses = array('Titulacion', 'Centro');
     public $helpers = array('Session');
 	public $components = array('Auth','Session');
+=======
+    var $helpers = array('Session');
+	var $components = array('Auth','Session');
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	var $paginate = array('Titulacion' => array('limit' => 4, 'order' => 'Titulacion.nombre DESC'));
 
     function beforeFilter(){
@@ -23,7 +28,11 @@ class TitulacionsController extends AppController {
 		$titulacions = $this->Titulacion->find('list', array('fields'=>array('id', 'nombre')));
 		$userCentroId = $this->getUserCentroId();
 		if($this->Auth->user('role') === 'admin') {
+<<<<<<< HEAD
 			$this->paginate['Titulacion']['conditions'] = array('Titulacion.nombre' => $userCentroId);
+=======
+			$this->paginate['Titulacion']['conditions'] = array('Titulacion.centro_id' => $userCentroId);
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 		}
 
 		$this->redirectToNamed();
@@ -34,9 +43,17 @@ class TitulacionsController extends AppController {
 		}
 		$titulacions = $this->paginate('Titulacion', $conditions);
 		
+<<<<<<< HEAD
 		$centros = $this->Titulacion->CentrosTitulacion->find('list', array('fields' => array('centro_id'), array('conditions' => array('titulacion_id' => $titulacions))));
 		
 		$this->set(compact('titulacions', 'centros', $centros));
+=======
+		$this->loadModel('Centro');
+		$centrosId = $this->Titulacion->find('list', array('fields'=>array('centro_id')));
+        $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
+		$this->set(compact('titulacions', 'centros'));
+
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	}
 
 	function view($id = null) {

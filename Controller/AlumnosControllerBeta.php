@@ -28,16 +28,11 @@ class AlumnosController extends AppController {
 		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
 		}
 
-        $this->loadModel('Persona');
-		$personasId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
-        $personas = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $personasId)));
-
-        $estadoInscripcion = $this->Alumno->Inscripcion->find('list', array('fields'=>array('estado')));
+		$estadoInscripcion = $this->Alumno->Inscripcion->find('list', array('fields'=>array('estado')));
 		$this->loadModel('Centro');
 		$centrosId = $this->Alumno->find('list', array('fields'=>array('centro_id')));
         $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
 
-		/*
 		$this->redirectToNamed();
 		$conditions = array();
         if(!empty($this->params['named']['centro_id'])){
@@ -49,17 +44,14 @@ class AlumnosController extends AppController {
 		if(!empty($this->params['named']['documento_nro'])){
 			$conditions['Alumno.documento_nro ='] = $this->params['named']['documento_nro'];
 		}
-		*/
 		//Evalúa si existe foto.
 		if(empty($this->params['named']['foto'])){
 			$foto = 0;
 		} else {
 			$foto = 1;
 		}
-		//$alumnos = $this->paginate('Alumno', $conditions);
-        $alumnos = $this->paginate('Alumno');
-		$this->set(compact('alumnos', 'estadoInscripcion', 'foto', 'centros', 'personas'));
-	    
+		$alumnos = $this->paginate('Alumno', $conditions);
+		$this->set(compact('alumnos', 'estadoInscripcion', 'foto', 'centros'));
 	}
 
 	public function view($id = null) {
@@ -75,21 +67,11 @@ class AlumnosController extends AppController {
 		$this->set('alumno', $this->Alumno->read(null, $id));
 		
         //Genera nombres en el view.
-		$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'))); 
-		//print_r($personaId);
-		//$this->loadModel('Persona');
-		//$persona = $this->Persona->find('list', array('fields'=>array('nombres', 'conditions'=>array('id' => $personaId))));
-		//print_r($persona);
-		//$this->loadModel('Persona');
-		//$personas = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
-
 		$notaCicloId = $this->Alumno->Nota->find('list', array('fields'=>array('ciclo_id')));
 		$this->loadModel('Ciclo');
 		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions'=>array('id'=>$notaCicloId)));
-
 		$notaMateriaId = $this->Alumno->Nota->find('list', array('fields'=>array('materia_id')));
 		$this->loadModel('Materia');
-
 		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$notaMateriaId)));
 		//Evalúa si existe foto.
 		if(empty($this->params['named']['foto'])){
@@ -104,18 +86,10 @@ class AlumnosController extends AppController {
     }
 	
 	public function add() {
-		//abort if cancel button was pressed  
-          	if(isset($this->params['data']['cancel'])){
+		  //abort if cancel button was pressed  
+          if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
-<<<<<<< HEAD
-		  	}
-          	if (!empty($this->data)) {
-				$this->Alumno->create();
-				// Obtiene y asigna el centro al alumno
-				$centroId = $this->getUserCentroId();
-				$this->request->data['Alumno']['centro_id'] = $centroId;
-=======
 		  }
           if (!empty($this->data)) {
 			$this->Alumno->create();
@@ -134,7 +108,6 @@ class AlumnosController extends AppController {
 			// Obtiene y asigna el centro al alumno
 			$centroId = $this->getUserCentroId();
 			$this->request->data['Alumno']['centro_id'] = $centroId;
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 
 			if ($this->Alumno->save($this->request->data)) {
 				$this->Session->setFlash('El alumno ha sido grabado', 'default', array('class' => 'alert alert-success'));
@@ -145,20 +118,12 @@ class AlumnosController extends AppController {
 			}
 		}
         
-<<<<<<< HEAD
-		//$this->loadModel('Barrio');          
-        $personas = $this->Alumno->Persona->find('list', array('fields' => array('id')));
-        print_r($personas);
-        $this->set(compact('alumnos', $personas));
-=======
 		$this->loadModel('Barrio');          
         $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
         $this->set('barrios', $barrios);
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
     }
 
 	public function edit($id = null) {
-		/*
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Alumno no valido', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
@@ -196,16 +161,11 @@ class AlumnosController extends AppController {
 		}
 
 		$this->loadModel('Barrio');          
-          $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-          $this->set('barrios', $barrios);
-<<<<<<< HEAD
-	    */
-=======
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
+        $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+        $this->set('barrios', $barrios);
 	}
 
 	public function delete($id = null) {
-		/*
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para el alumno', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
@@ -216,11 +176,10 @@ class AlumnosController extends AppController {
 		}
 		$this->Session->setFlash('El alumno no fue borrado', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
-	    */
 	}
 	
 	//Métodos Privados
-	/*
+	
 	private function __getEdad($day, $month, $year){
 		$year_diff  = date("Y") - $year;
 		$month_diff = date("m") - $month;
@@ -229,6 +188,5 @@ class AlumnosController extends AppController {
 		if ($day_diff < 0 && $month_diff < 0) $year_diff--;
                 return $year_diff;
 	}
-	*/
 }
 ?>

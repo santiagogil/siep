@@ -105,7 +105,7 @@ class AppController extends Controller {
 	function getLastCicloInscripcionAlumnoId($cicloIdActual)
 	{
 	    $this->loadModel('Inscripcion');
-		$CicloInscripcionAlumnoId = $this->Inscripcion->find('list', array('fields'=>array('Inscripcion.alumno_id'), 'conditions'=>array('Inscripcion.ciclo_id'=>$cicloIdActual)));
+		$CicloInscripcionAlumnoId = $this->Inscripcion->find('list', array('fields'=>array('Inscripcion.persona_id'), 'conditions'=>array('Inscripcion.ciclo_id'=>$cicloIdActual)));
 	    return $CicloInscripcionAlumnoId;
 	}
 }

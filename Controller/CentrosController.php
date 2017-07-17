@@ -16,7 +16,11 @@ class CentrosController extends AppController {
         //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
+<<<<<<< HEAD
 	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) { 
+=======
+	    } elseif ($this->Auth->user('role') === 'usuario') { 
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	        $this->Auth->allow('index', 'view');
 	    } 
     }

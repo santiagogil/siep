@@ -91,14 +91,24 @@
        <div class="unit">
             <div class="subtitulo">Opciones</div>
             <div class="opcion"><?php echo $this->Html->link('Listar Titulaciones', array('controller' => 'titulacions', 'action' => 'index')); ?></div>
+<<<<<<< HEAD
             <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $titulacion['Titulacion']['id'])); ?></div>
             <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $titulacion['Titulacion']['id']), null, sprintf(__('Esta seguro de borrar la titulación %s?'), $titulacion['Titulacion']['nombre'])); ?></div>
+=======
+            <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $titulacions['Titulacion']['id'])); ?></div>
+            <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $titulacions['Titulacion']['id']), null, sprintf(__('Esta seguro de borrar la titulación %s?'), $titulacions['Titulacion']['nombre'])); ?></div>
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
         </div>
     </div>
  </div>
 <!-- end main -->
+<<<<<<< HEAD
 <!-- Centros Relacionados -->
 <div id="click_04" class="titulo_acordeon">Centros Relacionados <span class="caret"></span></div>
+=======
+<!-- Cursos Relacionados -->
+<div id="click_04" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 <div id="acordeon_04">
   <div class="row">
   <?php if (!empty($titulacion['Centro'])):?>

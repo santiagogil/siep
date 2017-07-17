@@ -4,6 +4,7 @@ App::uses('AppController', 'Controller');
 class InscripcionsMateriasController extends AppController {
 
 	var $name = 'InscripcionsMaterias';
+<<<<<<< HEAD
     public $helpers = array('Session', 'Form', 'Time', 'Js');
     public $components = array('Auth','Session', 'RequestHandler');
    	var $paginate = array('InscripcionsMateria' => array('limit' => 2, 'order' => 'InscripcionsMateria.materia_id ASC'));
@@ -19,6 +20,12 @@ class InscripcionsMateriasController extends AppController {
 	    }
     }
 
+=======
+    var $helpers = array('Session', 'Form', 'Time', 'Js');
+    var $components = array('Auth','Session', 'RequestHandler');
+   	var $paginate = array('InscripcionsMateria' => array('limit' => 2, 'order' => 'InscripcionsMateria.materia_id ASC'));
+
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 /**
  * index method
  *

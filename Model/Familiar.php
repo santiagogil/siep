@@ -8,21 +8,13 @@ class Familiar extends AppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
     
     var $belongsTo = array(
-		'Alumno' => array(
-			'className' => 'Alumno',
-			'foreignKey' => 'alumno_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-		/*'Persona' => array(
+		'Persona' => array(
 			'className' => 'Persona',
 			'foreignKey' => 'persona_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		)
-		*/
 	);
 	
    
@@ -115,14 +107,7 @@ class Familiar extends AppModel {
                 )
             ),
             */	   
-				    'barrio' => array(
-                'required' => array(
-    						    'rule' => 'notBlank',
-                    'required' => 'create',
-    						    'message' => 'Indicar un barrio.'
-                )
-            ),	   
-            'ciudad' => array(
+				    'ciudad' => array(
                 'required' => array(
     						    'rule' => 'notBlank',
                     'required' => 'create',

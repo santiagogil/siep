@@ -1,45 +1,54 @@
 <?php echo $this->Html->script(array('acordeon', 'slider')); ?>
 <?php echo $this->Html->css('slider.css'); ?>
 <!-- start main -->
-<div class="TituloSec"><?php echo ($alumno['Alumno']['persona_id']); ?></div>
+<div class="TituloSec"><?php echo ($persona['Persona']['apellidos']).' '.($persona['Persona']['nombres']); ?></div>
   <div id="ContenidoSec">
      <div class="row">
         <div class="col-md-8">	
 	       <div class="unit">
  		      <div class="row perfil">
+                 <div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
+					<!-- Sí no tiene foto presenta imagen de avatar según el sexo. -->
+	                <?php if(($foto == 0) && ($persona['Persona']['sexo'] == 'MASC')): ?>
+	                         <?php echo $this->Html->image('../img/avatar-masculino.png', array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
+	                <?php endif; ?>
+	                <?php if(($foto == 0) && ($persona['Persona']['sexo'] == 'FEM')): ?>
+	                         <?php echo $this->Html->image('../img/avatar-femenino.png', array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
+	                <?php endif; ?>
+	                <!-- Sí tiene foto la presenta. -->
+	                <?php if($foto == 1): ?>
+	                         <?php echo $this->Html->image('../files/alumno/foto/' . $persona['Persona']['foto_dir'] . '/' . 'thumb_' .$persona['Persona']['foto'], array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
+	                <?php endif; ?>
+  	             </div>
                  <div class="col-md-8 col-sm-6 col-xs-8">	
-<<<<<<< HEAD
-                    
-=======
                     <b><?php echo __('Nombres: '); ?></b>
-                    <?php echo ($alumno['Alumno']['nombres']); ?></p>
+                    <?php echo ($persona['Persona']['nombres']); ?></p>
                     <b><?php echo __('Apellidos: '); ?></b>
-                    <?php echo ($alumno['Alumno']['apellidos']); ?></p>
+                    <?php echo ($persona['Persona']['apellidos']); ?></p>
                     <b><?php echo __('Documento: '); ?></b>
-                    <?php echo ($alumno['Alumno']['documento_tipo']).' '.($alumno['Alumno']['documento_nro']); ?></p>
+                    <?php echo ($persona['Persona']['documento_tipo']).' '.($persona['Persona']['documento_nro']); ?></p>
                     <b><?php echo __('Legajo Físico N°: '); ?></b>
-                    <?php echo $alumno['Alumno']['legajo_fisico_nro']; ?></p>
+                    <?php echo $persona['Persona']['legajo_fisico_nro']; ?></p>
                     <b><?php echo __('Edad: '); ?></b>
-                    <?php echo ($alumno['Alumno']['edad']); ?></p>
+                    <?php echo ($persona['Persona']['edad']); ?></p>
 	                </div>
                     <div class="col-md-8 col-sm-6 col-xs-8">
                     <b><?php echo __('Direccion: '); ?></b>
-                    <?php echo $alumno['Alumno']['calle_nombre'].' N° '.$alumno['Alumno']['calle_nro']; ?></p>
+                    <?php echo $persona['Persona']['calle_nombre'].' N° '.$persona['Persona']['calle_nro']; ?></p>
                     <b><?php echo __('Barrio: '); ?></b>
-                    <?php echo $barrioNombre[$alumno['Alumno']['barrio_id']]; ?></p>
+                    <?php echo $barrioNombre[$persona['Persona']['barrio_id']]; ?></p>
                     <b><?php echo __('Telefono: '); ?></b>
-                    <?php echo $alumno['Alumno']['telefono_nro']; ?></p>
-                    <!--<b><?php echo __('Email: '); ?></b>
-                    <?php echo ($this->Html->link($alumno['Alumno']['email'],'mailto:'.$alumno['Alumno']['email'])); ?></p>
+                    <?php echo $persona['Persona']['telefono_nro']; ?></p>
+                    <b><?php echo __('Email: '); ?></b>
+                    <?php echo ($this->Html->link($persona['Persona']['email'],'mailto:'.$persona['Persona']['email'])); ?></p>
                     <b><?php echo __('Ocupación: '); ?></b>
-                    <?php echo ($alumno['Alumno']['ocupacion']); ?></p>
+                    <?php echo ($persona['Persona']['ocupacion']); ?></p>
                     <b><?php echo __('Lugar de trabajo: '); ?></b>
-                    <?php echo ($alumno['Alumno']['lugar_de_trabajo']); ?></p>
+                    <?php echo ($persona['Persona']['lugar_de_trabajo']); ?></p>
                     <b><?php echo __('Horario de trabajo: '); ?></b>
-                    <?php echo ($alumno['Alumno']['horario_de_trabajo']); ?></p>-->
+                    <?php echo ($persona['Persona']['horario_de_trabajo']); ?></p>
                     <b><?php echo __('Observaciones: '); ?></b>
-                    <?php echo $alumno['Alumno']['observaciones']; ?></p>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
+                    <?php echo $persona['Persona']['observaciones']; ?></p>
                  </div>
  	          </div>
          </div>
@@ -48,23 +57,16 @@
 <div class="col-md-4">
  <div class="unit">
         <div class="subtitulo">Opciones</div>
-        <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index')); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Listar Personas'), array('action' => 'index')); ?></div>
       <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
-        <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['Alumno']['id'])); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['Alumno']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['Alumno']['nombre_completo_alumno'])); ?></div>
-<<<<<<< HEAD
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>-->
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add', $alumno['Alumno']['id'])); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $persona['Persona']['id'])); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $persona['Persona']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $persona['Persona']['nombre_completo_persona'])); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $persona['Persona']['id'], 'ext' => 'pdf')); ?></div>
+        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add', $persona['Persona']['id'])); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
-=======
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add', $alumno['Alumno']['id'])); ?></div>-->
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Calificación'), array('controller' => 'notas', 'action' => 'add')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Inasistencia'), array('controller' => 'inasistencias', 'action' => 'add')); ?></div>-->
+        <div class="opcion"><?php echo $this->Html->link(__('Agregar Inasistencia'), array('controller' => 'inasistencias', 'action' => 'add')); ?></div>
       <?php endif; ?>	
 	</div>
   </div>
@@ -74,9 +76,9 @@
 <div id="click_01" class="titulo_acordeon">Familiares Relacionadas <span class="caret"></span></div>
 <div id="acordeon_01">
 	<div class="row">
-	<?php if (!empty($alumno['Familiar'])):?>
+	<?php if (!empty($persona['Familiar'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">
-			<?php foreach ($alumno['Familiar'] as $familiar): ?>
+			<?php foreach ($persona['Familiar'] as $familiar): ?>
             <div class="col-md-6">
                 <div class="unit">
                     <?php echo '<b>Vinculo:</b> '.$familiar['vinculo'];?><br>
@@ -103,9 +105,9 @@
 	<div id="click_02" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_02">
 		<div class="row">
-			<?php if (!empty($alumno['Inscripcion'])):?>
+			<?php if (!empty($persona['Inscripcion'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
-				<?php foreach ($alumno['Inscripcion'] as $inscripcion):	?>
+				<?php foreach ($persona['Inscripcion'] as $inscripcion):	?>
 			<div class="col-md-4">
 				<div class="unit">
 					<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
@@ -139,9 +141,9 @@
 	<div id="click_03" class="titulo_acordeon">Integraciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_03">
 		<div class="row">
-		<?php if (!empty($alumno['Integracion'])):?>
+		<?php if (!empty($persona['Integracion'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
-	<?php foreach ($alumno['Integracion'] as $integracion):	?>
+	<?php foreach ($persona['Integracion'] as $integracion):	?>
 	<div class="col-md-6">
 		<div class="unit">
 			<?php echo '<b>Ciclo ID:</b> '.($this->Html->link($integracion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $integracion['ciclo_id'])));?><br>
@@ -167,9 +169,9 @@
 	<div id="click_04" class="titulo_acordeon">Servicios Complementarios Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_04">
 		<div class="row">
-			<?php if (!empty($alumno['Servicio'])):?>
+			<?php if (!empty($persona['Servicio'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
-	<?php foreach ($alumno['Servicio'] as $servicio): ?>
+	<?php foreach ($persona['Servicio'] as $servicio): ?>
 	<div class="col-md-6">
 		<div class="unit">
 			<?php echo '<b>Ciclo ID:</b> '.($this->Html->link($servicio['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $servicio['ciclo_id'])));?><br>
@@ -196,9 +198,9 @@
 	<div id="click_06" class="titulo_acordeon">Inasistencias Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_06">
 		<div class="row">
-		<?php if (!empty($alumno['Inasistencia'])):?>
+		<?php if (!empty($persona['Inasistencia'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
-	<?php foreach ($alumno['Inasistencia'] as $inasistencia): ?>
+	<?php foreach ($persona['Inasistencia'] as $inasistencia): ?>
 	<div class="col-md-6">
 		<div class="unit">
 			<?php echo '<b>Ciclo Id:</b> '.($this->Html->link($inasistencia['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inasistencia['ciclo_id'])));?><br>
@@ -226,11 +228,11 @@
 </div>
 <div id="acordeon_05">
 	<div class="row">
-		<?php if (!empty($alumno['Nota'])):?>
+		<?php if (!empty($persona['Nota'])):?>
   	<!-- Swiper -->
 	    <div class="swiper-container" style="height: 200px;">
     	    <div class="swiper-wrapper" >
-				<?php foreach ($alumno['Nota'] as $nota): ?>
+				<?php foreach ($persona['Nota'] as $nota): ?>
 				<div class="swiper-slide">
 					<div class="col-md-6">
 						<div class="unit">

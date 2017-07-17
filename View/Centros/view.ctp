@@ -176,8 +176,13 @@
 </div>
 <!-- end Titulaciones Relacionadas -->
 <!-- Cursos Relacionados --> 
+<<<<<<< HEAD
 <div id="click_04" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_04">
+=======
+<div id="click_01" class="titulo_acordeon">Cursos Relacionados <span class="caret"></span></div>
+<div id="acordeon_01">
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	<div class="row">
 	<?php if (!empty($centro['Curso'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">

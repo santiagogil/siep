@@ -1,6 +1,10 @@
 <div class="col-md-6">
 	<div class="unit">
+<<<<<<< HEAD
          <!--<span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Institución:</b> <?php echo $this->Html->link($centros[$titulacion['Titulacion']['id']], array('controller' => 'centros', 'action' => 'view', $titulacion['Titulacion']['id'])); ?></span><br/>-->
+=======
+         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Institución:</b> <?php echo $this->Html->link($centros[$titulacion['Titulacion']['centro_id']], array('controller' => 'centros', 'action' => 'view', $titulacion['Titulacion']['centro_id'])); ?></span><br/>
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
          <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Nombre:</b> <?php echo $titulacion['Titulacion']['nombre']; ?></span><br/>
          <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Orientación:</b> <?php echo $titulacion['Titulacion']['orientacion']; ?></span><br/>
          <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Forma del dictado:</b> <?php echo $titulacion['Titulacion']['forma_dictado']; ?></span><br/>

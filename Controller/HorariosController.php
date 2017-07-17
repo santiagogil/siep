@@ -2,7 +2,7 @@
 class HorariosController extends AppController {
 
 	var $name = 'Horarios';
-    public $helpers = array('Session', 'Html');
+    var $helpers = array('Session', 'Html');
 	public $components = array('Auth','Session', 'RequestHandler');
 	var $paginate = array('Horario' => array('limit' => 6, 'order' => 'Horario.dia DESC'));
 

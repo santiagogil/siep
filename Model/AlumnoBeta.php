@@ -5,7 +5,7 @@ class Alumno extends AppModel {
 	
 	var $name = 'Alumno';
     //var $displayField = 'apellido';
-	//public $virtualFields = array('nombre_completo_alumno'=> 'CONCAT(Alumno.apellidos, " ", Alumno.nombres)');
+	public $virtualFields = array('nombre_completo_alumno'=> 'CONCAT(Alumno.apellidos, " ", Alumno.nombres)');
     /*
 	public $actsAs = array(
 			'Upload.Upload' => array(

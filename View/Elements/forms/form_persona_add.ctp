@@ -11,11 +11,6 @@
 <div class="row">
 	<div class="col-md-4 col-sm-6 col-xs-12">
   	  <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
-<<<<<<< HEAD
-	   	<?php 
-          	echo $this->Form->input('persona_id', array('label' => 'Persona*', 'empty' => 'Ingrese una persona...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
-        ?>
-=======
 	   <?php 
         echo $this->Form->input('nombres', array('label' => 'Nombres*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese todos los nombres', 'placeholder' => 'Ingrese todos los Nombres...'));
         echo $this->Form->input('apellidos', array('label'=>'Apellidos*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese todos los apellidos', 'placeholder' => 'Ingrese todos los apellidos...'));
@@ -77,7 +72,6 @@
           echo $this->Form->input('ciudad', array('label' => 'Ciudad*', 'default' => 'Ushuaia', 'options' => $ciudades, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione la ciudad del domicilio real', 'placeholder' => 'Ingrese una ciudad...'));
           $pendientes = array('SI' => 'SI', 'NO' => 'NO');
     ?>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
     </div> 
   </div>
   <div class="col-md-12 col-sm-6 col-xs-12">

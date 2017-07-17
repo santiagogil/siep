@@ -12,6 +12,7 @@
 			echo $this->Form->input('cue', array('id'=>'cue', 'label'=>'CUE*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un CUE', 'placeholder' => 'Ingrese un CUE...'));
 			echo $this->Form->input('nombre', array('id'=>'nombre', 'label'=>'Nombre*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nombre', 'placeholder' => 'Ingrese el nombre de la institución...'));
 			echo $this->Form->input('sigla', array('id'=>'sigla', 'label'=>'Sigla*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una sigla', 'placeholder' => 'Ingrese una sigla de la institución...'));
+<<<<<<< HEAD
 			$sectores = array('ESTATAL' => 'ESTATAL', 'PRIVADO' => 'PRIVADO');
 	        echo $this->Form->input('sector', array('label' => 'Sector*', 'empty' => 'Ingrese un sector...', 'options' => $sectores, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
 	        $nivelServicios = array('Común - Inicial' => 'Común - Inicial', 'Común - Primario' => 'Común - Primario', 'Común - Secundario' => 'Común - Secundario', 'Común - Superior
@@ -21,6 +22,8 @@
 				' => 'Especial - Secundario', 'Especial - Taller de nivel Primario' => 'Especial - Taller de nivel Primario', 'Especial - Taller de nivel Secundario' => 'Especial - Taller de nivel Secundario', 'Especial - Talleres de educacion integral' => 'Especial - Talleres de educacion integral', 'Especial - Integración' => 'Especial - Integración', 'Especial - Domiciliaria-hospitalaria. Inicial' => 'Especial - Domiciliaria-hospitalaria. Inicial', 'Especial - Domiciliaria-hospitalaria. Primario' => 'Especial - Domiciliaria-hospitalaria. Primario', 'Especial - Domiciliaria-hospitalaria. Secundario' => 'Especial - Domiciliaria-hospitalaria. Secundario', 'Adultos - Primario' => 'Adultos - Primario', 'Adultos - Secundario' => 'Adultos - Secundario', 'Adultos - Alfabetización' => 'Adultos - Alfabetización', 'Adultos - Formación Profesional/Capacitación Laboral' => 'Adultos - Formación Profesional/Capacitación Laboral', 'Adultos - Domiciliaria-hospitalaria. Primario
 				' => 'Adultos - Domiciliaria-hospitalaria. Primario', 'Adultos - Domiciliaria-hospitalaria. Secundario' => 'Adultos - Domiciliaria-hospitalaria. Secundario', 'between' => '<br>', 'class' => 'form-control');
 	        echo $this->Form->input('nivel_servicio', array('label' => 'Nivel - Servicio*', 'empty' => 'Ingrese un nivel y servicio...', 'options' => $nivelServicios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
+=======
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 			echo $this->Form->input('fechaFundacion', array('label' => 'Fecha de fundación*', 'id' => 'datetimepicker2', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
 			?>
 		</div>

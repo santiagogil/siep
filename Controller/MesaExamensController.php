@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class MesaExamensController extends AppController {
 
    	var $name = 'Mesaexamens';
-    public $helpers = array('Session', 'Form', 'Time', 'Js');
+    var $helpers = array('Session', 'Form', 'Time', 'Js');
 	public $components = array('Paginator', 'Flash', 'Auth','Session', 'RequestHandler');
 	var $paginate = array('Mesaexamen' => array('limit' => 4, 'order' => 'Mesaexamen.fecha DESC'));
 
@@ -25,7 +25,8 @@ class MesaExamensController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->MesaExamen->recursive = -1;
+	    
+		//$this->MesaExamen->recursive = 0;
 		$this->set('mesaexamens', $this->paginate());
         $ciclos = $this->Mesaexamen->Ciclo->find('list');
 		$titulacions = $this->Mesaexamen->Titulacion->find('list');

@@ -8,12 +8,19 @@
 	         <div class="unit">
  		        <div class="row perfil">
                     <div class="col-md-4 col-sm-6 col-xs-8">	
+<<<<<<< HEAD
 						<b><?php echo __('Centro: '); ?></b>
 						 	<?php echo ($this->Html->link($curso['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $curso['Centro']['id']))); ?></p>
 						<b><?php echo __('Titulacion: '); ?></b>
 						 	<?php echo ($this->Html->link($curso['Titulacion']['nombre'], array('controller' => 'titulacions', 'action' => 'view', $curso['Titulacion']['id']))); ?></p>
 						<b><?php echo __('Turno: '); ?></b>
 							<?php echo ($curso['Curso']['turno']); ?></p>
+=======
+						<b><?php echo __('Turno: '); ?></b>
+						<?php echo ($curso['Curso']['turno']); ?></p>
+						<b><?php echo __('Centro: '); ?></b>
+						<?php echo ($this->Html->link($curso['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $curso['Centro']['id']))); ?></p>
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 						<b><?php echo __('Aula: '); ?></b>
 							<?php echo ($curso['Curso']['aula_nro']); ?></p>
 			            <!--<b><?php echo __('Matriculados: '); ?></b>-->
@@ -112,7 +119,11 @@
 </div>-->
 <!-- end Cargos Relacionados -->
 <!-- Materias Relacionadas -->
+<<<<<<< HEAD
 <div id="click_02" class="titulo_acordeon">Unidades Curriculares Relacionadas <span class="caret"></span></div>
+=======
+<div id="click_02" class="titulo_acordeon">Espacios Relacionados <span class="caret"></span></div>
+>>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 <div id="acordeon_02">
 		<div class="row">
 	<?php if (!empty($curso['Materia'])):?>
@@ -161,7 +172,7 @@
 	<div class="col-md-6">
 		<div class="unit">
 			<?php echo '<b>Inscripción:</b> '.($this->Html->link($inscripcion['legajo_nro'], array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id'])));?><br>
-			<?php echo '<b>Alumno:</b> '.($this->Html->link($alumnoNombre[$inscripcion['alumno_id']], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['alumno_id'])));?><br>
+			<?php echo '<b>Alumno:</b> '.($this->Html->link($alumnoNombre[$inscripcion['persona_id']], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['persona_id'])));?><br>
             <?php echo '<b>Fecha_alta:</b> '.($this->Html->formatTime($inscripcion['fecha_alta']));?><br>
 			<!--<?php echo '<b>Fecha_baja:</b> '.($this->Html->formatTime($inscripcion['fecha_baja']));?><br>
             <?php echo '<b>Fecha_egreso:</b> '.($this->Html->formatTime($inscripcion['fecha_egreso']));?><br>-->
