@@ -53,11 +53,7 @@ class InscripcionsController extends AppController {
 			$conditions['Inscripcion.estado ='] = $this->params['named']['estado'];
 		}
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
-<<<<<<< HEAD
 		$this->set(compact('inscripcions', 'personas', 'centros'));
-=======
-		$this->set(compact('inscripcions', 'alumnos', 'centros'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	}
     
 	public function view($id = null) {
@@ -91,22 +87,14 @@ class InscripcionsController extends AppController {
 			$personasDoc = $this->Inscripcion->Persona->findById($personaId, 'documento_nro');
             $personaDoc = $personasDoc['Persona']['documento_nro'];
 			//Genera el nro de legajo y se deja en los datos que se intentaran guardar
-<<<<<<< HEAD
 			$codigoActual = $this->__getCodigo($ciclo, $personaDoc);
-=======
-			$codigoActual = $this->__getCodigo($ciclo, $alumnoDoc);
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 			//Comprueba que ese legajo no exista.
 			$codigoLista = $this->Inscripcion->find('list', array('fields'=>array('legajo_nro')));
             if (in_array($codigoActual, $codigoLista, true))
             { 
                 $this->Session->setFlash('El alumno ya está inscripto en este ciclo.', 'default', array('class' => 'alert alert-danger'));
 			}else{
-<<<<<<< HEAD
 				$this->request->data['Inscripcion,']['legajo_nro'] = $this->__getCodigo($ciclo, $personaDoc);
-=======
-				$this->request->data['Inscripcion']['legajo_nro'] = $this->__getCodigo($ciclo, $alumnoDoc);
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 			//Antes de guardar genera el estado de la inscripción
 			    if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true){
 			        $estado = "COMPLETA";	
@@ -125,7 +113,6 @@ class InscripcionsController extends AppController {
 				}
 			}
 		}
-<<<<<<< HEAD
 		
 		$userCentroId = $this->getUserCentroId();
 		$cursos = $this->Curso->find('list', array('fields'=>array('nombre_completo_curso'), array('conditions' => array('centro_id' => $userCentroId))));
@@ -133,10 +120,6 @@ class InscripcionsController extends AppController {
         $this->set(compact('cursos',$cursos, 'materias',$materias));
     }
         
-=======
-    }
-
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	public function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
@@ -190,22 +173,14 @@ class InscripcionsController extends AppController {
 	private function __lists(){
 	    $this->loadModel('User');
         $this->loadModel('Empleado');
-<<<<<<< HEAD
 		$personas = $this->Inscripcion->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'order'=>'nombre_completo_persona ASC'));
-=======
-		$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno'), 'order'=>'nombre_completo_alumno ASC'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 		$ciclos = $this->Inscripcion->Ciclo->find('list');
 		$cicloIdActual = $this->getLastCicloId();
 		$centros = $this->Inscripcion->Centro->find('list');
 		$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
 		$materias = $this->Inscripcion->Materia->find('list');
 		$empleados = $this->Inscripcion->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado'), 'conditions'=>array('id'== 'empleadoId')));
-<<<<<<< HEAD
 	    $this->set(compact('personas', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
-=======
-	    $this->set(compact('alumnos', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	}
 	
 	private function __getCodigo($ciclo, $personaDoc){

@@ -8,38 +8,7 @@
 	       <div class="unit">
  		      <div class="row perfil">
                  <div class="col-md-8 col-sm-6 col-xs-8">	
-<<<<<<< HEAD
                     
-=======
-                    <b><?php echo __('Nombres: '); ?></b>
-                    <?php echo ($alumno['Alumno']['nombres']); ?></p>
-                    <b><?php echo __('Apellidos: '); ?></b>
-                    <?php echo ($alumno['Alumno']['apellidos']); ?></p>
-                    <b><?php echo __('Documento: '); ?></b>
-                    <?php echo ($alumno['Alumno']['documento_tipo']).' '.($alumno['Alumno']['documento_nro']); ?></p>
-                    <b><?php echo __('Legajo Físico N°: '); ?></b>
-                    <?php echo $alumno['Alumno']['legajo_fisico_nro']; ?></p>
-                    <b><?php echo __('Edad: '); ?></b>
-                    <?php echo ($alumno['Alumno']['edad']); ?></p>
-	                </div>
-                    <div class="col-md-8 col-sm-6 col-xs-8">
-                    <b><?php echo __('Direccion: '); ?></b>
-                    <?php echo $alumno['Alumno']['calle_nombre'].' N° '.$alumno['Alumno']['calle_nro']; ?></p>
-                    <b><?php echo __('Barrio: '); ?></b>
-                    <?php echo $barrioNombre[$alumno['Alumno']['barrio_id']]; ?></p>
-                    <b><?php echo __('Telefono: '); ?></b>
-                    <?php echo $alumno['Alumno']['telefono_nro']; ?></p>
-                    <!--<b><?php echo __('Email: '); ?></b>
-                    <?php echo ($this->Html->link($alumno['Alumno']['email'],'mailto:'.$alumno['Alumno']['email'])); ?></p>
-                    <b><?php echo __('Ocupación: '); ?></b>
-                    <?php echo ($alumno['Alumno']['ocupacion']); ?></p>
-                    <b><?php echo __('Lugar de trabajo: '); ?></b>
-                    <?php echo ($alumno['Alumno']['lugar_de_trabajo']); ?></p>
-                    <b><?php echo __('Horario de trabajo: '); ?></b>
-                    <?php echo ($alumno['Alumno']['horario_de_trabajo']); ?></p>-->
-                    <b><?php echo __('Observaciones: '); ?></b>
-                    <?php echo $alumno['Alumno']['observaciones']; ?></p>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
                  </div>
  	          </div>
          </div>
@@ -52,17 +21,10 @@
       <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['Alumno']['id'])); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['Alumno']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['Alumno']['nombre_completo_alumno'])); ?></div>
-<<<<<<< HEAD
         <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>-->
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add', $alumno['Alumno']['id'])); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
-=======
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add', $alumno['Alumno']['id'])); ?></div>-->
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Calificación'), array('controller' => 'notas', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Inasistencia'), array('controller' => 'inasistencias', 'action' => 'add')); ?></div>-->
       <?php endif; ?>	

@@ -13,13 +13,8 @@
         <span class="name"><span class="glyphicon glyphicon-calendar"></span> <b>Centro:</b> 
         <?php echo $this->Html->link($centros[$cursosInscripcion['Inscripcion']['centro_id']], array('controller' => 'centros', 'action' => 'view', $cursosInscripcion['Inscripcion']['centro_id'])); ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Sección:</b> <?php echo $this->Html->link($cursosInscripcion['Curso']['nombre_completo_curso'], array('controller' => 'cursos', 'action' => 'view', $cursosInscripcion['Curso']['id']));?></span><br/>
-<<<<<<< HEAD
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Alumno:</b>  <?php echo $this->Html->link($alumnos[$cursosInscripcion['Inscripcion']['persona_id']], array('controller' => 'alumnos', 'action' => 'view', $cursosInscripcion['Inscripcion']['persona_id'])); ?></span><br/>
         <span class="name
         "><span class="glyphicon glyphicon-info-sign"></span> <b>Legajo Nº:</b> <?php echo $this->Html->link($cursosInscripcion['Inscripcion']['legajo_nro'], array('controller' => 'inscripcions', 'action' => 'view', $cursosInscripcion['Inscripcion']['id'])); ?></span><br/> 		   
-=======
-        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Alumno:</b>  <?php echo $this->Html->link($alumnos[$cursosInscripcion['Inscripcion']['alumno_id']], array('controller' => 'alumnos', 'action' => 'view', $cursosInscripcion['Inscripcion']['alumno_id'])); ?></span><br/>
-        <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Legajo Nº:</b> <?php echo $this->Html->link($cursosInscripcion['Inscripcion']['legajo_nro'], array('controller' => 'inscripcions', 'action' => 'view', $cursosInscripcion['Inscripcion']['id'])); ?></span><br/> 		   
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	</div>
 </div>

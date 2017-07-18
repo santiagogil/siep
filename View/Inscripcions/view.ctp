@@ -164,11 +164,7 @@
 </div>
 <!-- end Cursos Relacionados -->
 <!-- Materias Relacionados --> 
-<<<<<<< HEAD
 <div id="click_02" class="titulo_acordeon">Unidades Curriculares Relacionadas <span class="caret"</span></div>
-=======
-<div id="click_02" class="titulo_acordeon">Espacios Relacionados <span class="caret"</span></div>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 <div id="acordeon_02">
 		<div class="row">
 	        <?php if (!empty($inscripcion['Materia'])):?>

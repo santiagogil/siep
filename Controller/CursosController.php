@@ -4,14 +4,9 @@ App::uses('AppController', 'Controller');
 class CursosController extends AppController {
 
 	var $name = 'Cursos';
-<<<<<<< HEAD
     public $uses = array('Curso', 'Inscripcion');
     public $helpers = array('Form', 'Time', 'Js');
 	public $components = array('Session', 'RequestHandler');
-=======
-    var $helpers = array('Form', 'Time', 'Js');
-	var $components = array('Session', 'RequestHandler');
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	var $paginate = array('Curso' => array('limit' => 6, 'order' => 'Curso.anio ASC'));
 
 	public function beforeFilter() {
@@ -53,10 +48,7 @@ class CursosController extends AppController {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
 		}
 		$cursos = $this->paginate('Curso',$conditions);
-<<<<<<< HEAD
 	
-=======
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 		$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla')));
 		$this->set(compact('cursos', 'centros'));
 	}
@@ -109,13 +101,9 @@ class CursosController extends AppController {
 		$titulacions = $this->Curso->Titulacion->find('list');
 		$materias = $this->Curso->Materia->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
-<<<<<<< HEAD
 		$inscripcions = $this->Inscripcion->find('list');
         
 		$this->set(compact('centros', 'titulacions', 'materias', 'ciclos', 'inscripcions', $inscripcions));
-=======
-		$this->set(compact('centros', 'titulacions', 'materias', 'ciclos'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	}
 
 	function edit($id = null) {
@@ -144,16 +132,10 @@ class CursosController extends AppController {
 		
 		$centros = $this->Curso->Centro->find('list');
 		$titulacions = $this->Curso->Titulacion->find('list');
-<<<<<<< HEAD
 		$ciclos = $this->Curso->Ciclo->find('list');
 		$inscripcions = $this->Inscripcion->find('list');
 
 		$this->set(compact('centros', 'titulacions', 'modalidads', 'ciclos', 'inscripcions', $inscripcions));
-=======
-		//$modalidads = $this->Curso->Modalidad->find('list');
-		$ciclos = $this->Curso->Ciclo->find('list');
-		$this->set(compact('centros', 'titulacions', 'modalidads', 'ciclos'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	}
 
 	function delete($id = null) {

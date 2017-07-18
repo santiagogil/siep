@@ -68,10 +68,6 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => '192.168.99.100',
-		'port' => 3386,
-		'login' => 'root',
-		'password' => 'root',
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => '',
@@ -79,26 +75,14 @@ class DATABASE_CONFIG {
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);
-	/*
 	public $test = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'port' => 3386,
-		'login' => 'root',
-		'password' => 'root',
 		'login' => 'root',
 		'password' => '',
 		'database' => 'siep',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
-	
-	public function __construct() {
-        $this->default['host']       = getenv("HOST");
-        $this->default['login']      = getenv("LOGIN");
-        $this->default['password']   = getenv("PASSWORD");
-        $this->default['database']   = getenv("DATABASE");
-    }
-    */
 }

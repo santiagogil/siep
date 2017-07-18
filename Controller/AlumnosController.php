@@ -108,33 +108,12 @@ class AlumnosController extends AppController {
           	if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
-<<<<<<< HEAD
 		  	}
           	if (!empty($this->data)) {
 				$this->Alumno->create();
 				// Obtiene y asigna el centro al alumno
 				$centroId = $this->getUserCentroId();
 				$this->request->data['Alumno']['centro_id'] = $centroId;
-=======
-		  }
-          if (!empty($this->data)) {
-			$this->Alumno->create();
-			// Antes de guardar pasa a mayúsculas el nombre completo.
-			$apellidosMayuscula = strtoupper($this->request->data['Alumno']['apellidos']);
-			$nombresMayuscula = strtoupper($this->request->data['Alumno']['nombres']);
-			// Genera el nombre completo en mayúsculas y se deja en los datos que se intentaran guardar
-			$this->request->data['Alumno']['apellidos'] = $apellidosMayuscula;
-			$this->request->data['Alumno']['nombres'] = $nombresMayuscula;
-            // Antes de guardar calcula la edad
-			$day = $this->request->data['Alumno']['fecha_nac']['day'];
-			$month = $this->request->data['Alumno']['fecha_nac']['month'];
-			$year = $this->request->data['Alumno']['fecha_nac']['year'];
-			// Calcula la edad y se deja en los datos que se intentaran guardar
-			$this->request->data['Alumno']['edad'] = $this->__getEdad($day, $month, $year);
-			// Obtiene y asigna el centro al alumno
-			$centroId = $this->getUserCentroId();
-			$this->request->data['Alumno']['centro_id'] = $centroId;
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 
 			if ($this->Alumno->save($this->request->data)) {
 				$this->Session->setFlash('El alumno ha sido grabado', 'default', array('class' => 'alert alert-success'));
@@ -145,16 +124,10 @@ class AlumnosController extends AppController {
 			}
 		}
         
-<<<<<<< HEAD
 		//$this->loadModel('Barrio');          
         $personas = $this->Alumno->Persona->find('list', array('fields' => array('id')));
         print_r($personas);
         $this->set(compact('alumnos', $personas));
-=======
-		$this->loadModel('Barrio');          
-        $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-        $this->set('barrios', $barrios);
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
     }
 
 	public function edit($id = null) {
@@ -198,10 +171,7 @@ class AlumnosController extends AppController {
 		$this->loadModel('Barrio');          
           $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
           $this->set('barrios', $barrios);
-<<<<<<< HEAD
 	    */
-=======
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	}
 
 	public function delete($id = null) {

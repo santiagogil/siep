@@ -4,7 +4,6 @@ App::uses('AppController', 'Controller');
 class CursosInscripcionsController extends AppController {
 
 	var $name = 'CursosInscripcions';
-<<<<<<< HEAD
     public $helpers = array('Session', 'Form', 'Time', 'Js');
     public $components = array('Auth','Session', 'RequestHandler');
    	public $paginate = array('CursosInscripcion' => array('limit' => 2, 'order' => 'CursosInscripcion.curso_id ASC'));
@@ -19,11 +18,6 @@ class CursosInscripcionsController extends AppController {
 	        $this->Auth->allow('index');
 	    } 
     } 
-=======
-    var $helpers = array('Session', 'Form', 'Time', 'Js');
-    var $components = array('Auth','Session', 'RequestHandler');
-   	var $paginate = array('CursosInscripcion' => array('limit' => 2, 'order' => 'CursosInscripcion.curso_id ASC'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 
 /**
  * index method
