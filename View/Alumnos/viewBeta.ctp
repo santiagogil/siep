@@ -1,14 +1,54 @@
 <?php echo $this->Html->script(array('acordeon', 'slider')); ?>
 <?php echo $this->Html->css('slider.css'); ?>
 <!-- start main -->
-<div class="TituloSec"><?php echo ($alumno['Alumno']['persona_id']); ?></div>
+<div class="TituloSec"><?php echo ($alumno['Alumno']['apellidos']).' '.($alumno['Alumno']['nombres']); ?></div>
   <div id="ContenidoSec">
      <div class="row">
         <div class="col-md-8">	
 	       <div class="unit">
  		      <div class="row perfil">
+                 <div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
+					<!-- Sí no tiene foto presenta imagen de avatar según el sexo. -->
+	                <?php if(($foto == 0) && ($alumno['Alumno']['sexo'] == 'MASC')): ?>
+	                         <?php echo $this->Html->image('../img/avatar-masculino.png', array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
+	                <?php endif; ?>
+	                <?php if(($foto == 0) && ($alumno['Alumno']['sexo'] == 'FEM')): ?>
+	                         <?php echo $this->Html->image('../img/avatar-femenino.png', array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
+	                <?php endif; ?>
+	                <!-- Sí tiene foto la presenta. -->
+	                <?php if($foto == 1): ?>
+	                         <?php echo $this->Html->image('../files/alumno/foto/' . $alumno['Alumno']['foto_dir'] . '/' . 'thumb_' .$alumno['Alumno']['foto'], array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
+	                <?php endif; ?>
+  	             </div>
                  <div class="col-md-8 col-sm-6 col-xs-8">	
-                    
+                    <b><?php echo __('Nombres: '); ?></b>
+                    <?php echo ($alumno['Alumno']['nombres']); ?></p>
+                    <b><?php echo __('Apellidos: '); ?></b>
+                    <?php echo ($alumno['Alumno']['apellidos']); ?></p>
+                    <b><?php echo __('Documento: '); ?></b>
+                    <?php echo ($alumno['Alumno']['documento_tipo']).' '.($alumno['Alumno']['documento_nro']); ?></p>
+                    <b><?php echo __('Legajo Físico N°: '); ?></b>
+                    <?php echo $alumno['Alumno']['legajo_fisico_nro']; ?></p>
+                    <b><?php echo __('Edad: '); ?></b>
+                    <?php echo ($alumno['Alumno']['edad']); ?></p>
+	                </div>
+                    <div class="col-md-8 col-sm-6 col-xs-8">
+                    <b><?php echo __('Direccion: '); ?></b>
+                    <?php echo $alumno['Alumno']['calle_nombre'].' N° '.$alumno['Alumno']['calle_nro']; ?></p>
+                    <b><?php echo __('Barrio: '); ?></b>
+                    <?php echo $barrioNombre[$alumno['Alumno']['barrio_id']]; ?></p>
+                    <b><?php echo __('Telefono: '); ?></b>
+                    <?php echo $alumno['Alumno']['telefono_nro']; ?></p>
+                    <!--<b><?php echo __('Email: '); ?></b>
+                    <?php echo ($this->Html->link($alumno['Alumno']['email'],'mailto:'.$alumno['Alumno']['email'])); ?></p>
+                    <b><?php echo __('Ocupación: '); ?></b>
+                    <?php echo ($alumno['Alumno']['ocupacion']); ?></p>
+                    <b><?php echo __('Lugar de trabajo: '); ?></b>
+                    <?php echo ($alumno['Alumno']['lugar_de_trabajo']); ?></p>
+                    <b><?php echo __('Horario de trabajo: '); ?></b>
+                    <?php echo ($alumno['Alumno']['horario_de_trabajo']); ?></p>-->
+                    <b><?php echo __('Observaciones: '); ?></b>
+                    <?php echo $alumno['Alumno']['observaciones']; ?></p>
                  </div>
  	          </div>
          </div>

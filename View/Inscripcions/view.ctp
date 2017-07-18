@@ -11,10 +11,10 @@
                     <div class="col-md-4 col-sm-4 col-xs-12">	
                         <b><?php echo __('Ciclo:'); ?></b>
                         <?php echo ($this->Html->link($inscripcion['Ciclo']['nombre'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['Ciclo']['nombre']))); ?></p>
-                        <!--<b><?php echo __('Centro:'); ?></b>
-                        <?php echo($this->Html->link($inscripcion['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $inscripcion['Centro']['sigla']))); ?></p>-->
-                        <b><?php echo __('Alumno:'); ?></b>
-                        <?php echo ($this->Html->link($inscripcion['Alumno']['nombre_completo_alumno'], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['Alumno']['id']))); ?></p>                     
+                        <b><?php echo __('Institución:'); ?></b>
+                        <?php echo($this->Html->link($inscripcion['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $inscripcion['Centro']['sigla']))); ?></p>
+                        <b><?php echo __('Persona:'); ?></b>
+                        <?php echo ($this->Html->link($inscripcion['Persona']['nombre_completo_persona'], array('controller' => 'personas', 'action' => 'view', $inscripcion['Persona']['id']))); ?></p>                     
                         <b><?php echo __('Estado:'); ?></b>
                         <?php if($inscripcion['Inscripcion']['estado'] == "COMPLETA"){; ?>
                         <span class="label label-success"><?php echo $inscripcion['Inscripcion']['estado']; ?></span>

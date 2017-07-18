@@ -83,9 +83,9 @@ class MateriasController extends AppController {
 		$this->loadModel('Materia');
 		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$horarioMateriaId)));
 		
-		$inscripcionAlumnoId = $this->Materia->Inscripcion->find('list', array('fields'=>array('alumno_id')));
-		$this->loadModel('Alumno');
-		$alumnoNombre = $this->Alumno->find('list', array('fields'=>array('nombre_completo_alumno'), 'conditions'=>array('id'=>$inscripcionAlumnoId)));
+		$inscripcionAlumnoId = $this->Materia->Inscripcion->find('list', array('fields'=>array('persona_id')));
+		$this->loadModel('Persona');
+		$alumnoNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$inscripcionAlumnoId)));
 		
 		$disenocurricularId = $this->Materia->find('list', array('fields'=>array('disenocurricular_id')));
 		$this->loadModel('Disenocurricular');

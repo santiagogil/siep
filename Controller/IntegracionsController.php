@@ -42,10 +42,10 @@ class IntegracionsController extends AppController {
 				$this->Session->setFlash('La Integracion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$alumnos = $this->Integracion->Alumno->find('list', array('fields'=>array('id',                                                    'nombre_completo_alumno')));
+		$personas = $this->Integracion->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
 		$centros = $this->Integracion->Centro->find('list', array('fields' => array('id', 'sigla')));
 		$ciclos = $this->Integracion->Ciclo->find('list');
-		$this->set(compact('alumnos', 'centros', 'ciclos'));
+		$this->set(compact('personas', 'centros', 'ciclos'));
 	}
 
 	function edit($id = null) {
@@ -71,10 +71,10 @@ class IntegracionsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Integracion->read(null, $id);
 		}
-		$alumnos = $this->Integracion->Alumno->find('list', array('fields'=>array('id',                                                    'nombre_completo_alumno')));
+		$personas = $this->Integracion->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
 		$centros = $this->Integracion->Centro->find('list', array('fields' => array('id', 'sigla')));
 		$ciclos = $this->Integracion->Ciclo->find('list');
-		$this->set(compact('alumnos', 'centros', 'ciclos'));
+		$this->set(compact('personas', 'centros', 'ciclos'));
 
 	}
 

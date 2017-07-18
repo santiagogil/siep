@@ -11,9 +11,9 @@ class Integracion extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Alumno' => array(
-			'className' => 'Alumno',
-			'foreignKey' => 'alumno_id',
+		'Persona' => array(
+			'className' => 'Persona',
+			'foreignKey' => 'persona_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

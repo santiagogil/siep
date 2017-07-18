@@ -33,14 +33,14 @@ class InasistenciasController extends AppController {
 		$this->paginate['Inasistencia']['limit'] = 8;
 		$this->paginate['Inasistencia']['order'] = array('Inasistencia.created' => 'DESC');
 		$this->paginate['Inasistencia']['conditions'] = array('Inasistencia.ciclo_id' => $cicloIdActual);
-		$alumnos = $this->Inasistencia->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno'), 'order'=>'Alumno.apellidos ASC'));
+		$personas = $this->Inasistencia->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'order'=>'Persona.apellidos ASC'));
 		
 		$this->redirectToNamed();
 		$conditions = array();
 		
-		if(!empty($this->params['named']['alumno_id']))
+		if(!empty($this->params['named']['persona_id']))
 		{
-			$conditions['Inasistencia.alumno_id ='] = $this->params['named']['alumno_id'];
+			$conditions['Inasistencia.persona_id ='] = $this->params['named']['persona_id'];
 		}
 		if(!empty($this->params['named']['tipo']))
 		{
@@ -55,7 +55,7 @@ class InasistenciasController extends AppController {
 			$conditions['Inasistencia.justificado ='] = $this->params['named']['justificado'];
 		}
 		$inasistencias = $this->paginate('Inasistencia', $conditions);
-		$this->set(compact('inasistencias', 'alumnos'));
+		$this->set(compact('inasistencias', 'personas'));
 	}
 	
 	
@@ -151,9 +151,9 @@ class InasistenciasController extends AppController {
         $this->loadModel('Empleado');
         $empleados = $this->Inasistencia->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado'), 'conditions'=>array('id'== 'empleadoId')));
         $cursos = $this->Inasistencia->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'order'=>'Curso.anio ASC'));
-        $alumnos = $this->Inasistencia->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno'), 'order'=>'Alumno.apellidos ASC', 'conditions'=>array('Alumno.id'=>$cicloInscripcionAlumnoId)));
+        $personas = $this->Inasistencia->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'order'=>'Persona.apellidos ASC', 'conditions'=>array('Persona.id'=>$cicloInscripcionAlumnoId)));
         $materias = $this->Inasistencia->Materia->find('list', array('fields'=>array('id', 'alia'), 'order'=>'Materia.curso_id ASC'));
-        $this->set(compact('empleados', 'ciclos', 'cicloIdActual', 'cursos', 'alumnos', 'materias'));
+        $this->set(compact('empleados', 'ciclos', 'cicloIdActual', 'cursos', 'personas', 'materias'));
 	}
 }
 ?>

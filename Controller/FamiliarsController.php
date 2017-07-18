@@ -20,7 +20,7 @@ class FamiliarsController extends AppController {
 	function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Familiar no valido', 'default', array('class' => 'alert alert-warning'));
-			$this->redirect(array('controller' => 'alumnos','action' => 'index'));
+			$this->redirect(array('controller' => 'personas', 'action' => 'index'));
 		}
 		$this->set('familiar', $this->Familiar->read(null, $id));
 				
@@ -30,7 +30,7 @@ class FamiliarsController extends AppController {
 		  //abort if cancel button was pressed  
           if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
-                $this->redirect(array('controller' => 'alumnos','action' => 'index'));
+                $this->redirect(array('controller' => 'personas', 'action' => 'index'));
 				
 		  }
    		  if (!empty($this->data)) {
@@ -43,20 +43,23 @@ class FamiliarsController extends AppController {
 				$this->Session->setFlash('El familiar no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$alumnos = $this->Familiar->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno')));
-		$this->set(compact('alumnos'));
-	}
+		$personas = $this->Familiar->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+		$this->loadModel('Barrio');          
+        $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+        //$this->set('barrios', $barrios);
+        $this->set(compact('personas', 'barrios', $barrios));
+    }
 
 	function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Familiar no valido', 'default', array('class' => 'alert alert-warning'));
-			$this->redirect(array('controller' => 'alumnos','action' => 'index'));
+			$this->redirect(array('controller' => 'personas', 'action' => 'index'));
 		}
 		if (!empty($this->data)) {
 		  //abort if cancel button was pressed  
           if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
-                $this->redirect( array('controller' => 'alumnos','action' => 'view', $id));
+                $this->redirect( array('controller' => 'personas', 'action' => 'view', $id));
 		  }
 		  if ($this->Familiar->save($this->data)) {
 				$this->Session->setFlash('El familiar ha sido grabado', 'default', array('class' => 'alert alert-success'));
@@ -71,21 +74,24 @@ class FamiliarsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Familiar->read(null, $id);
 		}
-		$alumnos = $this->Familiar->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno')));
-		$this->set(compact('alumnos'));
+		$personas = $this->Familiar->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+		$this->loadModel('Barrio');          
+        $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+        //$this->set('barrios', $barrios);
+        $this->set(compact('personas', 'barrios', $barrios));
 	}
 
 	function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para familiar', 'default', array('class' => 'alert alert-warning'));
-			$this->redirect(array('controller' => 'alumnos','action' => 'index'));
+			$this->redirect(array('controller' => 'personas', 'action' => 'index'));
 		}
 		if ($this->Familiar->delete($id)) {
 			$this->Session->setFlash('El Familiar ha sido borrado', 'default', array('class' => 'alert alert-success'));
-			$this->redirect(array('controller' => 'alumnos','action' => 'index'));
+			$this->redirect(array('controller' => 'personas', 'action' => 'index'));
 		}
 		$this->Session->setFlash('Familiar no fue borrado', 'default', array('class' => 'alert alert-danger'));
-		$this->redirect(array('controller' => 'alumnos','action' => 'index'));
+		$this->redirect(array('controller' => 'personas', 'action' => 'index'));
 	}
 }
 ?>

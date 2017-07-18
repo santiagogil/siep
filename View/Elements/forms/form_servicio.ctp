@@ -8,7 +8,7 @@
    
 <?php 
         echo $this->Form->input('creado', array('type' => 'text', 'between' => '<br>', 'empty' => '','class' => 'datepicker form-control'));
-		echo $this->Form->input('alumno_id', array('label'=>'Alumno', 'between' => '<br>', 'class' => 'form-control'));
+		echo $this->Form->input('persona_id', array('label'=>'Persona', 'between' => '<br>', 'class' => 'form-control'));
 		echo $this->Form->input('ciclo_id', array('label'=>'Ciclo', 'between' => '<br>', 'class' => 'form-control'));
 		$tipos_servicio = array('Gabinete' => 'Gabinete', 'Domiciliaria' => 'Domiciliaria', 'Hospitalaria' => 'Hospitalaria', 'Comedor' => 'Comedor', 'Beca' => 'Beca');
         echo $this->Form->input('tipo_servicio', array('options' => $tipos_servicio, 'empty' => '', 'between' => '<br>', 'class' => 'form-control'));

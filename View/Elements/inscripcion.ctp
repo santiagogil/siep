@@ -10,7 +10,7 @@
         </div>
         <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Centro:</b> <?php echo $this->Html->link($centros[$inscripcion['Inscripcion']['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['Inscripcion']['centro_id'])); ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Código:</b> <?php echo $inscripcion['Inscripcion']['legajo_nro']; ?></span><br/>
-        <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($alumnos[$inscripcion['Inscripcion']['alumno_id']], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['Inscripcion']['alumno_id'])); ?></span><br/>
+        <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Persona:</b> <?php echo $this->Html->link($personas[$inscripcion['Inscripcion']['persona_id']], array('controller' => 'personas', 'action' => 'view', $inscripcion['Inscripcion']['persona_id'])); ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-calendar"></span> <b>Alta:</b> <?php echo $this->Html->formatTime($inscripcion['Inscripcion']['fecha_alta']);?></span><br/>
         <!--<span class="name"><span class="glyphicon glyphicon-calendar"></span> <b>Baja:</b> <?php echo $this->Html->formatTime($inscripcion['Inscripcion']['fecha_baja']);?></span><br/> 		   
         <span class="name"><span class="glyphicon glyphicon-calendar"></span> <b>Egreso:</b> <?php echo $this->Html->formatTime($inscripcion['Inscripcion']['fecha_egreso']);?></span><br/>-->       

@@ -61,9 +61,9 @@ class CursosController extends AppController {
 		$this->set('curso', $this->Curso->read(null, $id));
 		
 		//genera nombres para datos relacionados.
-		$inscripcionAlumnoId = $this->Curso->Inscripcion->find('list', array('fields'=>array('alumno_id')));
-		$this->loadModel('Alumno');
-		$alumnoNombre = $this->Alumno->find('list', array('fields'=>array('nombre_completo_alumno'), 'conditions'=>array('id'=>$inscripcionAlumnoId)));
+		$inscripcionAlumnoId = $this->Curso->Inscripcion->find('list', array('fields'=>array('persona_id')));
+		$this->loadModel('Persona');
+		$alumnoNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$inscripcionAlumnoId)));
 
 		//genera número de matriculados.
 		$cursoId = $this->Curso->id;

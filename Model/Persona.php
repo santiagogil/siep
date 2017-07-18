@@ -1,4 +1,4 @@
-<?php /*
+<?php 
 class Persona extends AppModel {
 	
 	var $name = 'Persona';
@@ -7,123 +7,245 @@ class Persona extends AppModel {
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-    var $hasMany = array(
-		'Familiares' => array(
-			'className' => 'Familiares',
-			'foreignKey' => 'alumno_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
+  var $hasMany = array(
+    'Familiar' => array(
+      'className' => 'Familiar',
+      'foreignKey' => 'persona_id',
+      'dependent' => false,
+      'conditions' => '',
+      'fields' => '',
+      'order' => '',
+      'limit' => '',
+      'offset' => '',
+      'exclusive' => '',
+      'finderQuery' => '',
+      'counterQuery' => ''
+    ),
+    'Integracion' => array(
+      'className' => 'Integracion',
+      'foreignKey' => 'persona_id',
+      'dependent' => false,
+      'conditions' => '',
+      'fields' => '',
+      'order' => '',
+      'limit' => '',
+      'offset' => '',
+      'exclusive' => '',
+      'finderQuery' => '',
+      'counterQuery' => ''
+    ),
+    'Servicio' => array(
+      'className' => 'Servicio',
+      'foreignKey' => 'persona_id',
+      'dependent' => false,
+      'conditions' => '',
+      'fields' => '',
+      'order' => '',
+      'limit' => '',
+      'offset' => '',
+      'exclusive' => '',
+      'finderQuery' => '',
+      'counterQuery' => ''
+    ),
+    'Inscripcion' => array(
+      'className' => 'Inscripcion',
+      'foreignKey' => 'persona_id',
+      'dependent' => false,
+      'conditions' => '',
+      'fields' => '',
+      'order' => '',
+      'limit' => '',
+      'offset' => '',
+      'exclusive' => '',
+      'finderQuery' => '',
+      'counterQuery' => ''
+    ),
+    'Inasistencia' => array(
+      'className' => 'Inasistencia',
+      'foreignKey' => 'persona_id',
+      'dependent' => false,
+      'conditions' => '',
+      'fields' => '',
+      'order' => '',
+      'limit' => '',
+      'offset' => '',
+      'exclusive' => '',
+      'finderQuery' => '',
+      'counterQuery' => ''
+    ),
+    'Nota' => array(
+      'className' => 'Nota',
+      'foreignKey' => 'persona_id',
+      'dependent' => false,
+      'conditions' => '',
+      'fields' => '',
+      'order' => '',
+      'limit' => '',
+      'offset' => '',
+      'exclusive' => '',
+      'finderQuery' => '',
+      'counterQuery' => ''
+    )
+  );
 
-   
   //Validaciones
 
         var $validate = array(
-                   'nombres' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',3),
-                           'allowEmpty' => false,
-                           'message' => 'El Nombre no es valido. Indicar uno igual o mayor a tres letras.'
-                           )
-                   ),
-                   'apellidos' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',3),
-                           'allowEmpty' => false,
-                           'message' => 'El Apellido no es valido. Indicar uno igual o mayor a tres letras.'
-                           )
-                   ),
-				   'dni_tipo' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),                          
-                           'allowEmpty' => false,
-                           'message' => 'El tipo de dni no es valida. Indicar una de las opciones.'
-                           )
-                   ),
-                   'dni_nro' => array(
-                           'numeric' => array(
-                           'rule' => 'numeric',
-                           'allowEmpty' => false,
-                           'message' => 'El DNI no es valido. Indicar DNI sin puntos.'
-                           ),
-						   'isUnique' => array(
-	                       'rule' => 'isUnique',
-	                       'message' => 'Este DNI de alumno esta siendo usado.'
-	                     )
-                   ),
-				   'ocupacion' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),                          
-                           'allowEmpty' => false,
-                           'message' => 'La ocupacion no es valida. Indicar una de las opciones.'
-                           )
-                   ),
-				   'lugar_nac' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),                          
-                           'allowEmpty' => false,
-                           'message' => 'El lugar no es valida.'
-                           )
-                   ),
-				   'nacionalidad' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),                          
-                           'allowEmpty' => false,
-                           'message' => 'La nacionalidad no es valida. Indicar una de las opciones.'
-                           )
-                   ),
-				   'telefono_nro' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',6),
-                           'allowEmpty' => false,
-                           'message' => 'El telefono no es valido. Indicar uno de referencia solo con numeros y sin espacios.'
-                           )
-                   ),
-                   'email' => array(
-                           'email' => array(
-                           'rule' => 'email',
-                           'allowEmpty' => true,
-                           'message' => 'El email no es valido. Indicar email valido.'
-                           )
-                   ),
-                   'calle_nombre' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),                          
-                           'allowEmpty' => false,
-                           'message' => 'La direccion no es valida.'
-                           )
-                   ),
-				   'calle_nro' => array(
-                           'numeric' => array(
-                           'rule' => 'numeric',
-                           'allowEmpty' => false,
-                           'message' => 'El numero no es valido.'
-                           )
-					),
-					'barrio' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),                          
-                           'allowEmpty' => false,
-                           'message' => 'El nombre del barrio no es valida.'
-                           )
-                   ),	   
-                   'ciudad' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',5),                          
-                           'allowEmpty' => false,
-                           'message' => 'La ciudad no es valida. Indicar una de las opciones.'
-                           )
-                   ),
-                         
-        );
-
+            'created' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar una fecha y hora.'
+                )
+            ),
+            'nombres' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar los nombres.'
+                )
+            ),
+            'apellidos' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar los apellidos.'
+                )
+            ),
+            'sexo' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar sexo.'
+                )
+            ),
+            'documento_tipo' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar un tipo de documento.'
+                )
+            ),
+            'documento_nro' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar un nº de documento.'
+                ),
+                'numeric' => array(
+                  'rule' => 'numeric',
+                  'allowEmpty' => false,
+                  'message' => 'Indicar número sin puntos ni espacios.'
+                ),
+                'isUnique' => array(
+                  'rule' => 'isUnique',
+                  'message' => 'Este documento de alumno esta siendo usado.'
+                )
+            ),
+            'fecha_nac' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar una fecha de nacimiento.'
+                ),
+             'date' => array(
+                'rule' => array('date'),
+                //'message' => 'Your custom message here',
+                //'allowEmpty' => false,
+                //'required' => false,
+                //'last' => false, // Stop validation after this rule
+                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+              )
+            ),
+            'edad' => array(
+                'numeric' => array(
+                'rule' => array('numeric'),
+                //'message' => 'Your custom message here',
+                'allowEmpty' => true,
+                //'required' => false,
+                //'last' => false, // Stop validation after this rule
+                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+                )
+            ),
+            'pcia_nac' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar una provincia.'
+                )
+            ),
+            'nacionalidad' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar una nacionalidad.'
+                )
+            ),
+            'indigena' => array(
+            ),
+            'estado_civil' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar un estado civil.'
+                )
+            ), 
+            'ocupacion' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar una ocupación.'
+                )
+            ),
+            'lugar_de_trabajo' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar un lugar de trabajo.'
+                )
+            ),
+            'horario_de_trabajo' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar un horario de trabajo.'
+                )
+            ),
+            'telefono_nro' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar un nº de teléfono.'
+                )
+            ),
+            'email' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar un correo electrónico.'
+                )
+            ),
+            'calle_nombre' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar un nombre de calle.'
+                )
+            ),
+            'calle_nro' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar un nº de calle.'
+                )
+            ),
+           'ciudad' => array(
+                'required' => array(
+                'rule' => 'notBlank',
+                'required' => 'create',
+                'message' => 'Indicar una ciudad.'
+               )
+            ),
+      );
 }
-*/?>
+?>

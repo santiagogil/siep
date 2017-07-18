@@ -19,15 +19,15 @@ class NotasController extends AppController {
         $this->paginate['Nota']['limit'] = 6;
 		$this->paginate['Nota']['order'] = array('Nota.ciclo' => 'DESC');
 		
-		$alumnos = $this->Nota->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno'), 'order'=>'Alumno.apellidos ASC'));
-		$materias = $this->Nota->Materia->find('list', array('fields'=>array(), 'order'=>'Materia.curso_id ASC'));
+		$alumnos = $this->Nota->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'order'=>'Persona.apellidos ASC'));
+		$materias = $this->Nota->Materia->find('list', array('fields'=>array('materia_id'), 'order'=>'Materia.curso_id ASC'));
 		$ciclos = $this->Nota->Ciclo->find('list');
 		$this->redirectToNamed();
 		$conditions = array();
 		
-		if(!empty($this->params['named']['alumno_id']))
+		if(!empty($this->params['named']['persona_id']))
 		{
-			$conditions['Nota.alumno_id ='] = $this->params['named']['alumno_id'];
+			$conditions['Nota.persona_id ='] = $this->params['named']['persona_id'];
 		}
 		if(!empty($this->params['named']['ciclo_id']))
 		{
@@ -131,7 +131,7 @@ class NotasController extends AppController {
 	private function __lists(){
 		$cicloIdActual = $this->getLastCicloId();
         $cicloInscripcionAlumnoId = $this->getLastCicloInscripcionAlumnoId($cicloIdActual);
-        $alumnos = $this->Nota->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno'), 'order'=>'Alumno.apellidos ASC', 'conditions'=>array('Alumno.id'=>$cicloInscripcionAlumnoId)));
+        $alumnos = $this->Nota->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'order'=>'Persona.apellidos ASC', 'conditions'=>array('Persona.id'=>$cicloInscripcionAlumnoId)));
 		$materias = $this->Nota->Materia->find('list', array('fields'=>array(), 'order'=>'Materia.curso_id ASC'));
 		$ciclos = $this->Nota->Ciclo->find('list');
 		$this->set(compact('alumnos', 'materias', 'ciclos', 'cicloIdActual'));

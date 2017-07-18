@@ -27,7 +27,7 @@
     	<?php 
             if($this->Html->loggedIn()) { 
             
-                $user = $current_user['role'] == 'superadmin';          
+                $user = $current_user['role'];          
        
                 switch ($user) {
                     

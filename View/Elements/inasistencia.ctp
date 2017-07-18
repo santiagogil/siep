@@ -1,6 +1,6 @@
 <div class="col-md-4">
     <div class="unit">
-         <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo ($this->Html->link($inasistencia['Alumno']['nombre_completo_alumno'], array('controller' => 'alumnos', 'action' => 'view', $inasistencia['Alumno']['id']))); ?></span><br/>
+         <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo ($this->Html->link($inasistencia['Persona']['nombre_completo_persona'], array('controller' => 'personas', 'action' => 'view', $inasistencia['Persona']['id']))); ?></span><br/>
          <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Tipo:</b> <?php echo ($inasistencia['Inasistencia']['tipo']);?></span><br/>
          <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Causa:</b> <?php echo ($inasistencia['Inasistencia']['causa']);?></span><br/>
          <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Justificada:</b> <?php echo ($inasistencia['Inasistencia']['justificado']);?></span><br/>

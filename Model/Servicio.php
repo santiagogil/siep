@@ -26,104 +26,103 @@ class Servicio extends AppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
     
     var $belongsTo = array(
-		'Alumno' => array(
-			'className' => 'Alumno',
-			'foreignKey' => 'alumno_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'Ciclo' => array(
-			'className' => 'Ciclo',
-			'foreignKey' => 'ciclo_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
+  		'Persona' => array(
+  			'className' => 'Persona',
+  			'foreignKey' => 'persona_id',
+  			'conditions' => '',
+  			'fields' => '',
+  			'order' => ''
+  		),
+  		'Ciclo' => array(
+  			'className' => 'Ciclo',
+  			'foreignKey' => 'ciclo_id',
+  			'conditions' => '',
+  			'fields' => '',
+  			'order' => ''
+  		)
 	);
 	
    
   //Validaciones
-
         var $validate = array(
-                   'tipo_servicio' => array(
+                  'tipo_servicio' => array(
                            'minLength' => array(
                            'rule' => array('minLength',4),                          
                            'allowEmpty' => false,
                            'message' => 'Indicar una de las opciones de la lista.'
                            )
-                   ),
-				   'fecha_solicitud_servicio' => array(
-                           'date' => array(
-                           'rule' => 'date',                          
-                           'allowEmpty' => false,
-                           'message' => 'Indicar fecha de inicio del servicio.'
+                  ),
+        				  'fecha_solicitud_servicio' => array(
+                            'date' => array(
+                            'rule' => 'date',                          
+                            'allowEmpty' => false,
+                            'message' => 'Indicar fecha de inicio del servicio.'
                            )
                    ),
-				   'estado' => array(
+				          'estado' => array(
                            'minLength' => array(
                            'rule' => array('minLength',3),
                            'allowEmpty' => false,
                            'message' => 'Indicar una de las opciones de la lista.'
                            )
                    ),
-                   'prestador' => array(
+                  'prestador' => array(
                            'minLength' => array(
                            'rule' => array('minLength',4),
                            'allowEmpty' => false,
                            'message' => 'Indicar una de las opciones de la lista.'
                            )
                    ),
-				   'docente_profesional_acargo' => array(
+				          'docente_profesional_acargo' => array(
                            'minLength' => array(
                            'rule' => array('minLength',4),                          
                            'allowEmpty' => false,
                            'message' => 'Indicar nombres y apellidos.'
                            )
                    ),
-				   'tipo_alta' => array(
+				          'tipo_alta' => array(
                            'minLength' => array(
                            'rule' => array('minLength',4),
                            'allowEmpty' => false,
                            'message' => 'Indicar una de las opciones de la lista.'
                            )
                    ),
-				   'fecha_alta' => array(
+				          'fecha_alta' => array(
                            'date' => array(
                            'rule' => 'date',                          
                            'allowEmpty' => false,
                            'message' => 'Indicar fecha de inicio del servicio.'
                            )
                    ),
-				   'fecha_baja' => array(
+				          'fecha_baja' => array(
                            'date' => array(
                            'rule' => 'date',                          
                            'allowEmpty' => true,
                            'message' => 'Indicar fecha de finalización del servicio.'
                            )
                    ),
-				   'tipo_baja' => array(
+				          'tipo_baja' => array(
                            'minLength' => array(
                            'rule' => array('minLength',4),
                            'allowEmpty' => false,
                            'message' => 'Indicar una de las opciones de la lista.'
                            )
                    ),
-				   'total_dias_asistencia' => array(
+				          'total_dias_asistencia' => array(
                            'numeric' => array(
                            'rule' => 'numeric',
                            'allowEmpty' => false,
                            'message' => 'Indicar con número la cantidad de días que asistió al servicio.'
                            )
                    ),
-				   'total_dias_inasistencia' => array(
+				          'total_dias_inasistencia' => array(
                            'numeric' => array(
                            'rule' => 'numeric',
                            'allowEmpty' => false,
                            'message' => 'Indicar con número la cantidad de días que no asistió al servicio.'
                            )
                    ),
-				   'observaciones' => array(
+				          'observaciones' => array(
                            'maxLength' => array(
                            'rule' => array('maxLength',200),
                            'allowEmpty' => false,
@@ -138,6 +137,5 @@ class Servicio extends AppModel {
                            )
                    )
 		);
-
 }
 ?>

@@ -34,7 +34,7 @@ class InscripcionsController extends AppController {
 		$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
 		}
         
-		$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno')));
+		$personas = $this->Inscripcion->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
 		$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla')));
 		
 		$this->redirectToNamed();
@@ -53,9 +53,9 @@ class InscripcionsController extends AppController {
 			$conditions['Inscripcion.estado ='] = $this->params['named']['estado'];
 		}
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
-		$this->set(compact('inscripcions', 'alumnos', 'centros'));
+		$this->set(compact('inscripcions', 'personas', 'centros'));
 	}
-
+    
 	public function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
@@ -63,7 +63,7 @@ class InscripcionsController extends AppController {
 		}
 		$this->set('inscripcion', $this->Inscripcion->read(null, $id));
 	}
-
+        
 	public function add() {
 		  //abort if cancel button was pressed  
           if(isset($this->params['data']['cancel'])){
@@ -83,18 +83,18 @@ class InscripcionsController extends AppController {
 			//Antes de guardar genera el número de legajo del Alumno.
 			$ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
 			$ciclo = substr($ciclos['Ciclo']['nombre'], -2);
-			$alumnoId = $this->request->data['Inscripcion']['alumno_id'];
-			$alumnosDoc = $this->Inscripcion->Alumno->findById($alumnoId, 'documento_nro');
-            $alumnoDoc = $alumnosDoc['Alumno']['documento_nro'];
+			$personaId = $this->request->data['Inscripcion']['persona_id'];
+			$personasDoc = $this->Inscripcion->Persona->findById($personaId, 'documento_nro');
+            $personaDoc = $personasDoc['Persona']['documento_nro'];
 			//Genera el nro de legajo y se deja en los datos que se intentaran guardar
-			$codigoActual = $this->__getCodigo($ciclo, $alumnoDoc);
+			$codigoActual = $this->__getCodigo($ciclo, $personaDoc);
 			//Comprueba que ese legajo no exista.
 			$codigoLista = $this->Inscripcion->find('list', array('fields'=>array('legajo_nro')));
             if (in_array($codigoActual, $codigoLista, true))
             { 
                 $this->Session->setFlash('El alumno ya está inscripto en este ciclo.', 'default', array('class' => 'alert alert-danger'));
 			}else{
-				$this->request->data['Inscripcion,']['legajo_nro'] = $this->__getCodigo($ciclo, $alumnoDoc);
+				$this->request->data['Inscripcion,']['legajo_nro'] = $this->__getCodigo($ciclo, $personaDoc);
 			//Antes de guardar genera el estado de la inscripción
 			    if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true){
 			        $estado = "COMPLETA";	
@@ -119,7 +119,7 @@ class InscripcionsController extends AppController {
 		$materias = $this->Materia->find('list');
         $this->set(compact('cursos',$cursos, 'materias',$materias));
     }
-
+        
 	public function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
@@ -154,8 +154,8 @@ class InscripcionsController extends AppController {
         $materias = $this->Materia->find('list');
         $this->set(compact('cursos',$cursos, 'materias',$materias));
 	}
-
-	public function delete($id = null) {
+    
+    public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Id no valida para inscripcion.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
@@ -173,18 +173,18 @@ class InscripcionsController extends AppController {
 	private function __lists(){
 	    $this->loadModel('User');
         $this->loadModel('Empleado');
-		$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno'), 'order'=>'nombre_completo_alumno ASC'));
+		$personas = $this->Inscripcion->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'order'=>'nombre_completo_persona ASC'));
 		$ciclos = $this->Inscripcion->Ciclo->find('list');
 		$cicloIdActual = $this->getLastCicloId();
 		$centros = $this->Inscripcion->Centro->find('list');
 		$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
 		$materias = $this->Inscripcion->Materia->find('list');
 		$empleados = $this->Inscripcion->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado'), 'conditions'=>array('id'== 'empleadoId')));
-	    $this->set(compact('alumnos', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
+	    $this->set(compact('personas', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
 	}
 	
-	private function __getCodigo($ciclo, $alumnoDoc){
-		$legajo= $alumnoDoc."-".$ciclo;
+	private function __getCodigo($ciclo, $personaDoc){
+		$legajo= $personaDoc."-".$ciclo;
 		return $legajo;
     }
 }
