@@ -67,8 +67,7 @@ class PersonasController extends AppController {
 		}
 		$this->loadModel('Barrio');
 		$barrioNombre = $this->Barrio->find('list', array('fields'=>array('nombre')));
-
-		$this->set(compact('foto', 'barrioNombre'));
+	    $this->set(compact('foto', 'barrioNombre'));
      }
 
 	public function add() {
@@ -79,17 +78,21 @@ class PersonasController extends AppController {
 		  }
 		  if (!empty($this->data)) {
 			$this->Persona->create();
-			
-            // Antes de guardar pasa a mayúsculas el nombre completo.
+		    // Antes de guardar pasa a mayúsculas el nombre completo.
 			$apellidosMayuscula = strtoupper($this->request->data['Persona']['apellidos']);
 			$nombresMayuscula = strtoupper($this->request->data['Persona']['nombres']);
 			// Genera el nombre completo en mayúsculas y se deja en los datos que se intentaran guardar
 			$this->request->data['Persona']['apellidos'] = $apellidosMayuscula;
 			$this->request->data['Persona']['nombres'] = $nombresMayuscula;
-
-			if ($this->Empleado->save($this->data)) {
+			// Antes de guardar calcula la edad
+			$day = $this->request->data['Persona']['fecha_nac']['day'];
+			$month = $this->request->data['Persona']['fecha_nac']['month'];
+			$year = $this->request->data['Persona']['fecha_nac']['year'];
+			// Calcula la edad y se deja en los datos que se intentaran guardar
+			$this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);
+			if ($this->Persona->save($this->data)) {
 				$this->Session->setFlash('La persona ha sido grabada.', 'default', array('class' => 'alert alert-success'));
-				$inserted_id = $this->Empleado->id;
+				$inserted_id = $this->Persona->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
 				$this->Session->setFlash('La persona no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
@@ -100,37 +103,67 @@ class PersonasController extends AppController {
         $this->set('barrios', $barrios);
 	}
 
-	/*
 	function edit($id = null) {
-		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Persona no valida'));
+	    if (!$id && empty($this->data)) {
+			$this->Session->setFlash('Persona no válida', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
-			if ($this->Persona->save($this->data)) {
-				$this->Session->setFlash(__('La persona ha sido grabado'));
-				$this->redirect(array('action' => 'index'));
+		  //abort if cancel button was pressed  
+          if(isset($this->params['data']['cancel'])){
+                $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
+                $this->redirect( array( 'action' => 'index' ));
+		  }
+          // Antes de guardar pasa a mayúsculas el nombre completo.
+		  $apellidosMayuscula = strtoupper($this->request->data['Persona']['apellidos']);
+		  $nombresMayuscula = strtoupper($this->request->data['Persona']['nombres']);
+		  // Genera el nombre completo en mayúsculas y se deja en los datos que se intentaran guardar
+		  $this->request->data['Persona']['apellidos'] = $apellidosMayuscula;
+		  $this->request->data['Persona']['nombres'] = $nombresMayuscula;
+    	  // Antes de guardar calcula la edad
+		  $day = $this->request->data['Persona']['fecha_nac']['day'];
+		  $month = $this->request->data['Persona']['fecha_nac']['month'];
+		  $year = $this->request->data['Persona']['fecha_nac']['year'];
+		  // Calcula la edad y se deja en los datos que se intentaran guardar
+		  $this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);          
+		  if ($this->Alumno->save($this->data)) {
+				$this->Session->setFlash('La persona ha sido grabada', 'default', array('class' => 'alert alert-success'));
+				$inserted_id = $this->Persona->id;
+				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
-				$this->Session->setFlash(__('La persona no ha sido grabado. Favor, intentelo nuevamente.'));
+				$this->Session->setFlash('La persona no ha sido grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		if (empty($this->data)) {
 			$this->data = $this->Persona->read(null, $id);
 		}
+
+		$this->loadModel('Barrio');          
+        $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+        $this->set('barrios', $barrios);
 	}
 
-	function delete($id = null) {
+	public function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash(__('Id no valido para persona'));
+			$this->Session->setFlash('Id no válido para la persona', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
 		}
-		if ($this->Persona->delete($id)) {
-			$this->Session->setFlash(__('Persona borrado'));
+		if ($this->Alumno->delete($id)) {
+			$this->Session->setFlash('La persona ha sido borrado', 'default', array('class' => 'alert alert-success'));
 			$this->redirect(array('action'=>'index'));
 		}
-		$this->Session->setFlash(__('Persona no fue borrado'));
+		$this->Session->setFlash('La persona no fue borrado', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
-	*/
+	
+	//Métodos Privados
+	private function __getEdad($day, $month, $year){
+		$year_diff  = date("Y") - $year;
+		$month_diff = date("m") - $month;
+		$day_diff   = date("d") - $day;
+		if ($day_diff < 0 && $month_diff==0) $year_diff--;
+		if ($day_diff < 0 && $month_diff < 0) $year_diff--;
+                return $year_diff;
+	}
 }
 ?>

@@ -5,7 +5,7 @@
 /Plugin/Upload/*
 
 /Vendor/*
-
+/log/*
 /tmp/*
 
 /Console

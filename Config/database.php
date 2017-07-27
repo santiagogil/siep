@@ -67,15 +67,16 @@
 class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
+		'persistent' => false,
 		'host' => 'mysql',
-		'ports' =>'3386',
 		'login' => 'root',
 		'password' => 'root',
 		'database' => 'siep',
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);
-	/**public $test = array(
+	/*
+	public $test = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -84,5 +85,6 @@ class DATABASE_CONFIG {
 		'database' => 'siep',
 		'prefix' => '',
 		//'encoding' => 'utf8',
-	); */
+	);
+	*/
 }

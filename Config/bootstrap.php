@@ -69,6 +69,7 @@ CakePlugin::load('DebugKit');
 CakePlugin::load('ReportManager',array('bootstrap' => true));
 CakePlugin::load('CakePdf', array('bootstrap' => true, 'routes' => true));
 CakePlugin::load('TinyMCE');
+//CakePlugin::load('Migrations');
 /**
  * Configuration CakePdf
  */

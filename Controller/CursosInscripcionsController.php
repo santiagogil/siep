@@ -40,7 +40,7 @@ class CursosInscripcionsController extends AppController {
 
 		$this->loadModel('Ciclo');
 		$this->loadModel('Centro');
-		$this->loadModel('Persona');
+		$this->loadModel('Alumno');
 		$ciclosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('ciclo_id')));
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
         // Carga el combobox de los cursos según la institución correspondiente.
@@ -53,13 +53,11 @@ class CursosInscripcionsController extends AppController {
         $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
 		$inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro')));
-        $alumnosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('persona_id')));
-        $alumnos = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $alumnosId)));
-  
+        $alumnoId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('alumno_id')));
+        $alumnoNombre = $this->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
+
   		$this->redirectToNamed();
-		
 		$conditions = array();
-		
 		if(!empty($this->params['named']['centro_id']))
 		{
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
@@ -73,6 +71,6 @@ class CursosInscripcionsController extends AppController {
 			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
 		}
 		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
-		$this->set(compact('cursosInscripcions', 'cicloActual', 'cursos', 'inscripcions', 'ciclos', 'alumnos', 'centros', 'materias'));
+		$this->set(compact('cursosInscripcions', 'cicloActual', 'cursos', 'inscripcions', 'ciclos', 'alumnoNombre', 'centros', 'materias'));
    }
 }
