@@ -1,11 +1,10 @@
-# TRAES con CakePHP 2.X
+# SIEP con CakePHP 2.X
 
 /Plugin/CakePdf/*
 /Plugin/DebugKit/*
 /Plugin/Upload/*
 
 /Vendor/*
-/log/*
 /tmp/*
 
 /Console
