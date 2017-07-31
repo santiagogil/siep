@@ -16,11 +16,11 @@
 
 Permite visualizar el estado actual del desarrollo de este proyecto.
 
-https://decyt-tdf.github.io/milestones/
+[https://decyt-tdf.github.io/milestones/](https://decyt-tdf.github.io/milestones/)
 
 ### Issues
 
 Permite visualizar la totalidad del trabajo de el equipo de desarrollo a travez de todos nuestros proyectos.
 
-https://pci-tdf.github.io/ubersicht/#decyt-tdf
+[https://pci-tdf.github.io/ubersicht/#decyt-tdf](https://pci-tdf.github.io/ubersicht/#decyt-tdf)
 
