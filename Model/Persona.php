@@ -21,60 +21,8 @@ class Persona extends AppModel {
       'finderQuery' => '',
       'counterQuery' => ''
     ),
-    'Integracion' => array(
-      'className' => 'Integracion',
-      'foreignKey' => 'persona_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    ),
-    'Servicio' => array(
-      'className' => 'Servicio',
-      'foreignKey' => 'persona_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    ),
-    'Inscripcion' => array(
-      'className' => 'Inscripcion',
-      'foreignKey' => 'persona_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    ),
-    'Inasistencia' => array(
-      'className' => 'Inasistencia',
-      'foreignKey' => 'persona_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    ),
-    'Nota' => array(
-      'className' => 'Nota',
+    'Alumno' => array(
+      'className' => 'Alumno',
       'foreignKey' => 'persona_id',
       'dependent' => false,
       'conditions' => '',
@@ -89,7 +37,6 @@ class Persona extends AppModel {
   );
 
   //Validaciones
-
         var $validate = array(
             'created' => array(
                 'required' => array(
@@ -181,6 +128,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar una nacionalidad.'
                 )
             ),
+            /*
             'indigena' => array(
             ),
             'estado_civil' => array(
@@ -211,6 +159,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar un horario de trabajo.'
                 )
             ),
+            */
             'telefono_nro' => array(
                 'required' => array(
                 'rule' => 'notBlank',
@@ -245,7 +194,7 @@ class Persona extends AppModel {
                 'required' => 'create',
                 'message' => 'Indicar una ciudad.'
                )
-            ),
+            )
       );
 }
 ?>

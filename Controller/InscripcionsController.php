@@ -33,13 +33,12 @@ class InscripcionsController extends AppController {
 		if($this->Auth->user('role') === 'admin') {
 		$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
 		}
-        
-		$personas = $this->Inscripcion->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+    	$alumnoId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'persona_id')));
+		$this->loadModel('Persona');
+        $alumnoNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));    
 		$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla')));
-		
 		$this->redirectToNamed();
 		$conditions = array();
-		
 		if(!empty($this->params['named']['centro_id']))
 		{
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
@@ -53,11 +52,7 @@ class InscripcionsController extends AppController {
 			$conditions['Inscripcion.estado ='] = $this->params['named']['estado'];
 		}
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
-<<<<<<< HEAD
-		$this->set(compact('inscripcions', 'personas', 'centros'));
-=======
-		$this->set(compact('inscripcions', 'alumnos', 'centros'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
+		$this->set(compact('inscripcions', 'alumnoNombre', 'centros'));
 	}
     
 	public function view($id = null) {
@@ -66,6 +61,11 @@ class InscripcionsController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('inscripcion', $this->Inscripcion->read(null, $id));
+
+		$alumnoId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'persona_id')));
+		$this->loadModel('Persona');
+        $alumnoNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+        $this->set(compact('inscripcions', 'alumnoNombre'));
 	}
         
 	public function add() {
@@ -87,26 +87,18 @@ class InscripcionsController extends AppController {
 			//Antes de guardar genera el número de legajo del Alumno.
 			$ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
 			$ciclo = substr($ciclos['Ciclo']['nombre'], -2);
-			$personaId = $this->request->data['Inscripcion']['persona_id'];
-			$personasDoc = $this->Inscripcion->Persona->findById($personaId, 'documento_nro');
-            $personaDoc = $personasDoc['Persona']['documento_nro'];
+			$alumnoId = $this->request->data['Inscripcion']['alumno_id'];
+			$personaDoc = $this->Inscripcion->Alumno->Persona->findById($alumnoId, 'documento_nro');
+            //$personaDoc = $personasDoc['Persona']['documento_nro'];
 			//Genera el nro de legajo y se deja en los datos que se intentaran guardar
-<<<<<<< HEAD
 			$codigoActual = $this->__getCodigo($ciclo, $personaDoc);
-=======
-			$codigoActual = $this->__getCodigo($ciclo, $alumnoDoc);
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 			//Comprueba que ese legajo no exista.
 			$codigoLista = $this->Inscripcion->find('list', array('fields'=>array('legajo_nro')));
             if (in_array($codigoActual, $codigoLista, true))
             { 
                 $this->Session->setFlash('El alumno ya está inscripto en este ciclo.', 'default', array('class' => 'alert alert-danger'));
 			}else{
-<<<<<<< HEAD
 				$this->request->data['Inscripcion,']['legajo_nro'] = $this->__getCodigo($ciclo, $personaDoc);
-=======
-				$this->request->data['Inscripcion']['legajo_nro'] = $this->__getCodigo($ciclo, $alumnoDoc);
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 			//Antes de guardar genera el estado de la inscripción
 			    if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true){
 			        $estado = "COMPLETA";	
@@ -115,7 +107,6 @@ class InscripcionsController extends AppController {
 			    }
 			//Genera el estado y se deja en los datos que se intentaran guardar
 			    $this->request->data['Inscripcion']['estado'] = $estado;
-			
 				if ($this->Inscripcion->save($this->data)) {
 					$this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 					$inserted_id = $this->Inscripcion->id;
@@ -125,18 +116,8 @@ class InscripcionsController extends AppController {
 				}
 			}
 		}
-<<<<<<< HEAD
-		
-		$userCentroId = $this->getUserCentroId();
-		$cursos = $this->Curso->find('list', array('fields'=>array('nombre_completo_curso'), array('conditions' => array('centro_id' => $userCentroId))));
-		$materias = $this->Materia->find('list');
-        $this->set(compact('cursos',$cursos, 'materias',$materias));
     }
         
-=======
-    }
-
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 	public function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
@@ -167,9 +148,6 @@ class InscripcionsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Inscripcion->read(null, $id);
 		}
-		$cursos = $this->Curso->find('list', array('fields'=>array('nombre_completo_curso')));
-        $materias = $this->Materia->find('list');
-        $this->set(compact('cursos',$cursos, 'materias',$materias));
 	}
     
     public function delete($id = null) {
@@ -186,26 +164,20 @@ class InscripcionsController extends AppController {
 	}
 	
 	//Métodos privados
-	
 	private function __lists(){
 	    $this->loadModel('User');
         $this->loadModel('Empleado');
-<<<<<<< HEAD
-		$personas = $this->Inscripcion->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'order'=>'nombre_completo_persona ASC'));
-=======
-		$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno'), 'order'=>'nombre_completo_alumno ASC'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
-		$ciclos = $this->Inscripcion->Ciclo->find('list');
+        $ciclos = $this->Inscripcion->Ciclo->find('list');
 		$cicloIdActual = $this->getLastCicloId();
 		$centros = $this->Inscripcion->Centro->find('list');
+		$empleados = $this->Inscripcion->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado'), 'conditions'=>array('id'== 'empleadoId')));
+		$userCentroId = $this->getUserCentroId();
 		$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
 		$materias = $this->Inscripcion->Materia->find('list');
-		$empleados = $this->Inscripcion->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado'), 'conditions'=>array('id'== 'empleadoId')));
-<<<<<<< HEAD
-	    $this->set(compact('personas', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
-=======
-	    $this->set(compact('alumnos', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
+    	$alumnoId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'persona_id')));
+        $this->loadModel('Persona');
+        $alumnoNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions' => array('id' => $alumnoId), 'order'=>'nombre_completo_persona ASC'));		
+		$this->set(compact('alumnoNombre', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
 	}
 	
 	private function __getCodigo($ciclo, $personaDoc){

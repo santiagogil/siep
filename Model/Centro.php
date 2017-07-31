@@ -73,7 +73,7 @@ class Centro extends AppModel {
 	);
 
 	var $hasAndBelongsToMany = array(
-				'Empleado' => array(
+		'Empleado' => array(
 			'className' => 'Empleado',
 			'joinTable' => 'centros_empleados',
 			'foreignKey' => 'centro_id',

@@ -1,45 +1,21 @@
 <?php echo $this->Html->script(array('acordeon', 'slider')); ?>
 <?php echo $this->Html->css('slider.css'); ?>
 <!-- start main -->
-<div class="TituloSec"><?php echo ($alumno['Alumno']['persona_id']); ?></div>
+<div class="TituloSec">Alumno</div>
   <div id="ContenidoSec">
      <div class="row">
         <div class="col-md-8">	
 	       <div class="unit">
  		      <div class="row perfil">
                  <div class="col-md-8 col-sm-6 col-xs-8">	
-<<<<<<< HEAD
-                    
-=======
-                    <b><?php echo __('Nombres: '); ?></b>
-                    <?php echo ($alumno['Alumno']['nombres']); ?></p>
-                    <b><?php echo __('Apellidos: '); ?></b>
-                    <?php echo ($alumno['Alumno']['apellidos']); ?></p>
+                    <b><?php echo __('Alumno: '); ?></b>
+                    <?php echo $this->Html->link(($alumnoNombre[$alumno['Alumno']['persona_id']]), array('controller' => 'personas', 'action' => 'view', $alumno['Alumno']['persona_id'])); ?></p>
                     <b><?php echo __('Documento: '); ?></b>
-                    <?php echo ($alumno['Alumno']['documento_tipo']).' '.($alumno['Alumno']['documento_nro']); ?></p>
-                    <b><?php echo __('Legajo Físico N°: '); ?></b>
-                    <?php echo $alumno['Alumno']['legajo_fisico_nro']; ?></p>
+                    <?php echo ($alumnoDocumentoTipo[$alumno['Alumno']['persona_id']]).' '.($alumnoDocumentoNumero[$alumno['Alumno']['persona_id']]); ?></p>
                     <b><?php echo __('Edad: '); ?></b>
-                    <?php echo ($alumno['Alumno']['edad']); ?></p>
-	                </div>
-                    <div class="col-md-8 col-sm-6 col-xs-8">
-                    <b><?php echo __('Direccion: '); ?></b>
-                    <?php echo $alumno['Alumno']['calle_nombre'].' N° '.$alumno['Alumno']['calle_nro']; ?></p>
-                    <b><?php echo __('Barrio: '); ?></b>
-                    <?php echo $barrioNombre[$alumno['Alumno']['barrio_id']]; ?></p>
-                    <b><?php echo __('Telefono: '); ?></b>
-                    <?php echo $alumno['Alumno']['telefono_nro']; ?></p>
-                    <!--<b><?php echo __('Email: '); ?></b>
-                    <?php echo ($this->Html->link($alumno['Alumno']['email'],'mailto:'.$alumno['Alumno']['email'])); ?></p>
-                    <b><?php echo __('Ocupación: '); ?></b>
-                    <?php echo ($alumno['Alumno']['ocupacion']); ?></p>
-                    <b><?php echo __('Lugar de trabajo: '); ?></b>
-                    <?php echo ($alumno['Alumno']['lugar_de_trabajo']); ?></p>
-                    <b><?php echo __('Horario de trabajo: '); ?></b>
-                    <?php echo ($alumno['Alumno']['horario_de_trabajo']); ?></p>-->
-                    <b><?php echo __('Observaciones: '); ?></b>
-                    <?php echo $alumno['Alumno']['observaciones']; ?></p>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
+                    <?php echo ($alumnoEdad[$alumno['Alumno']['persona_id']]); ?></p>
+                    <b><?php echo __('Legajo Físico N°: '); ?></b>
+                    <?php echo $alumno['Alumno']['legajo_fisico_nro']; ?></p>                   
                  </div>
  	          </div>
          </div>
@@ -51,18 +27,11 @@
         <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index')); ?></div>
       <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['Alumno']['id'])); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['Alumno']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['Alumno']['nombre_completo_alumno'])); ?></div>
-<<<<<<< HEAD
+        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['Alumno']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['Alumno']['persona_id'])); ?></div>
         <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>-->
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add', $alumno['Alumno']['id'])); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
-=======
-        <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add', $alumno['Alumno']['id'])); ?></div>-->
+        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add')); ?></div>
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Calificación'), array('controller' => 'notas', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Inasistencia'), array('controller' => 'inasistencias', 'action' => 'add')); ?></div>-->
       <?php endif; ?>	
@@ -80,14 +49,15 @@
             <div class="col-md-6">
                 <div class="unit">
                     <?php echo '<b>Vinculo:</b> '.$familiar['vinculo'];?><br>
-                    <?php echo '<b>Nombre:</b> '.$familiar['nombre_completo'];?><br>
-                    <?php echo '<b>Cuil/Cuit:</b> '.$familiar['cuit_cuil'];?><br>
-                    <?php echo '<b>Telefono:</b> '.$familiar['telefono_nro'];?><br>
-                    <?php echo '<b>Email:</b> '.$familiar['email'];?><br>
-                    <!--<?php echo '<b>Domicilio:</b> '.$familiar['domicilio'];?><br>-->
+                    <?php echo '<b>Nombre:</b> '.$familiarNombre[$familiar['persona_id']];?><br>
+                    <!--
+                    <?php echo '<b>Cuil/Cuit:</b> '.$familiarCuilCuit[$familiar['persona_id']];?><br>
+                    <?php echo '<b>Telefono:</b> '.$familiarTelefono[$familiar['persona_id']];?><br>
+                    <?php echo '<b>Email:</b> '.$familiarEmail[$familiar['persona_id']];?><br>
+                    -->
                 <div class="text-right">
-                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $familiar['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
                     <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $familiar['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+                    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $familiar['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
                     <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'familiars', 'action' => 'delete', $familiar['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
                 </div>
 		    </div>
@@ -109,6 +79,7 @@
 			<div class="col-md-4">
 				<div class="unit">
 					<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
+					<?php echo '<b>Centro:</b> '.($this->Html->link($centroNombre[$inscripcion['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
 					<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
 					<!--<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>-->
 					<?php echo '<b>Fecha de alta:</b> '.$this->Html->formatTime($inscripcion['fecha_alta']);?><br>
@@ -135,7 +106,7 @@
 	</div>
 </div>
 <!-- end Inscripciones Relacionadas -->
-<!-- Integraciones Relacionadas -->
+<!-- Integraciones Relacionadas 
 	<div id="click_03" class="titulo_acordeon">Integraciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_03">
 		<div class="row">
@@ -163,7 +134,7 @@
 	</div>
 </div>
 <!-- end Integraciones Relacionadas -->
-<!-- Servicios Complementarios Relacionadas -->
+<!-- Servicios Complementarios Relacionadas 
 	<div id="click_04" class="titulo_acordeon">Servicios Complementarios Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_04">
 		<div class="row">
@@ -192,7 +163,7 @@
 	</div>
 </div>
 <!-- end Servicios Complementarios Relacionadas -->
-<!-- Inasistencias Relacionadas --> 
+<!-- Inasistencias Relacionadas  
 	<div id="click_06" class="titulo_acordeon">Inasistencias Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_06">
 		<div class="row">
@@ -220,14 +191,14 @@
 	</div>
 </div>
 <!-- end Inasistencias Relacionadas -->
-<!-- Calificaciones Relacionadas -->
+<!-- Calificaciones Relacionadas 
 <div id="click_05" class="titulo_acordeon">Calificaciones Relacionadas 
 	<span class="caret"></span>
 </div>
 <div id="acordeon_05">
 	<div class="row">
 		<?php if (!empty($alumno['Nota'])):?>
-  	<!-- Swiper -->
+  	<!-- Swiper 
 	    <div class="swiper-container" style="height: 200px;">
     	    <div class="swiper-wrapper" >
 				<?php foreach ($alumno['Nota'] as $nota): ?>
@@ -247,9 +218,9 @@
             </div>
 		<?php endforeach; ?>
 	</div>
-	<!-- Add Pagination --> 
+	<!-- Add Pagination  
     <div class="swiper-pagination"></div>
-    <!-- Include plugin after Swiper --> 
+    <!-- Include plugin after Swiper  
 	<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
 	<?php endif; ?>
     </div>

@@ -12,15 +12,9 @@
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
       <?php 
-<<<<<<< HEAD
             echo $this->Form->input('Inscripcion.Curso', array('multiple' => true, 'label'=>'Curso*', 'empty' => 'Ingrese un curso...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
             echo $this->Form->input('Inscripcion.Materia', array('multiple' => true, 'label'=>'Unidades Curriculares*', 'empty' => 'Ingrese una unidad...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-            echo $this->Form->input('persona_id', array('label'=>'Persona*', 'empty' => 'Ingrese un alumno...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-=======
-            echo $this->Form->input('Curso', array('label'=>'Curso*', 'empty' => 'Ingrese un curso...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-            echo $this->Form->input('Materia', array('label'=>'Materia*', 'empty' => 'Ingrese una materia...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
             echo $this->Form->input('alumno_id', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
             echo $this->Form->input('legajo_nro', array('type' => 'hidden'));
       ?>  
     </div>

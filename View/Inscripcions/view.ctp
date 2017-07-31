@@ -13,8 +13,8 @@
                         <?php echo ($this->Html->link($inscripcion['Ciclo']['nombre'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['Ciclo']['nombre']))); ?></p>
                         <b><?php echo __('Institución:'); ?></b>
                         <?php echo($this->Html->link($inscripcion['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $inscripcion['Centro']['sigla']))); ?></p>
-                        <b><?php echo __('Persona:'); ?></b>
-                        <?php echo ($this->Html->link($inscripcion['Persona']['nombre_completo_persona'], array('controller' => 'personas', 'action' => 'view', $inscripcion['Persona']['id']))); ?></p>                     
+                        <b><?php echo __('Alumno:'); ?></b>
+                        <?php echo ($this->Html->link($alumnoNombre[$inscripcion['Alumno']['persona_id']], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['Alumno']['id']))); ?></p>                     
                         <b><?php echo __('Estado:'); ?></b>
                         <?php if($inscripcion['Inscripcion']['estado'] == "COMPLETA"){; ?>
                         <span class="label label-success"><?php echo $inscripcion['Inscripcion']['estado']; ?></span>
@@ -164,11 +164,7 @@
 </div>
 <!-- end Cursos Relacionados -->
 <!-- Materias Relacionados --> 
-<<<<<<< HEAD
 <div id="click_02" class="titulo_acordeon">Unidades Curriculares Relacionadas <span class="caret"</span></div>
-=======
-<div id="click_02" class="titulo_acordeon">Espacios Relacionados <span class="caret"</span></div>
->>>>>>> c7995caecfa37091c952f6bab236d376020c7a7e
 <div id="acordeon_02">
 		<div class="row">
 	        <?php if (!empty($inscripcion['Materia'])):?>

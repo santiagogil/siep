@@ -1,12 +1,12 @@
 application:
   image: waldemarnt/cakephp
   volumes:
-        - .:/var/www/cake-app
+      - .:/var/www/cake-app
   tty: true
-db:
+mysql:
   image: mysql
   ports:
-    - 3386:3306    
+      - 3386:3306    
   environment:
     MYSQL_ROOT_PASSWORD: root
     MYSQL_DATABASE: siep
@@ -16,28 +16,29 @@ phpmyadmin:
   image: phpmyadmin/phpmyadmin
   restart: always
   links:
-    - db
+      - mysql
   ports:
-    - 8184:80
+      - 8183:80
   environment:
-    PMA_USER: root
+    PMA_HOST: mysql
+    PMA_PORT: 3306
     PMA_PASSWORD: root
     PMA_ARBITRARY: 1
 php:
-    image: bitnami/php-fpm
-    expose:
-        - 9000
-    volumes_from:
-        - application
-    links:
-        - db    
+  image: bitnami/php-fpm
+  expose:
+      - 9000
+  volumes_from:
+      - application
+  links:
+      - mysql    
 nginx:
-    image: waldemarnt/cakephp-nginx
-    ports:
-        - 80:80
-    links:
-        - php
-    volumes_from:
-        - application
-    volumes:
-        - ./logs/nginx/:/var/log/nginx    
+  image: waldemarnt/cakephp-nginx
+  ports:
+      - 80:80
+  links:
+      - php
+  volumes_from:
+      - application
+  volumes:
+      - ./logs/nginx/:/var/log/nginx    

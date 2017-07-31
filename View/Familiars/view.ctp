@@ -6,38 +6,39 @@
 	        <div class="row">
 	            <div class="col-md-6 col-sm-6">
                     <b>Nombre completo:</b>		
-                    <?php echo ($familiar['Familiar']['nombre_completo']); ?><br>
+                    <?php echo ($personaNombre[$familiar['Familiar']['persona_id']]); ?><br>
                     <b>Nacionalidad:</b>		
-                    <?php echo ($familiar['Familiar']['nacionalidad']); ?><br>
+                    <?php echo ($personaNacionalidad[$familiar['Familiar']['persona_id']]); ?><br>
                     <b>Cuil/Cuit:</b>		
-                    <?php echo ($familiar['Familiar']['cuit_cuil']); ?><br>
+                    <?php echo ($personaCuilCuit[$familiar['Familiar']['persona_id']]); ?><br>
                     <b>Ocupación:</b>		
-                    <?php echo ($familiar['Familiar']['ocupacion']); ?><br>
+                    <?php echo ($personaOcupacion[$familiar['Familiar']['persona_id']]); ?><br>
                     <b>Lugar de trabajo:</b>		
-                    <?php echo ($familiar['Familiar']['lugar_de_trabajo']); ?><br>
+                    <?php echo ($personaLugarTrabaja[$familiar['Familiar']['persona_id']]); ?><br>
                     <b>Observaciones:</b>
                     <?php echo ($familiar['Familiar']['observaciones']); ?>
                 </div>
                 <div class="col-md-6 col-sm-6">
                     <b>Ciudad:</b>
-                    <?php echo ($familiar['Familiar']['ciudad']); ?><br>
+                    <?php echo ($personaCiudad[$familiar['Familiar']['persona_id']]); ?><br>
                     <b>Domicilio:</b>
-                    <?php echo ($familiar['Familiar']['domicilio']); ?><br>
+                    <?php echo ($personaCalleNombre[$familiar['Familiar']['persona_id']]). ' ' . ($personaCalleNumero[$familiar['Familiar']['persona_id']]); ?><br>
                     <b>Telefono:</b>
-                    <?php echo ($familiar['Familiar']['telefono_nro']); ?><br>
+                    <?php echo ($personaTelefono[$familiar['Familiar']['persona_id']]); ?><br>
                     <b>Email:</b>
-                    <?php echo ($familiar['Familiar']['email']); ?><br>
+                    <?php echo ($personaEmail[$familiar['Familiar']['persona_id']]); ?><br>
                 </div>
 		    </div>
 	    </div>
     </div>
     <div class="col-md-4">
-         <div class="unit">
-              <div class="subtitulo">Opciones</div>
-              <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index', 'controller' => 'alumnos')); ?></div>
-              <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $familiar['Familiar']['id'])); ?></div>
-              <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $familiar['Familiar']['id'] ), null, sprintf(__('Esta seguro de borrar el familiar "'.$familiar['Familiar']['nombre_completo'].'"'), $this->Form->value('Familiar.id'))); ?></div>
-         </div>
+        <div class="unit">
+            <div class="subtitulo">Opciones</div>
+            <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index', 'controller' => 'alumnos')); ?></div>
+            <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $familiar['Familiar']['id'])); ?></div>
+            <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $familiar['Familiar']['id'] ), null, sprintf(__('Esta seguro de borrar el familiar "'.$familiar['Familiar']['id'].'"'), $this->Form->value('Familiar.id'))); ?>
+            </div>
+        </div>
     </div>	
   </div>
 </div>
