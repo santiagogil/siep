@@ -1,13 +1,14 @@
-# siep-cens
+# siep
 
-Sistema nominal integral para los CENS.
+Sistema integral educativo provincial para la gestión de establecimientos educativos.
 
 Instalación:
 
-PASO 0: Instalar: APACHE, MySQL y COMPOSER.
+PASO 1: Clonar este repo.
 
-PASO 1: Importar el archivo de base de datos ("traes_cens.sql").
+PASO 2: Dentro del directorio clonado ejecutar: docker-compose up -d
 
-PASO 2: Clonar este repo en el directorio /www ó /htdocs.
+PASO 3: Dentro del directorio clonado ejecutar: composer install
 
-PASO 3: Ejecutar comando "composer install" dentro del directorio del sistema /siep-cens.
+PASO 4: Desde el Container de PHPMyAdmin  
+importar el archivo siep.sql

@@ -1,6 +1,5 @@
 <?php
 class FamiliarsController extends AppController {
-
 	var $name = 'Familiars';
     public $helpers = array('Session');
 	public $components = array('Auth','Session');
@@ -23,7 +22,18 @@ class FamiliarsController extends AppController {
 			$this->redirect(array('controller' => 'personas', 'action' => 'index'));
 		}
 		$this->set('familiar', $this->Familiar->read(null, $id));
-				
+		$this->loadModel('Persona');
+		$personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+        $personaNacionalidad = $this->Persona->find('list', array('fields'=>array('id', 'nacionalidad')));        
+        $personaCuilCuit = $this->Persona->find('list', array('fields'=>array('id', 'cuil_cuit')));
+        $personaOcupacion = $this->Persona->find('list', array('fields'=>array('id', 'ocupacion')));
+        $personaLugarTrabaja = $this->Persona->find('list', array('fields'=>array('id', 'lugar_de_trabajo')));
+        $personaCiudad = $this->Persona->find('list', array('fields'=>array('id', 'ciudad')));
+        $personaCalleNombre = $this->Persona->find('list', array('fields'=>array('id', 'calle_nombre')));
+        $personaCalleNumero = $this->Persona->find('list', array('fields'=>array('id', 'calle_nro')));
+        $personaTelefono = $this->Persona->find('list', array('fields'=>array('id', 'telefono_nro')));
+        $personaEmail = $this->Persona->find('list', array('fields'=>array('id', 'email'))); 
+        $this->set(compact('personaNombre', 'personaNacionalidad', 'personaCuilCuit', 'personaOcupacion', 'personaLugarTrabaja', 'personaCiudad', 'personaCalleNombre', 'personaCalleNumero', 'personaTelefono', 'personaEmail'));
 	}
 
 	function add() {
@@ -31,7 +41,6 @@ class FamiliarsController extends AppController {
           if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect(array('controller' => 'personas', 'action' => 'index'));
-				
 		  }
    		  if (!empty($this->data)) {
 			$this->Familiar->create();
@@ -43,11 +52,11 @@ class FamiliarsController extends AppController {
 				$this->Session->setFlash('El familiar no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$personas = $this->Familiar->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
-		$this->loadModel('Barrio');          
-        $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-        //$this->set('barrios', $barrios);
-        $this->set(compact('personas', 'barrios', $barrios));
+		$alumnoId = $this->Familiar->Alumno->find('list', array('fields'=>array('id', 'persona_id')));
+        $this->loadModel('Persona');
+        $alumnos = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
+        $personas = $this->Familiar->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+        $this->set(compact('alumnos', 'personas'));
     }
 
 	function edit($id = null) {
@@ -59,7 +68,7 @@ class FamiliarsController extends AppController {
 		  //abort if cancel button was pressed  
           if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
-                $this->redirect( array('controller' => 'personas', 'action' => 'view', $id));
+                $this->redirect( array('controller' => 'familiars', 'action' => 'view', $id));
 		  }
 		  if ($this->Familiar->save($this->data)) {
 				$this->Session->setFlash('El familiar ha sido grabado', 'default', array('class' => 'alert alert-success'));
@@ -74,11 +83,11 @@ class FamiliarsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Familiar->read(null, $id);
 		}
-		$personas = $this->Familiar->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
-		$this->loadModel('Barrio');          
-        $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-        //$this->set('barrios', $barrios);
-        $this->set(compact('personas', 'barrios', $barrios));
+		$alumnoId = $this->Familiar->Alumno->find('list', array('fields'=>array('id', 'persona_id')));
+        $this->loadModel('Persona');
+        $alumnos = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
+        $personas = $this->Familiar->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+        $this->set(compact('alumnos', 'personas'));
 	}
 
 	function delete($id = null) {
