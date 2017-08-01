@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class PersonasController extends AppController {
 
 	var $name = 'Personas';
-	public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+	public $helpers = array('Form', 'Time', 'Js');
 	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Persona' => array('limit' => 3, 'order' => 'Persona.id DESC'));
 
@@ -126,7 +126,7 @@ class PersonasController extends AppController {
 		  $year = $this->request->data['Persona']['fecha_nac']['year'];
 		  // Calcula la edad y se deja en los datos que se intentaran guardar
 		  $this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);          
-		  if ($this->Alumno->save($this->data)) {
+		  if ($this->Persona->save($this->data)) {
 				$this->Session->setFlash('La persona ha sido grabada', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Persona->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
