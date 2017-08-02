@@ -24,7 +24,12 @@ class AppController extends Controller {
 					    'logoutRedirect' => array('controller' => 'users', 'action' => 'login'), 'authError' => 'Debe estar logueado para ver esta página.', 
 					    'loginError' => 'Nombre de usuario o contraseña incorrectos, inténtelo nuevamente.',
 						'authorize' => array('Controller'),
-			));
+			),
+			'Session',
+			'RequestHandler'
+	);
+
+	public $helpers = array('Form', 'Time', 'Js');
 
     // Allow the login controllers only
 	public function beforeFilter() {
@@ -33,7 +38,6 @@ class AppController extends Controller {
 	}
 	
     public function isAuthorized($user) {
-		
 		// Superadmin puede acceder a todo
 		// Si no es así entonces se trata de un usuario común y lo redirigimos a otra página.
 		// En este caso a la acción usuario del controller users

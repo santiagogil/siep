@@ -5,8 +5,6 @@ class CursosController extends AppController {
 
 	var $name = 'Cursos';
     public $uses = array('Curso', 'Inscripcion');
-    public $helpers = array('Form', 'Time', 'Js');
-	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Curso' => array('limit' => 6, 'order' => 'Curso.anio ASC'));
 
 	public function beforeFilter() {
@@ -102,7 +100,6 @@ class CursosController extends AppController {
 		$materias = $this->Curso->Materia->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
 		$inscripcions = $this->Inscripcion->find('list');
-        
 		$this->set(compact('centros', 'titulacions', 'materias', 'ciclos', 'inscripcions', $inscripcions));
 	}
 
@@ -134,7 +131,6 @@ class CursosController extends AppController {
 		$titulacions = $this->Curso->Titulacion->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
 		$inscripcions = $this->Inscripcion->find('list');
-
 		$this->set(compact('centros', 'titulacions', 'modalidads', 'ciclos', 'inscripcions', $inscripcions));
 	}
 

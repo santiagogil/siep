@@ -4,8 +4,6 @@ App::uses('AppController', 'Controller');
 class InscripcionsMateriasController extends AppController {
 
 	var $name = 'InscripcionsMaterias';
-    public $helpers = array('Session', 'Form', 'Time', 'Js');
-    public $components = array('Auth','Session', 'RequestHandler');
    	var $paginate = array('InscripcionsMateria' => array('limit' => 2, 'order' => 'InscripcionsMateria.materia_id ASC'));
 
     function beforeFilter(){

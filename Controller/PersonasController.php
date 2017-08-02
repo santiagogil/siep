@@ -4,13 +4,10 @@ App::uses('AppController', 'Controller');
 class PersonasController extends AppController {
 
 	var $name = 'Personas';
-	public $helpers = array('Form', 'Time', 'Js');
-	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Persona' => array('limit' => 3, 'order' => 'Persona.id DESC'));
 
 	
 	function beforeFilter(){
-
         parent::beforeFilter();
 	    //Si el usuario tiene un rol de superadmin le damos acceso a todo.
         //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.

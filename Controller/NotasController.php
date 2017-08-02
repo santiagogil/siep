@@ -2,8 +2,6 @@
 class NotasController extends AppController {
 
 	var $name = 'Notas';
-    public $helpers = array('Session');
-	public $components = array('Auth','Session');
     var $paginate = array('Nota' => array('limit' => 4, 'order' => 'Nota.created DESC'));
 
 	function beforeFilter(){
@@ -127,7 +125,6 @@ class NotasController extends AppController {
 
 	
 	//Métodos privados.
-
 	private function __lists(){
 		$cicloIdActual = $this->getLastCicloId();
         $cicloInscripcionAlumnoId = $this->getLastCicloInscripcionAlumnoId($cicloIdActual);
