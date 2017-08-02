@@ -4,8 +4,6 @@ App::uses('AppController', 'Controller');
 class AlumnosController extends AppController {
 
 	var $name = 'Alumnos';
-    public $helpers = array('Form', 'Time', 'Js');
-	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Alumno' => array('limit' => 4, 'order' => 'Alumno.created DESC'));
 
     public function beforeFilter() {
@@ -20,7 +18,6 @@ class AlumnosController extends AppController {
     }
     
     public function index() {
-		
 		$this->Alumno->recursive = -1;
 		$this->paginate['Alumno']['limit'] = 4;
 		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
@@ -56,7 +53,6 @@ class AlumnosController extends AppController {
 			'filename' => 'alumno_' . $id .'.pdf'
 		);
 		$this->set('alumno', $this->Alumno->read(null, $id));
-		
         //Genera nombres en el view.
 		//Datos personales del Alumno
 		$alumnoId = $this->Alumno->find('list', array('fields'=>array('persona_id')));

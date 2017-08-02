@@ -6,8 +6,6 @@ class CentrosController extends AppController {
 
 	var $name = 'Centros';
     public $uses = array('Centro', 'Titulacion');
-    public $helpers = array('Form', 'Time', 'Js');
-	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Centro' => array('limit' => 4, 'order' => 'Centro.cue ASC'));
 
  	public function beforeFilter() {
@@ -64,8 +62,6 @@ class CentrosController extends AppController {
 			  }
 		}
 		$empleados = $this->Centro->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado')));
-		$titulacions = $this->Titulacion->find('list');
-		$this->set(compact('titulacions', $titulacions));
 		$this->set(compact('empleados'));
 	}
 

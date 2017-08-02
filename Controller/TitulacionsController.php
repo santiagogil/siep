@@ -3,8 +3,6 @@ class TitulacionsController extends AppController {
 
 	var $name = 'Titulacions';
     public $uses = array('Titulacion', 'Centro');
-    public $helpers = array('Session');
-	public $components = array('Auth','Session');
 	var $paginate = array('Titulacion' => array('limit' => 4, 'order' => 'Titulacion.nombre DESC'));
 
     function beforeFilter(){

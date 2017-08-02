@@ -3,8 +3,6 @@ class MateriasController extends AppController {
 
 	var $name = 'Materias';
     public $uses = array('Materia', 'Inscripcion');
-    public $helpers = array('Form', 'Time', 'Js');
-	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Materia' => array('limit' => 6, 'order' => 'Materia.alia DESC'));
 
     public function beforeFilter() {
@@ -122,21 +120,21 @@ class MateriasController extends AppController {
            $this->Session->setFlash(__('Los Contenidos no se guardaron.'));
         }
         */
-          if(isset($this->params['data']['cancel'])){
+        if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
-		  }
-          if (!empty($this->data)) {
+		}
+        if (!empty($this->data)) {
 			$this->Materia->create();
 			
-			if ($this->Materia->save($this->request->data)) {
-				$this->Session->setFlash('La unidad ha sido grabada', 'default', array('class' => 'alert alert-success'));
-				$inserted_id = $this->Materia->id;
-				$this->redirect(array('action' => 'view', $inserted_id));
-			} else {
-				$this->Session->setFlash('La unidad no fue grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
-			}
+		if ($this->Materia->save($this->request->data)) {
+			$this->Session->setFlash('La unidad ha sido grabada', 'default', array('class' => 'alert alert-success'));
+			$inserted_id = $this->Materia->id;
+			$this->redirect(array('action' => 'view', $inserted_id));
+		} else {
+			$this->Session->setFlash('La unidad no fue grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 		}
+	}
         $cursos = $this->Materia->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
         $this->set(compact('cursos'));
     }
@@ -171,7 +169,6 @@ class MateriasController extends AppController {
 		$this->set(compact('disenocurriculars', 'alumnos'));
 	}
    
-
 	public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para unidad.', 'default', array('class' => 'alert alert-warning'));
