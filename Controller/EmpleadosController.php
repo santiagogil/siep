@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class EmpleadosController extends AppController {
 
 	var $name = 'Empleados';
-    public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+    public $helpers = array('Form', 'Time', 'Js');
 	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Empleado' => array('limit' => 3, 'order' => 'Empleado.id DESC'));
 	

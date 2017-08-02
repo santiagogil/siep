@@ -6,7 +6,7 @@ class CentrosController extends AppController {
 
 	var $name = 'Centros';
     public $uses = array('Centro', 'Titulacion');
-    public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+    public $helpers = array('Form', 'Time', 'Js');
 	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Centro' => array('limit' => 4, 'order' => 'Centro.cue ASC'));
 

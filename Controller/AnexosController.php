@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class AnexosController extends AppController {
 
    	var $name = 'Anexos';
-    public $helpers = array('Session', 'Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+    public $helpers = array('Session', 'Form', 'Time', 'Js');
 	public $components = array('Flash', 'Auth','Session', 'RequestHandler');
 	var $paginate = array('Anexo' => array('limit' => 4, 'order' => 'Anexo.anio DESC'));
 
