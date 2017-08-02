@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class AlumnosController extends AppController {
 
 	var $name = 'Alumnos';
-    public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+    public $helpers = array('Form', 'Time', 'Js');
 	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Alumno' => array('limit' => 4, 'order' => 'Alumno.created DESC'));
 

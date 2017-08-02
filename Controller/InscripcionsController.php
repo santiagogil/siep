@@ -5,7 +5,7 @@ class InscripcionsController extends AppController {
 
 	var $name = 'Inscripcions';
     public $uses = array('Inscripcion', 'Curso', 'Materia');
-	public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+	public $helpers = array('Form', 'Time', 'Js');
 	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Inscripcion' => array('limit' => 4, 'order' => 'Inscripcion.fecha_alta DESC'));
 		

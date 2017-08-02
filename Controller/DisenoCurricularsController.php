@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class DisenoCurricularsController extends AppController {
 
    	var $name = 'Disenocurriculars';
-    public $helpers = array('Session', 'Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+    public $helpers = array('Session', 'Form', 'Time', 'Js');
 	public $components = array('Flash', 'Auth','Session', 'RequestHandler');
 	var $paginate = array('Disenocurricular' => array('limit' => 4, 'order' => 'Disenocurricular.anio DESC'));
 
