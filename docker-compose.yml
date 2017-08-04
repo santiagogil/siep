@@ -1,44 +1,53 @@
-application:
-  image: waldemarnt/cakephp
-  volumes:
-      - .:/var/www/cake-app
-  tty: true
-mysql:
-  image: mysql
-  ports:
-      - 3386:3306    
-  environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: siep
-    MYSQL_USER: root
-    MYSQL_PASSWORD: root    
-phpmyadmin:
-  image: phpmyadmin/phpmyadmin
-  restart: always
-  links:
-      - mysql
-  ports:
-      - 8183:80
-  environment:
-    PMA_HOST: mysql
-    PMA_PORT: 3306
-    PMA_PASSWORD: root
-    PMA_ARBITRARY: 1
-php:
-  image: bitnami/php-fpm
-  expose:
-      - 9000
-  volumes_from:
-      - application
-  links:
-      - mysql    
-nginx:
-  image: waldemarnt/cakephp-nginx
-  ports:
-      - 80:80
-  links:
-      - php
-  volumes_from:
-      - application
-  volumes:
-      - ./logs/nginx/:/var/log/nginx    
+version: '3'
+
+services:
+  siep-mysql:
+    image: mysql:5.7
+    container_name: siep-mysql
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - "8106:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=siep
+      - MYSQL_USER=siep
+      - MYSQL_PASSWORD=siep
+    networks:
+      - back-tier
+
+  siep-nginx:
+    depends_on: 
+      - siep-php-fpm
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    image: decyt/siep-nginx
+    ports:
+      - "8180:80"
+    networks:
+      - back-tier
+      - front-tier
+
+  siep-php-fpm:
+    depends_on:
+      - siep-mysql
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    image: decyt/siep-php-fpm
+    container_name: siep-php-fpm
+    links:
+      - siep-mysql
+    networks:
+      - back-tier
+
+
+volumes:
+  mysql: {}
+
+networks:
+  front-tier:
+    driver: overlay
+  back-tier:
+    driver: overlay
