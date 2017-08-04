@@ -7,7 +7,7 @@ services:
     volumes:
       - mysql:/var/lib/mysql
     ports:
-      - "8106:3306"
+      - "3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=siep
@@ -24,7 +24,7 @@ services:
       dockerfile: docker/nginx/Dockerfile
     image: decyt/siep-nginx
     ports:
-      - "8180:80"
+      - "80"
     networks:
       - back-tier
       - front-tier
