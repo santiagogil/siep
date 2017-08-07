@@ -66,9 +66,8 @@ Configure::write('Dispatcher.filters', array(
 ));
 CakePlugin::load('Upload');
 CakePlugin::load('DebugKit');
-CakePlugin::load('ReportManager',array('bootstrap' => true));
 CakePlugin::load('CakePdf', array('bootstrap' => true, 'routes' => true));
-//CakePlugin::load('Migrations');
+CakePlugin::load('Migrations');
 /**
  * Configuration CakePdf
  */
