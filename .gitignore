@@ -1,10 +1,9 @@
 # SIEP con CakePHP 2.X
 
-/Plugin/CakePdf/*
-/Plugin/DebugKit/*
-/Plugin/Upload/*
+/Plugin/*
 
 /Vendor/*
+
 /tmp/*
 
 /logs/**/*.log*
