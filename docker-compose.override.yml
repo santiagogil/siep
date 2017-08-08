@@ -41,5 +41,8 @@ services:
     volumes:
       - .:/app
     command: "Vendor/bin/cake Migrations.migrations migrate"
-
+  siep-memcached:
+    image: memcached
+    networks:
+      - back-tier
        

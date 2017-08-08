@@ -2,7 +2,7 @@ FROM phpdockerio/php71-fpm:latest
 
 # Install selected extensions and other stuff
 RUN apt-get update \
-    && apt-get -y --no-install-recommends install  php7.1-mcrypt php7.1-mysql php7.1-intl php7.1-mbstring php7.1-sqlite3\
+    && apt-get -y --no-install-recommends install  php7.1-mcrypt php7.1-mysql php7.1-intl php7.1-mbstring php7.1-sqlite3 php7.1-memcache\
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 COPY docker/php-fpm/php-ini-overrides.ini /etc/php/7.1/fpm/conf.d/99-overrides.ini
 WORKDIR "/var/www/myapp"
