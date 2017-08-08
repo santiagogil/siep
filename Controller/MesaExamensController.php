@@ -4,8 +4,6 @@ App::uses('AppController', 'Controller');
 class MesaExamensController extends AppController {
 
    	var $name = 'Mesaexamens';
-    public $helpers = array('Session', 'Form', 'Time', 'Js');
-	public $components = array('Paginator', 'Flash', 'Auth','Session', 'RequestHandler');
 	var $paginate = array('Mesaexamen' => array('limit' => 4, 'order' => 'Mesaexamen.fecha DESC'));
 
     function beforeFilter(){

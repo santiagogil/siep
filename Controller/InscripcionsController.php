@@ -4,10 +4,7 @@ App::uses('AppController', 'Controller');
 class InscripcionsController extends AppController {
 
 	var $name = 'Inscripcions';
-    public $uses = array('Inscripcion', 'Curso', 'Materia');
-	public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
-	public $components = array('Session', 'RequestHandler');
-	var $paginate = array('Inscripcion' => array('limit' => 4, 'order' => 'Inscripcion.fecha_alta DESC'));
+    var $paginate = array('Inscripcion' => array('limit' => 4, 'order' => 'Inscripcion.fecha_alta DESC'));
 		
 	function beforeFilter(){
 	    parent::beforeFilter();
