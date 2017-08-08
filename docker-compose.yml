@@ -35,7 +35,11 @@ services:
       - siep-mysql
     networks:
       - back-tier
-
+  siep-memcached:
+    image: memcached:alpine
+    networks:
+      - back-tier
+ 
 
 volumes:
   mysql: {}
