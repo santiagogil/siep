@@ -59,6 +59,7 @@ class AppSchema extends CakeSchema {
 	public $barrios = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'nombre' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'ciudad_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -179,9 +180,9 @@ class AppSchema extends CakeSchema {
 		'nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 11, 'key' => 'unique', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'fechaInicio' => array('type' => 'date', 'null' => false, 'default' => null),
 		'fechaFinal' => array('type' => 'date', 'null' => false, 'default' => null),
-		'primer_periodo' => array('type' => 'date', 'null' => false, 'default' => null),
-		'segundo_periodo' => array('type' => 'date', 'null' => false, 'default' => null),
-		'tercer_periodo' => array('type' => 'date', 'null' => false, 'default' => null),
+		'primer_periodo' => array('type' => 'date', 'null' => true, 'default' => null),
+		'segundo_periodo' => array('type' => 'date', 'null' => true, 'default' => null),
+		'tercer_periodo' => array('type' => 'date', 'null' => true, 'default' => null),
 		'observaciones' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
@@ -201,6 +202,17 @@ class AppSchema extends CakeSchema {
 			'ciclos_cursos' => array('column' => array('ciclo_id', 'curso_id'), 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+	);
+
+	public $ciudads = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+		'nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 15, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => false, 'default' => null),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
 	public $correlativas = array(
@@ -628,15 +640,15 @@ class AppSchema extends CakeSchema {
 		'fecha_nac' => array('type' => 'date', 'null' => false, 'default' => null),
 		'pcia_nac' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'utf8_spanish_ci', 'charset' => 'utf8'),
 		'nacionalidad' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'utf8_spanish_ci', 'charset' => 'utf8'),
-		'indigena' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_spanish_ci', 'charset' => 'utf8'),
 		'estado_civil' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 30, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'email' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 100, 'collate' => 'utf8_spanish_ci', 'charset' => 'utf8'),
 		'telefono_nro' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'calle_nombre' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_spanish_ci', 'charset' => 'utf8'),
 		'calle_nro' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
-		'barrio_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'asentamiento' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'ciudad' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'utf8_spanish_ci', 'charset' => 'utf8'),
+		'ciudad_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'barrio_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'asentamiento_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'pueblosoriginario_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'observaciones' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'agente' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 4, 'unsigned' => false),
 		'alumno' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 4, 'unsigned' => false),
@@ -662,6 +674,17 @@ class AppSchema extends CakeSchema {
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'nombre' => array('column' => 'nombre', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
+	);
+
+	public $pueblosoriginarios = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+		'nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'MyISAM')
 	);
