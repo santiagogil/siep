@@ -19,6 +19,9 @@ services:
   siep-nginx:
     depends_on: 
       - siep-php-fpm
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
     image: decyt/siep-nginx
     ports:
       - "80"
@@ -29,6 +32,9 @@ services:
   siep-php-fpm:
     depends_on:
       - siep-mysql
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
     image: decyt/siep-php-fpm
     container_name: siep-php-fpm
     links:
