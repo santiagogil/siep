@@ -36,3 +36,10 @@ services:
     volumes:
       - .:/app
     command: "composer install --ignore-platform-reqs"
+  siep-migrations:
+    image: composer
+    volumes:
+      - .:/app
+    command: "Vendor/bin/cake Migrations.migrations migrate"
+
+       
