@@ -6,25 +6,25 @@ class PersonasController extends AppController {
 	var $name = 'Personas';
 	var $paginate = array('Persona' => array('limit' => 3, 'order' => 'Persona.id DESC'));
 
-	
+
 	function beforeFilter(){
         parent::beforeFilter();
 	    //Si el usuario tiene un rol de superadmin le damos acceso a todo.
         //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
 	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	    } elseif ($this->Auth->user('role') === 'usuario') {
 	        $this->Auth->allow('index', 'view');
 	    }
     }
-		
+
 	public function index() {
 		$this->Persona->recursive = 0;
 		$this->paginate['Persona']['limit'] = 4;
 		$this->paginate['Persona']['order'] = array('Persona.id' => 'ASC');
 		$this->redirectToNamed();
 		$conditions = array();
-				
+
 		if(!empty($this->params['named']['nombre_completo_persona']))
 		{
 			$conditions['Persona.nombre_completo_persona ='] = $this->params['named']['nombre_completo_persona'];
@@ -55,7 +55,7 @@ class PersonasController extends AppController {
 			'filename' => 'persona_' . $id .'.pdf'
 		);
 		$this->set('persona', $this->Persona->read(null, $id));
-		
+
         //Evalúa si existe foto.
 		if(empty($this->params['named']['foto'])){
 			$foto = 0;
@@ -65,10 +65,12 @@ class PersonasController extends AppController {
 		$this->loadModel('Barrio');
 		$barrioNombre = $this->Barrio->find('list', array('fields'=>array('nombre')));
 	    $this->set(compact('foto', 'barrioNombre'));
+
+
      }
 
 	public function add() {
-		//abort if cancel button was pressed  
+		//abort if cancel button was pressed
           if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
@@ -95,10 +97,15 @@ class PersonasController extends AppController {
 				$this->Session->setFlash('La persona no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$this->loadModel('Barrio');          
+		$this->loadModel('Barrio');
         $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
         $this->set('barrios', $barrios);
+
+	   $this->loadModel('PuebloOriginario');
+	 $nativos = $this->PuebloOriginario->find('list', array('fields' => array('nombre')));
+	 $this->set('nativos', $nativos);
 	}
+
 
 	function edit($id = null) {
 	    if (!$id && empty($this->data)) {
@@ -106,7 +113,7 @@ class PersonasController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
-		  //abort if cancel button was pressed  
+		  //abort if cancel button was pressed
           if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
@@ -122,7 +129,7 @@ class PersonasController extends AppController {
 		  $month = $this->request->data['Persona']['fecha_nac']['month'];
 		  $year = $this->request->data['Persona']['fecha_nac']['year'];
 		  // Calcula la edad y se deja en los datos que se intentaran guardar
-		  $this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);          
+		  $this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);
 		  if ($this->Persona->save($this->data)) {
 				$this->Session->setFlash('La persona ha sido grabada', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Persona->id;
@@ -135,9 +142,17 @@ class PersonasController extends AppController {
 			$this->data = $this->Persona->read(null, $id);
 		}
 
-		$this->loadModel('Barrio');          
+		$this->loadModel('Barrio');
         $barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
         $this->set('barrios', $barrios);
+
+	   $this->loadModel('PuebloOriginario');
+	 $pueblosoriginarios = $this->PuebloOriginario->find('list', array('fields' => array('nombre')));
+	 $this->set('pueblossoriginarios', $pueblosoriginarios);
+
+	 $this->loadModel('PuebloOriginario');
+    $nativos = $this->PuebloOriginario->find('list', array('fields' => array('nombre')));
+    $this->set('nativos', $nativos);
 	}
 
 	public function delete($id = null) {
@@ -152,7 +167,7 @@ class PersonasController extends AppController {
 		$this->Session->setFlash('La persona no fue borrado', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
-	
+
 	//Métodos Privados
 	private function __getEdad($day, $month, $year){
 		$year_diff  = date("Y") - $year;

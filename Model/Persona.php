@@ -1,10 +1,10 @@
-<?php 
+<?php
 class Persona extends AppModel {
-	
+
 	var $name = 'Persona';
     //var $displayField = 'apellido';
 	public $virtualFields = array('nombre_completo_persona'=> 'CONCAT(Persona.nombres, " ", Persona.apellidos)');
-	
+
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
   var $hasMany = array(
@@ -61,14 +61,14 @@ class Persona extends AppModel {
             ),
             'sexo' => array(
                 'required' => array(
-                'rule' => 'notBlank',
+                'rule' => array('inList', array('FEMENINO', 'MASCULINO')),
                 'required' => 'create',
                 'message' => 'Indicar sexo.'
                 )
             ),
             'documento_tipo' => array(
                 'required' => array(
-                'rule' => 'notBlank',
+                'rule' => array('inList', array('DNI','CI','LC','LE','Cédula Mercosur','Pasaporte extranjero','Cédula de identidad extranjera','Otro documento extranjero','No posee', 'En trámite')),
                 'required' => 'create',
                 'message' => 'Indicar un tipo de documento.'
                 )
@@ -123,7 +123,14 @@ class Persona extends AppModel {
             ),
             'nacionalidad' => array(
                 'required' => array(
-                'rule' => 'notBlank',
+                'rule' =>  array('inList', array('Argentino', 'Boliviana', 'Brasileña', 'Chilena', 'Colombiana','Ecuatoriana','Guyanesa','Paraguaya','Peruana','Surinamesa','Uruguaya','Venezolana','Beliceña',
+			 'Costarricense','Guatemalteca','Hondureña','Nicaragüense','Salvadoreña','Canadiense','Estadounidense','Mexicana','Cubana','Arubana','Bahameña','Barbadense','Dominiquesa',
+			 'Dominicana','Haitiana','Jamaiquina','Puertorriqueña','Sancristobaleña','Santaluciana','Sanvicentina','Albanesa','Alemana','Andorrana','Armenia','Austríaca','Belga','Bielorrusa',
+			 'Bosnia','Búlgara','Checa','Chipriota','Croata','Danesa','Escocesa','Eslovaca','Hindú','Eslovena','Española','Estonia','Finlandesa','Francesa','Griega','Holandesa','Húngara',
+			 'Británica','Irlandesa','Italiana','Letona','Lituana','Luxemburguesa','Maltesa','Moldava','Monegasca','Montenegrina','Noruega','Luxemburguesa','Portuguesa','Rumana','Rusa',
+			 'Serbia','Sueca','Suiza','Turca','Ucraniana','Australiana','Neozelandesa','Afgana','Azerbaiyana','Bangladesí','Bareiní','China','Liberiana','Emiratí','Filipina','Georgiana',
+			 'Hindú','Indonesia','Israelí','Japonesa','Libanesa','Mongola','Norcoreana','Hindú','Siria','Surcoreana','Vietnamita','Argelina','Camerunesa','Etíope','Ecuatoguineana','Egipcia',
+			 'Libia','Marroquí','Namibia','Nigeriana','Saharaui','Senegalesa','Sudafricana','Togolesa')),
                 'required' => 'create',
                 'message' => 'Indicar una nacionalidad.'
                 )
@@ -137,7 +144,7 @@ class Persona extends AppModel {
                 'required' => 'create',
                 'message' => 'Indicar un estado civil.'
                 )
-            ), 
+            ),
             'ocupacion' => array(
                 'required' => array(
                 'rule' => 'notBlank',

@@ -117,7 +117,7 @@ class Centro extends AppModel {
                            'isUnique' => array(
 	                       'rule' => 'isUnique',
 	                       'message' => 'Este CUE esta siendo usado.'
-	                     )    						   
+	                     )
                    ),
 				   'nombre' => array(
                            'minLength' => array(
@@ -128,69 +128,103 @@ class Centro extends AppModel {
                            'isUnique' => array(
 	                       'rule' => 'isUnique',
 	                       'message' => 'Este nombre de centro esta siendo usado.'
-	                     )    						   
+	                     )
                    ),
                    'sigla' => array(
                            'minLength' => array(
-                           'rule' => array('minLength', 5), 
-                           'allowEmpty' => false,       
+                           'rule' => array('minLength', 5),
+                           'allowEmpty' => false,
                            'message' => 'Indicar una sigla (Ejemplo: CENS 1 o CP Los Andes).'
                            ),
                            'isUnique' => array(
 	                       'rule' => 'isUnique',
 	                       'message' => 'Esta sigla de centro esta siendo usado.'
-	                     )          						   
+	                     )
                    ),
+			    'sector'=> array(
+					'minLength' => array(
+					'rule' => array('inList', array('ESTATAL' ,'PRIVADO')),
+					'allowEmpty' => false,
+					'message' => 'Indicar una opcion.'
+					)
+				),
+
                    'fechaFundacion' => array(
                            'date' => array(
                            'rule' => 'date',
                            'allowEmpty' => false,
                            'message' => 'Indicar fecha de creacion del centro.'
-                           )        
+                           )
                    ),
                    'equipoDirectivo' => array(
                            'minLength' => array(
-                           'rule' => array('minLength', 5), 
-                           'allowEmpty' => false,       
+                           'rule' => array('minLength', 5),
+                           'allowEmpty' => false,
                            'message' => 'Indicar nombres del equipo directivo (Director, Vicedirector y Secretario).'
-                           )        
+                           )
                    ),
+
+			    'ambito' => array(
+		 	    		'minLength' => array(
+		 			'rule' => array('inList', array('URBANO' ,'RURAL')),
+		 			'allowEmpty' => false,
+		 			'message' => 'Indicar una opcion.'
+		 			)
+   				),
+
                     'direccion' => array(
                            'minLength' => array(
-                           'rule' => array('minLength',5),                          
+                           'rule' => array('minLength',5),
                            'allowEmpty' => false,
                            'message' => 'Indicar direccion que contenga numeros y letras.'
-                           )        
-                   ),        
+                           )
+                   ),
+
+			    'cp' => array(
+	  	    			'minLength' => array(
+	  				'rule' => array('minLength',4),
+	  				'allowEmpty' => true,
+	  				'message' => 'Indicar código postal.'
+	  				)
+				),
+
+				'codigoLocalidad' => array(
+				  	'minLength' => array(
+                      	'rule' => array('minLength',5),
+					'allowEmpty' => true,
+			       	'message' => 'Indicar una opcion.'
+				      )
+				),
+
                     'ciudad' => array(
                            'minLength' => array(
-                           'rule' => array('minLength',5),                          
+                           'rule' => array('inList', array('RIO GRANDE' ,'TOLHUIN', 'USHUAIA')),
                            'allowEmpty' => false,
                            'message' => 'Indicar una opcion.'
-                           )        
+                           )
                    ),
                    'telefono' => array(
                            'minLength' => array(
                            'rule' => array('minLength',6),
                            'allowEmpty' => false,
                            'message' => 'Indicar un telefono de referencia.'
-                           )        
+                           )
                    ),
                    'email' => array(
                            'email' => array(
                            'rule' => 'email',
-                           'allowEmpty' => true,
+                           'allowEmpty' => false,
                            'message' => 'Indicar correo electronico valido.'
-                           )        
+                           )
                    ),
                   'url' => array(
                            'url' => array(
                            'rule' => 'url',
                            'allowEmpty' => true,
                            'message' => 'Indicar una url valida.'
-                           )        
+                           )
                    )
-        
+
      );
 }
 ?>
