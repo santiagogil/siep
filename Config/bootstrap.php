@@ -64,10 +64,7 @@ Configure::write('Dispatcher.filters', array(
     'AssetDispatcher',
     'CacheDispatcher'
 ));
-CakePlugin::load('Upload');
-CakePlugin::load('DebugKit');
-CakePlugin::load('CakePdf', array('bootstrap' => true, 'routes' => true));
-CakePlugin::load('Migrations');
+CakePlugin::loadAll(array('CakePdf' => array('bootstrap' => true, 'routes' => true)));
 /**
  * Configuration CakePdf
  */
