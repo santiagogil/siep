@@ -68,10 +68,10 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'myapp-mysql',
-		'login' => 'myapp',
-		'password' => 'myapp',
-		'database' => 'myapp',
+		'host' => 'siep-mysql',
+		'login' => 'siep',
+		'password' => 'siep',
+		'database' => 'siep',
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);
