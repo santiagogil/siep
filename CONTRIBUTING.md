@@ -31,23 +31,23 @@ Nuestro flujo de trabajo es el habitual para pull requests:
 ```
       +----------  PR  ---------+
 +-----v----+                +---+----+
-| Upstream +----- fork -----> Origin |         
+| Upstream +----- fork -----> Origin |
 +-----+----+                +---^----+
       |                         |
       | Pull                    | Push 
       |                         |
-      |                         |                                 
-      |                         |                                 
-+-----v-------------------------+----+                            
-| Local                         |    |         
-| master                        |    |       
+      |                         |
+      |                         |
++-----v-------------------------+----+
+| Local                         |    |
+| master                        |    |
 |                               |    |
-|   git checkout -b nombreDelFeature |    
-|                               |    |                        
+|   git checkout -b nombreDelFeature |
+|                               |    |
 | nombreDelFeature -------------+    |
-| (edit, add, git cz)                | 
+| (edit, add, git cz)                |
 +------------------------------------+
-```                                                            
+```
 
 * Upstream = https://github.com/decyt-tdf/siep
 * Origin = https://github.com/<miUsuario>/siep
