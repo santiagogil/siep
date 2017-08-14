@@ -31,12 +31,12 @@ services:
       - siep-mysql
     image: decyt/siep-php-fpm
     container_name: siep-php-fpm
-    links:
-      - siep-mysql
     networks:
       - back-tier
   siep-memcached:
     image: memcached:alpine
+    ports:
+      - "11211:11211"
     networks:
       - back-tier
  

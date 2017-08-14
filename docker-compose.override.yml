@@ -43,7 +43,3 @@ services:
     command: "Vendor/bin/cake Migrations.migration run all -f"
     networks:
       - back-tier
-  siep-memcached:
-    image: memcached
-    networks:
-      - back-tier
