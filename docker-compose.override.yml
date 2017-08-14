@@ -1,4 +1,4 @@
-version: '3'
+version: '2.1'
 
 services:
   siep-mysql:
@@ -37,10 +37,10 @@ services:
       - .:/app
     command: "composer install --ignore-platform-reqs"
   siep-migrations:
-    image: composer
+    image: decyt/siep-php-fpm
     volumes:
       - .:/app
-    command: "Vendor/bin/cake Migrations.migrations migrate"
+    command: "Vendor/bin/cake Migrations.migration run all -f"
     networks:
       - back-tier
   siep-memcached:
