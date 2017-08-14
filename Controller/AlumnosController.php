@@ -105,9 +105,11 @@ class AlumnosController extends AppController {
 				$this->Session->setFlash('El alumno no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
+
         $personas = $this->Alumno->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+
         $this->set(compact('alumnos', 'personas'));
-    }
+	}
 
 	public function edit($id = null) {
 		if (!$id && empty($this->data)) {
@@ -146,6 +148,30 @@ class AlumnosController extends AppController {
 		}
 		$this->Session->setFlash('El alumno no fue borrado', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
+	}
+
+	public function autocompleteNombreAlumno() {
+		$term = null;
+
+		if(!empty($this->request->query('term'))) {
+			$term = $this->request->query('term');
+			$terminos = explode(' ', trim($term));
+			$terminos = array_diff($terminos,array(''));
+			$conditions = array();
+
+			foreach($terminos as $termino) {
+				$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
+			}
+
+			$personas = $this->Alumno->Persona->find('all', array(
+				'recursive'	=> -1,
+				'conditions' => $conditions,
+				'fields' 	=> array('id', 'nombre_completo_persona'))
+			);
+		}
+
+		echo json_encode($personas);
+		$this->autoRender = false;
 	}
 }
 ?>
