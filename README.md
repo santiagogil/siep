@@ -24,3 +24,8 @@ Permite visualizar la totalidad del trabajo de el equipo de desarrollo a travez 
 
 [https://pci-tdf.github.io/ubersicht/#decyt-tdf](https://pci-tdf.github.io/ubersicht/#decyt-tdf)
 
+## Instalación
+<!--  Por ejemplo npm install titulo  -->
+
+## Tests
+<!-- Breve descripción de cómo correr la suit de tests  -->
