@@ -102,6 +102,10 @@ class PersonasController extends AppController {
 				$this->Session->setFlash('La persona no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
+		$this->loadModel('Ciudad');
+    		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+    		$this->set('ciudades', $ciudades);
+
 		$this->loadModel('Barrio');
         	$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
         	$this->set('barrios', $barrios);
@@ -113,7 +117,7 @@ class PersonasController extends AppController {
 	 	$this->loadModel('Asentamiento');
     		$asentamientos = $this->Asentamiento->find('list', array('fields' => array('nombre')));
     		$this->set('asentamientos', $asentamientos);
-
+				
 	}
 
 
@@ -152,13 +156,22 @@ class PersonasController extends AppController {
 			$this->data = $this->Persona->read(null, $id);
 		}
 
-		$this->loadModel('Barrio');
-        	$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-        	$this->set('barrios', $barrios);
+		$this->loadModel('Ciudad');
+				$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+				$this->set('ciudades', $ciudades);
 
-	 	$this->loadModel('PuebloOriginario');
-    		$nativos = $this->PuebloOriginario->find('list', array('fields' => array('nombre')));
-    		$this->set('nativos', $nativos);
+		$this->loadModel('Barrio');
+					$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+					$this->set('barrios', $barrios);
+
+			$this->loadModel('PuebloOriginario');
+		$nativos = $this->PuebloOriginario->find('list', array('fields' => array('nombre')));
+		$this->set('nativos', $nativos);
+
+		$this->loadModel('Asentamiento');
+				$asentamientos = $this->Asentamiento->find('list', array('fields' => array('nombre')));
+				$this->set('asentamientos', $asentamientos);
+
 	}
 
 	public function delete($id = null) {
@@ -172,6 +185,19 @@ class PersonasController extends AppController {
 		}
 		$this->Session->setFlash('La persona no fue borrado', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
+	}
+
+	public function select_list($type_list, $ref_id = null){
+		if($type_list == 'ciudades' && $ref_id != null){
+			$list = $this->Persona->find('list', array('conditions'=>array('ciudad_id'=>$ref_id)));
+
+		}else{
+			$list = array();
+		}
+
+		$this->response->type('json');
+		$this->response->body(json_encode($list));
+		return $this->response;
 	}
 
 	//Métodos Privados

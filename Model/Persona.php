@@ -195,13 +195,13 @@ class Persona extends AppModel {
                 'message' => 'Indicar un nº de calle.'
                 )
             ),
-           'ciudad' => array(
+						'ciudad_id' => array(
                 'required' => array(
                 'rule' => 'notBlank',
                 'required' => 'create',
                 'message' => 'Indicar una ciudad.'
-               )
-            )
-      );
+                )
+							)
+    );
 }
 ?>
