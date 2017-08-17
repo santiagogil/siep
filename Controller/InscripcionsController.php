@@ -8,48 +8,74 @@ class InscripcionsController extends AppController {
 		
 	function beforeFilter(){
 	    parent::beforeFilter();
-		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
-        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
+		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
+        if (($this->Auth->user('role') === 'superadmin') || ($this->Auth->user('role') === 'admin')) {
 	        $this->Auth->allow();
 	    } elseif ($this->Auth->user('role') === 'usuario') { 
 	        $this->Auth->allow('index', 'view');
 	    }
-        //Si se ejecutan las acciones add/edit activa la función privada "lists".
-		if($this->ifActionIs(array('add', 'edit'))){
+	    /* FIN */
+        /* FUNCIÓN PRIVADA "LISTS" (INICIO).
+        *Si se ejecutan las acciones add/edit activa la función privada "lists".
+		*/
+		if ($this->ifActionIs(array('add', 'edit'))) {
 			$this->__lists();
 		}
+		/* FIN */
     }
 	
 	public function index() {
 		$this->Inscripcion->recursive = 1;
 		$this->paginate['Inscripcion']['limit'] = 4;
 		$this->paginate['Inscripcion']['order'] = array('Inscripcion.fecha_alta' => 'DESC');
-		$cicloIdActual = $this->getLastCicloId();
+		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
+		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
+		*/
+		//$cicloIdActual = $this->getLastCicloId();
 		$userCentroId = $this->getUserCentroId();
-		if($this->Auth->user('role') === 'admin') {
-		$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
+		$userRole = $this->Auth->user('role');
+		if ($this->Auth->user('role') === 'admin') {
+		//$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
+		$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId);	
+		} else if ($userRole === 'usuario') {
+			$this->loadModel('Centro');
+			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId);
 		}
-    	$alumnoId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'persona_id')));
-		$this->loadModel('Persona');
-        $alumnoNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));    
-		$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla')));
-		$this->redirectToNamed();
+		/* FIN */
+    	/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
+		*Pagina según búsquedas simultáneas ya sea por CICLO y/o CENTRO y/o LEGAJO y/o ESTADO.
+		*/
+    	$this->redirectToNamed();
 		$conditions = array();
-		if(!empty($this->params['named']['centro_id']))
-		{
+		if (!empty($this->params['named']['ciclo_id'])) {
+			$conditions['Inscripcion.ciclo_id ='] = $this->params['named']['ciclo_id'];
+		}
+		if (!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
 		}
-		if(!empty($this->params['named']['legajo_nro']))
-		{
+		if (!empty($this->params['named']['legajo_nro'])) {
 			$conditions['Inscripcion.legajo_nro ='] = $this->params['named']['legajo_nro'];
 		}
-		if(!empty($this->params['named']['estado']))
-		{
+		if(!empty($this->params['named']['estado'])) {
 			$conditions['Inscripcion.estado ='] = $this->params['named']['estado'];
 		}
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
-		$this->set(compact('inscripcions', 'alumnoNombre', 'centros'));
+		/* FIN */
+		/* SETS DE DATOS PARA COMBOBOX (INICIO). */
+		$alumnoId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'persona_id')));
+		$this->loadModel('Persona');
+        $alumnoNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));    
+		$this->loadModel('Centro');
+		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
+		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+		$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
+		$ciclos = $this->Inscripcion->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
+		/* FIN */
+		$this->set(compact('inscripcions', 'alumnoNombre', 'centros', 'ciclos'));
 	}
     
 	public function view($id = null) {
@@ -163,18 +189,33 @@ class InscripcionsController extends AppController {
 	//Métodos privados
 	private function __lists(){
 	    $this->loadModel('User');
-        $this->loadModel('Empleado');
         $ciclos = $this->Inscripcion->Ciclo->find('list');
 		$cicloIdActual = $this->getLastCicloId();
 		$centros = $this->Inscripcion->Centro->find('list');
+		$this->loadModel('Empleado');
 		$empleados = $this->Inscripcion->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado'), 'conditions'=>array('id'== 'empleadoId')));
-		$userCentroId = $this->getUserCentroId();
-		$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
+		//Sí es "superadmin" o "usuario" ve combobox con todos los cursos. Sino ve los propios del centro.
+		$userRol = $this->Auth->user('role');
+		if (($userRol == 'superadmin') || ($userRol == 'usuario')) {
+			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
+		} else if ($userRol == 'admin') {
+			$userCentroId = $this->getUserCentroId();
+			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId)));	
+		}
 		$materias = $this->Inscripcion->Materia->find('list');
-    	$alumnoId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'persona_id')));
-        $this->loadModel('Persona');
-        $alumnoNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions' => array('id' => $alumnoId), 'order'=>'nombre_completo_persona ASC'));		
-		$this->set(compact('alumnoNombre', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
+    	//Sí es "superadmin" o "usuario" ve combobox con todos los alumnos. Sino ve los propios del centro.
+		$userRol = $this->Auth->user('role');
+		if (($userRol == 'superadmin') || ($userRol == 'usuario')) {
+			$personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
+		} else if ($userRol == 'admin') {
+			$userCentroId = $this->getUserCentroId();
+			$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+		}
+		$personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$alumnos)));
+		$this->loadModel('Persona');
+		$personaNombre = $this->Inscripcion->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
+		print_r($personaNombre);
+		$this->set(compact('alumnos', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
 	}
 	
 	private function __getCodigo($ciclo, $personaDoc){

@@ -8,38 +8,52 @@ class AlumnosController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        //Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
         if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
 	        $this->Auth->allow();
 	    } elseif ($this->Auth->user('role') === 'usuario') { 
 	        $this->Auth->allow('index', 'view');
-	    } 
+	    }
+	    /* FIN */ 
     }
     
     public function index() {
 		$this->Alumno->recursive = -1;
 		$this->paginate['Alumno']['limit'] = 4;
 		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
-		
+		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
+		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
+		*/
 		$userCentroId = $this->getUserCentroId();
-		if($this->Auth->user('role') === 'admin') {
+		$userRole = $this->Auth->user('role');
+		if ($this->Auth->user('role') === 'admin') {
 		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
+		} else if ($userRole === 'usuario') {
+			$this->loadModel('Centro');
+			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $nivelCentroId);
 		}
-        
-        $personasId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
-        $this->loadModel('Persona');
-        $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $personasId)));
-        $personaDocumento = $this->Persona->find('list', array('fields'=>array('documento_nro'), 'conditions' => array('id' => $personasId)));
-          		
+        /* FIN */
+        /* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
+		*Pagina según búsquedas simultáneas ya sea por NÚMERO DE LEGAJO FÍSICO y/o .
+		*/   		
         $this->redirectToNamed();
 		$conditions = array();
-        if(!empty($this->params['named']['legajo_fisico_nro'])){
+        if (!empty($this->params['named']['legajo_fisico_nro'])) {
 			$conditions['Alumno.legajo_fisico_nro ='] = $this->params['named']['legajo_fisico_nro'];
 		}
 		$alumnos = $this->paginate('Alumno', $conditions);
-
-        $this->set(compact('alumnos', 'personaNombre', 'personaDocumento'));
+	    /* FIN */
+	    /* SETS DE DATOS PARA COMBOBOX (INICIO). */
+	    $personasId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
+        $this->loadModel('Persona');
+        $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $personasId)));
+        $personaDocumento = $this->Persona->find('list', array('fields'=>array('documento_nro'), 'conditions' => array('id' => $personasId)));
+	    /* FIN */
+	    $this->set(compact('alumnos', 'personaNombre', 'personaDocumento'));
 	}
 
 	public function view($id = null) {

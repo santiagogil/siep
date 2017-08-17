@@ -243,6 +243,7 @@
 	</div>
 </div>
 <!-- end Inscripciones Relacionadas -->
+<?php if($current_user['role'] == 'superadmin'): ?>
 <!-- Empleados Relacionados -->
 <div id="click_05" class="titulo_acordeon">Usuarios Relacionados <span class="caret"></span></div>
 <div id="acordeon_05">
@@ -270,3 +271,4 @@
 </div>
 </div>
 <!-- end Agentes Relacionados -->
+<?php endif; ?>

@@ -26,24 +26,39 @@
     <!-- ******* menu principal ******* -->
     	<?php 
             if($this->Html->loggedIn()) { 
-            
-                $user = $current_user['role'];          
-       
-                switch ($user) {
-                    
-                    case 'superadmin':
-                      echo $this->element('menues/menu-sa');
-                      break;
-                    
-                    case 'admin':
-                      echo $this->element('menues/menu-a');
-                      break;
-                    
-                    default:
-                      echo $this->element('menues/menu-u');
-                      break;
-                };
-            }
+                $userRole = $current_user['role'];
+                if ($userRole == 'superadmin') {
+                    echo $this->element('menues/menu-sa');
+                } elseif ($userRole == 'admin') {
+                    $userPuesto = $current_user['puesto'];
+                    switch ($userPuesto) {
+                        case 'Dirección Jardín/Escuela':
+                            echo $this->element('menues/menu-aip');
+                            break;
+                        case 'Dirección Colegio Secundario':
+                            echo $this->element('menues/menu-a');
+                            break;                    
+                        default:
+                            //Dirección Instituto Superior.
+                            echo $this->element('menues/menu-a');
+                            break;
+                    }
+                } elseif ($userRole == 'usuario') {
+                    $userPuesto = $current_user['puesto'];
+                    switch ($userPuesto) {
+                        case 'Supervisión Inicial/Primaria':
+                            echo $this->element('menues/menu-aip');
+                            break;
+                        case 'Supervisión Secundaria':
+                            echo $this->element('menues/menu-a');
+                            break;                    
+                        default:
+                            //Dirección Provincial de Superior.
+                            echo $this->element('menues/menu-a');
+                            break;
+                    }
+                }
+            }    
         ?>
     <!-- ******************************* -->
     	<script>
