@@ -66,10 +66,11 @@
           //echo $this->Form->input('email', array('label' => 'Email','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un email de contacto', 'placeholder' => 'Ingrese un email...'));
           echo $this->Form->input('calle_nombre', array('label' => 'Nombre de la calle*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el nombre de la calle del domicilio real', 'placeholder' => 'Ingrese el nombre de la calle...'));
           echo $this->Form->input('calle_nro', array('label' => 'Número de la calle*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el número de la calle del domicilio real', 'placeholder' => 'Ingrese el número de la calle...'));
-					echo $this->Form->input('ciudad_id', array('label' => 'Ciudad*', 'empty' => 'Ingrese una ciudad...', 'options' => $ciudades, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione la ciudad del domicilio real', 'placeholder' => 'Ingrese una ciudad...'));
-					  echo $this->Form->input('barrio_id', array('label' => 'Barrio*', 'empty' => 'Ingrese un barrio...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
-            echo $this->Form->input('asentamiento_id', array('label' => 'Asentamiento', 'empty' => 'Ingrese un asentamiento...',  'options' => $asentamientos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
-
+					echo $this->Form->input('ciudad_id', array('label' => 'Ciudad*','id'=>'comboCiudad', 'empty' => 'Ingrese una ciudad...', 'options' => $ciudades, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione la ciudad del domicilio real', 'placeholder' => 'Ingrese una ciudad...'));
+					?>
+					<div id="lbarrios">
+					</div>
+					  <?php
             $pendientes = array('SI' => 'SI', 'NO' => 'NO');
               ?>
           </div>
@@ -90,4 +91,25 @@
 				  }
                });
      </script>
+
+		 <script>
+	 	$(document).ready(function(){
+	 		var el = $("#comboCiudad")
+	 		console.log(el)
+	 		el.on("change", function(){
+	 			console.log(this.val);
+	 			$.ajax({
+	 				type:"GET",
+	 				url:basePath+"personas/listarBarriosAsentamientos/" + $(this).val(),
+	 				success: function(respuesta){
+	 					console.log(respuesta);
+	 					$('#lbarrios').html(respuesta);
+	 				}
+
+	 			})
+
+	 			});
+
+	 		});
+	 	</script>
 </div>

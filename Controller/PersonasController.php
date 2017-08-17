@@ -117,7 +117,7 @@ class PersonasController extends AppController {
 	 	$this->loadModel('Asentamiento');
     		$asentamientos = $this->Asentamiento->find('list', array('fields' => array('nombre')));
     		$this->set('asentamientos', $asentamientos);
-				
+
 	}
 
 
@@ -187,18 +187,21 @@ class PersonasController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
-	public function select_list($type_list, $ref_id = null){
-		if($type_list == 'ciudades' && $ref_id != null){
-			$list = $this->Persona->find('list', array('conditions'=>array('ciudad_id'=>$ref_id)));
+	public function listarBarriosAsentamientos($id) {
+		if (is_numeric($id)) {
 
-		}else{
-			$list = array();
-		}
+			$this->layout = 'ajax';
+			$this->loadModel('Barrio');
+			$this->loadModel('Asentamiento');
+			$lista_barrios=$this->Barrio->find('list',array('conditions' => array('ciudad_id' => $id)));
+			$lista_asentamientos=$this->Asentamiento->find('list',array('conditions' => array('Asentamiento.ciudad_id' => $id)));
+			$this->set('lista_barrios',$lista_barrios);
+			$this->set('lista_asentamientos',$lista_asentamientos);
 
-		$this->response->type('json');
-		$this->response->body(json_encode($list));
-		return $this->response;
+
+    }
 	}
+
 
 	//Métodos Privados
 	private function __getEdad($day, $month, $year){
