@@ -37,8 +37,8 @@ class CursosInscripcionsController extends AppController {
 		$userRole = $this->Auth->user('role');
 		$estado2 = array("COMPLETA", "PENDIENTE");
 		if ($this->Auth->user('role') === 'admin') {
-		//$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
-		$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);	
+		//$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
+		$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);	
 		} else if ($userRole === 'usuario') {
 			$this->loadModel('Centro');
 			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
