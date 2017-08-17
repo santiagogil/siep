@@ -8,13 +8,15 @@ class CursosInscripcionsController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        //Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
         if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) { 
 	        $this->Auth->allow('index');
-	    } 
+	    }
+	    /* FIN */ 
     } 
 
 /**
@@ -27,48 +29,63 @@ class CursosInscripcionsController extends AppController {
 		$this->paginate['CursosInscripcion']['limit'] = 8;
 		$this->paginate['CursosInscripcion']['order'] = array('CursosInscripcion.curso_id' => 'ASC');
 		
-		$cicloIdActual = $this->getLastCicloId();
+		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
+		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
+		*/
+		//$cicloIdActual = $this->getLastCicloId();
+		$userCentroId = $this->getUserCentroId();
+		$userRole = $this->Auth->user('role');
 		$estado2 = array("COMPLETA", "PENDIENTE");
-		if($this->Auth->user('role') === 'admin') {
-			$userCentroId = $this->getUserCentroId();
-			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
-		} else {
-			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2);		
+		if ($this->Auth->user('role') === 'admin') {
+		//$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
+		$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);	
+		} else if ($userRole === 'usuario') {
+			$this->loadModel('Centro');
+			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId);
 		}
-
-		$this->loadModel('Ciclo');
-		$this->loadModel('Centro');
-		$this->loadModel('Alumno');
-		$ciclosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('ciclo_id')));
-        $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
-        // Carga el combobox de los cursos según la institución correspondiente.
-        if($this->Auth->user('role') === 'admin') {
-          $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'conditions' => array('centro_id' => $userCentroId)));    
+		/* FIN */
+        /* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
+		*Pagina según búsquedas simultáneas ya sea por CENTRO y/o CURSO y/o INSCRIPCIÓN.
+		*/
+  		$this->redirectToNamed();
+		$conditions = array();
+		if(!empty($this->params['named']['centro_id'])) {
+			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
+		}
+		if(!empty($this->params['named']['curso_id'])) {
+			$conditions['CursosInscripcion.curso_id ='] = $this->params['named']['curso_id'];
+		}
+		if(!empty($this->params['named']['inscripcion_id'])) {
+			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
+		}
+		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
+		/* FIN */
+		/* SETS DE DATOS PARA COMBOBOX (INICIO). */
+        if ($userRole === 'admin') {
+          	$cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'conditions' => array('centro_id' => $userCentroId)));    
+        } else if ($userRole === 'usuario') {
+           	$this->loadModel('Centro');
+			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+	        $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));  
         } else {
-          $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso')));  
-        }	
+        	//Sí es "superadmin"
+ 	        $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso')));
+        }
+		$ciclosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('ciclo_id')));
+        $this->loadModel('Ciclo');
+        $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
         $centrosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('centro_id')));
+        $this->loadModel('Centro');
         $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
 		$inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro')));
         $alumnoId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('alumno_id')));
+        $this->loadModel('Alumno');
         $alumnoNombre = $this->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
-
-  		$this->redirectToNamed();
-		$conditions = array();
-		if(!empty($this->params['named']['centro_id']))
-		{
-			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
-		}
-		if(!empty($this->params['named']['curso_id']))
-		{
-			$conditions['CursosInscripcion.curso_id ='] = $this->params['named']['curso_id'];
-		}
-		if(!empty($this->params['named']['inscripcion_id']))
-		{
-			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
-		}
-		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
+		/* FIN */
 		$this->set(compact('cursosInscripcions', 'cicloActual', 'cursos', 'inscripcions', 'ciclos', 'alumnoNombre', 'centros', 'materias'));
    }
 }

@@ -96,8 +96,7 @@ class Inscripcion extends AppModel {
 	                       'rule' => 'isUnique',
 	                       'message' => 'Este nº de legajo de alumno esta siendo usado.'
 	                     )
-                   ),
-				   
+                   ),				   
 				   'tipo_alta' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
@@ -124,13 +123,13 @@ class Inscripcion extends AppModel {
                            )
                    ),
 				   'fines' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar una opción.'
-                           )
+                           'valid' => array(
+								'rule' => array('inList', array('No', 'Sí línea deudores de materias.', 'Sí línea trayectos educativos.')),
+								'message' => 'Indicar una opción',
+								'allowEmpty' => true
+						)
                    ),
-				   'fecha_baja' => array(
+                   'fecha_baja' => array(
                            'date' => array(
                            'rule' => 'date',
                            'allowEmpty' => true,
@@ -189,6 +188,7 @@ class Inscripcion extends AppModel {
 				   'recursante' => array(
                            'boolean' => array(
                            'rule' => array('boolean'),
+                           'allowEmpty' => true,
 					       'message' => 'Indicar una opción'
 				           )
                    ),
@@ -209,18 +209,21 @@ class Inscripcion extends AppModel {
                    'fotocopia_dni' => array(
                            'boolean' => array(
                            'rule' => array('boolean'),
+                           'allowEmpty' => true,
 					       'message' => 'Indicar una opción'
 				           )
                    ),
 				   'certificado_septimo' => array(
                            'boolean' => array(
                            'rule' => array('boolean'),
+                           'allowEmpty' => true,
 					       'message' => 'Indicar una opción'
 				           )
                    ),
 				   'certificado_laboral' => array(
                            'boolean' => array(
                            'rule' => array('boolean'),
+                           'allowEmpty' => true,
 					       'message' => 'Indicar una opción'
 				           )
                    )

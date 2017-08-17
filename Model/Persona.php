@@ -174,6 +174,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar un nº de teléfono.'
                 )
             ),
+            /*
             'email' => array(
                 'required' => array(
                 'rule' => 'notBlank',
@@ -181,6 +182,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar un correo electrónico.'
                 )
             ),
+            */
             'calle_nombre' => array(
                 'required' => array(
                 'rule' => 'notBlank',

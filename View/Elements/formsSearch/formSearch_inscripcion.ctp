@@ -1,7 +1,10 @@
 <?php echo $this->Form->create('Inscripcion',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
+<div class="form-group">
+   <?php echo $this->Form->input('ciclo_id', array('label' => false, 'class' => 'form-control', 'empty' => 'Ingrese un ciclo...'));	?>
+</div><br>
 <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
 <div class="form-group">
-   <?php echo $this->Form->input('centro_id', array('label' => false, 'class' => 'form-control', 'Placeholder' => 'Ingrese una institución...'));	?>
+   <?php echo $this->Form->input('centro_id', array('label' => false, 'class' => 'form-control', 'empty' => 'Ingrese una institución...'));	?>
 </div><br>
 <?php endif; ?>
 <div class="form-group">

@@ -150,8 +150,8 @@ class Centro extends AppModel {
 				),
 
                    'fechaFundacion' => array(
-                           'date' => array(
-                           'rule' => 'date',
+                           'datetime' => array(
+                           'rule' => 'datetime',
                            'allowEmpty' => false,
                            'message' => 'Indicar fecha de creacion del centro.'
                            )
