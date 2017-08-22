@@ -106,17 +106,17 @@ class PersonasController extends AppController {
     		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
     		$this->set('ciudades', $ciudades);
 
-		$this->loadModel('Barrio');
-        	$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-        	$this->set('barrios', $barrios);
+	         $this->loadModel('Barrio');
+          	$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+          	$this->set('barrios', $barrios);
 
 	   	$this->loadModel('PuebloOriginario');
 	 	$nativos = $this->PuebloOriginario->find('list', array('fields' => array('nombre')));
 	 	$this->set('nativos', $nativos);
 
 	 	$this->loadModel('Asentamiento');
-    		$asentamientos = $this->Asentamiento->find('list', array('fields' => array('nombre')));
-    		$this->set('asentamientos', $asentamientos);
+  	$asentamientos = $this->Asentamiento->find('list', array('fields' => array('nombre')));
+    $this->set('asentamientos', $asentamientos);
 
 	}
 
@@ -187,19 +187,29 @@ class PersonasController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
-	public function listarBarriosAsentamientos($id) {
+	public function listarBarrios($id) {
 		if (is_numeric($id)) {
 
 			$this->layout = 'ajax';
 			$this->loadModel('Barrio');
-			$this->loadModel('Asentamiento');
+
 			$lista_barrios=$this->Barrio->find('list',array('conditions' => array('ciudad_id' => $id)));
-			$lista_asentamientos=$this->Asentamiento->find('list',array('conditions' => array('Asentamiento.ciudad_id' => $id)));
 			$this->set('lista_barrios',$lista_barrios);
+    }
+		echo json_encode($lista_barrios);
+		$this->autoRender = false;
+	}
+	public function listarAsentamientos($id) {
+		if (is_numeric($id)) {
+
+			$this->layout = 'ajax';
+			$this->loadModel('Asentamiento');
+			$lista_asentamientos=$this->Asentamiento->find('list',array('conditions' => array('Asentamiento.ciudad_id' => $id)));
 			$this->set('lista_asentamientos',$lista_asentamientos);
 
-
     }
+		echo json_encode($lista_asentamientos);
+		$this->autoRender = false;
 	}
 
 
