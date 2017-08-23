@@ -69,8 +69,15 @@ class PersonasController extends AppController {
 		}
 		$this->loadModel('Barrio');
 		$barrioNombre = $this->Barrio->find('list', array('fields'=>array('nombre')));
-	    $this->set(compact('foto', 'barrioNombre'));
+	  $this->set(compact('foto', 'barrioNombre'));
 
+		$this->loadModel('Asentamiento');
+		$AsentamientoNombre = $this->Asentamiento->find('list', array('fields'=>array('nombre')));
+	  $this->set(compact('foto', 'AsentamientoNombre'));
+
+		$this->loadModel('Ciudad');
+		$ciudadNombre = $this->Ciudad->find('list', array('fields' => array('nombre')));
+		$this->set('ciudadNombre', $ciudadNombre);
 
      }
 
