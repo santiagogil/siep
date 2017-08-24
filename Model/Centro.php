@@ -104,7 +104,14 @@ class Centro extends AppModel {
 			'insertQuery' => ''
 		)
 	);
-
+	var $belongsTo = array(
+		'Ciudad' => array(
+			'className' => 'Ciudad',
+			'foreignKey' => 'ciudad_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		));
 	//Validaciones
 
         var $validate = array(
