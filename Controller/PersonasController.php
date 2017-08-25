@@ -69,8 +69,15 @@ class PersonasController extends AppController {
 		}
 		$this->loadModel('Barrio');
 		$barrioNombre = $this->Barrio->find('list', array('fields'=>array('nombre')));
-	    $this->set(compact('foto', 'barrioNombre'));
+	  $this->set(compact('foto', 'barrioNombre'));
 
+		$this->loadModel('Asentamiento');
+		$AsentamientoNombre = $this->Asentamiento->find('list', array('fields'=>array('nombre')));
+	  $this->set(compact('foto', 'AsentamientoNombre'));
+
+		$this->loadModel('Ciudad');
+		$ciudadNombre = $this->Ciudad->find('list', array('fields' => array('nombre')));
+		$this->set('ciudadNombre', $ciudadNombre);
 
      }
 
@@ -106,17 +113,17 @@ class PersonasController extends AppController {
     		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
     		$this->set('ciudades', $ciudades);
 
-		$this->loadModel('Barrio');
-        	$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-        	$this->set('barrios', $barrios);
+	         $this->loadModel('Barrio');
+          	$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+          	$this->set('barrios', $barrios);
 
 	   	$this->loadModel('PuebloOriginario');
 	 	$nativos = $this->PuebloOriginario->find('list', array('fields' => array('nombre')));
 	 	$this->set('nativos', $nativos);
 
 	 	$this->loadModel('Asentamiento');
-    		$asentamientos = $this->Asentamiento->find('list', array('fields' => array('nombre')));
-    		$this->set('asentamientos', $asentamientos);
+  	$asentamientos = $this->Asentamiento->find('list', array('fields' => array('nombre')));
+    $this->set('asentamientos', $asentamientos);
 
 	}
 
@@ -187,19 +194,29 @@ class PersonasController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
-	public function listarBarriosAsentamientos($id) {
+	public function listarBarrios($id) {
 		if (is_numeric($id)) {
 
 			$this->layout = 'ajax';
 			$this->loadModel('Barrio');
-			$this->loadModel('Asentamiento');
+
 			$lista_barrios=$this->Barrio->find('list',array('conditions' => array('ciudad_id' => $id)));
-			$lista_asentamientos=$this->Asentamiento->find('list',array('conditions' => array('Asentamiento.ciudad_id' => $id)));
 			$this->set('lista_barrios',$lista_barrios);
+    }
+		echo json_encode($lista_barrios);
+		$this->autoRender = false;
+	}
+	public function listarAsentamientos($id) {
+		if (is_numeric($id)) {
+
+			$this->layout = 'ajax';
+			$this->loadModel('Asentamiento');
+			$lista_asentamientos=$this->Asentamiento->find('list',array('conditions' => array('Asentamiento.ciudad_id' => $id)));
 			$this->set('lista_asentamientos',$lista_asentamientos);
 
-
     }
+		echo json_encode($lista_asentamientos);
+		$this->autoRender = false;
 	}
 
 
@@ -211,6 +228,31 @@ class PersonasController extends AppController {
 		if ($day_diff < 0 && $month_diff==0) $year_diff--;
 		if ($day_diff < 0 && $month_diff < 0) $year_diff--;
                 return $year_diff;
+	}
+
+
+	public function autocompletePersonas() {
+		$term = null;
+
+		if(!empty($this->request->query('term'))) {
+			$term = $this->request->query('term');
+			$terminos = explode(' ', trim($term));
+			$terminos = array_diff($terminos,array(''));
+			$conditions = array();
+
+			foreach($terminos as $termino) {
+				$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
+			}
+
+			$personas = $this->Persona->find('all', array(
+					'recursive'	=> -1,
+					'conditions' => $conditions,
+					'fields' 	=> array('id', 'nombre_completo_persona'))
+			);
+		}
+
+		echo json_encode($personas);
+		$this->autoRender = false;
 	}
 }
 ?>

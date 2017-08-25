@@ -51,25 +51,29 @@
 				echo $this->Form->input('estado_civil', array('label' => 'Estado civil*', 'empty' => 'Ingrese un estado...', 'options' => $estadosCiviles, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
 				echo $this->Form->input('ocupacion', array('label'=>'Ocupación*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Indique a qué se dedica', 'placeholder' => 'Ingrese una ocupación...'));
    				echo $this->Form->input('lugar_de_trabajo', array('label'=>'Lugar de Trabajo*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Indique un lugar de trabajo', 'placeholder' => 'Ingrese un lugar de trabajo...'));
-				echo $this->Form->input('horario_de_trabajo', array('label'=>'Horario de Trabajo*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Indique un horario de trabajo', 'placeholder' => 'Ingrese un horario de trabajo...'));
-        	}
-          		echo $this->Form->input('agente', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Agente</label>'));
-          		echo $this->Form->input('alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Alumno</label>'));
-          		echo $this->Form->input('familiar', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Familiar</label>'));
-        	?>
-      	</div>
-    	<?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
-      	<div class="unit"><strong><h3>Datos de Contacto</h3></strong><hr />
-			<?php
-	          	echo $this->Form->input('telefono_nro', array('label' => 'Numero de Telefono*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un teléfono de contacto', 'placeholder' => 'Ingrese un nº de teléfono...'));
-	          	//echo $this->Form->input('email', array('label' => 'Email','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un email de contacto', 'placeholder' => 'Ingrese un email...'));
-	          	echo $this->Form->input('calle_nombre', array('label' => 'Nombre de la calle*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el nombre de la calle del domicilio real', 'placeholder' => 'Ingrese el nombre de la calle...'));
-	          	echo $this->Form->input('calle_nro', array('label' => 'Número de la calle*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el número de la calle del domicilio real', 'placeholder' => 'Ingrese el número de la calle...'));
-				echo $this->Form->input('ciudad_id', array('label' => 'Ciudad*','id'=>'comboCiudad', 'empty' => 'Ingrese una ciudad...', 'options' => $ciudades, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione la ciudad del domicilio real', 'placeholder' => 'Ingrese una ciudad...'));
-			?>
-			<div id="lbarrios">
-			</div>
-			<?php $pendientes = array('SI' => 'SI', 'NO' => 'NO'); ?>
+				  echo $this->Form->input('horario_de_trabajo', array('label'=>'Horario de Trabajo*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Indique un horario de trabajo', 'placeholder' => 'Ingrese un horario de trabajo...'));
+        //endif;
+          echo $this->Form->input('agente', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Agente</label>'));
+          echo $this->Form->input('alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Alumno</label>'));
+          echo $this->Form->input('familiar', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<i></i><br>Familiar</label>'));
+        ?>
+      </div>
+    <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
+      <div class="unit"><strong><h3>Datos de Contacto</h3></strong><hr />
+			 <?php
+          echo $this->Form->input('telefono_nro', array('label' => 'Numero de Telefono*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un teléfono de contacto', 'placeholder' => 'Ingrese un nº de teléfono...'));
+          //echo $this->Form->input('email', array('label' => 'Email','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un email de contacto', 'placeholder' => 'Ingrese un email...'));
+          echo $this->Form->input('calle_nombre', array('label' => 'Nombre de la calle*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el nombre de la calle del domicilio real', 'placeholder' => 'Ingrese el nombre de la calle...'));
+          echo $this->Form->input('calle_nro', array('label' => 'Número de la calle*','class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el número de la calle del domicilio real', 'placeholder' => 'Ingrese el número de la calle...'));
+					echo $this->Form->input('ciudad_id', array('label' => 'Ciudad*','id'=>'comboCiudad', 'empty' => 'Ingrese una ciudad...', 'options' => $ciudades, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione la ciudad del domicilio real', 'placeholder' => 'Ingrese una ciudad...'));
+				  echo $this->Form->input('barrio_id', array('label' => 'Barrio*','id'=>'comboBarrio','options'=>$barrios ,'empty' => 'Ingrese un barrio...','between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
+				  echo $this->Form->input('asentamiento_id', array('label' => 'Asentamiento','id'=>'comboAsentamiento', 'empty' => 'Ingrese un asentamiento...',  'options' => $asentamientos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción.'));
+
+
+
+            $pendientes = array('SI' => 'SI', 'NO' => 'NO');
+              ?>
+          </div>
         </div>
     </div>
 <div class="col-md-12 col-sm-6 col-xs-12">
@@ -92,18 +96,36 @@
 <script>
 	 	$(document).ready(function(){
 	 		var el = $("#comboCiudad")
+			$("#comboBarrio").empty();
+			$("#comboAsentamiento").empty();
 	 		console.log(el)
 	 		el.on("change", function(){
-	 			console.log(this.val);
+	 			console.log($(this).val());
+				$("#comboBarrio").empty();
+				$("#comboAsentamiento").empty();
 	 			$.ajax({
 	 				type:"GET",
-	 				url:basePath+"personas/listarBarriosAsentamientos/" + $(this).val(),
+	 				url:basePath+"personas/listarBarrios/" + $(this).val(),
 	 				success: function(respuesta){
-	 					console.log(respuesta);
-	 					$('#lbarrios').html(respuesta);
-	 				}
-	 			})
- 			});
- 		});
-</script>
+						var lista = JSON.parse(respuesta);
+						$("#comboBarrio").append('<option value="' +''+ '"> ' + 'seleccione un barrio'+ '</option>');
+						for (var key in lista) {
+							$("#comboBarrio").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
+						}
+					}
+	 		})
+			$.ajax({
+				type:"GET",
+				url:basePath+"personas/listarAsentamientos/" + $(this).val(),
+				success: function(respAsentamiento){
+					var listaA = JSON.parse(respAsentamiento);
+					$("#comboAsentamiento").append('<option value="' +''+ '"> ' + 'seleccione un asentamiento'+ '</option>');
+					for (var keyA in listaA) {
+						$("#comboAsentamiento").append('<option value="' +keyA+ '"> ' + listaA[keyA] + '</option>');
+					}
+				}
+		})
+	 	});
+	});
+	 	</script>
 </div>
