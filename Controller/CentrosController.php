@@ -165,5 +165,29 @@ class CentrosController extends AppController {
         $this->render();
 	}
 
+	public function autocompleteCentro() {
+		$term = null;
+
+		if(!empty($this->request->query('term'))) {
+			$term = $this->request->query('term');
+			$terminos = explode(' ', trim($term));
+			$terminos = array_diff($terminos,array(''));
+			$conditions = array();
+
+			foreach($terminos as $termino) {
+				$conditions[] = array('sigla LIKE' => '%' . $termino . '%');
+			}
+
+			$centro = $this->Centro->find('all', array(
+					'recursive'	=> -1,
+					'conditions' => $conditions,
+					'fields' 	=> array('id', 'sigla '))
+			);
+		}
+
+		echo json_encode($centro);
+		$this->autoRender = false;
+	}
+
 }
 ?>

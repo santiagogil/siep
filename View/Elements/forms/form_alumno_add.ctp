@@ -11,13 +11,33 @@
 <div class="row">
 	<div class="col-md-4 col-sm-6 col-xs-12">
   	  <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
+
           <!-- Autocomplete para nombre de Personas -->
           <div>
               <label for="AlumnoPersonaId">Nombre completo*: </label>
               <br>
               <input id="AlumnoPersonaId" class="form-control" data-toggle="tooltip" data-placemente="bottom" title="Ingrese el nombre completo">
           </div>
+
+          <script>
+              $( function() {
+                  $( "#AlumnoPersonaId" ).autocomplete({
+                      source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombreAlumno'));?>",
+                      minLength: 2,
+                      select: function( event, ui ) {
+                          console.log(ui.item);
+                          $("#AlumnoPersonaId").val( ui.item.Persona.nombre_completo_persona );
+                          return false;
+                      }
+                  }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+                      return $( "<li>" )
+                          .append( "<div>" +item.Persona.nombre_completo_persona+ "</div>" )
+                          .appendTo( ul );
+                  };
+              });
+          </script>
           <!-- End Autocomplete -->
+
       </div>
     </div>
     <div class="col-md-4 col-sm-6 col-xs-12">
@@ -44,24 +64,5 @@
                   $(this).data('DateTimePicker').date(specifiedDate);
               }
            });
-    </script>
-
-
-    <script>
-        $( function() {
-            $( "#AlumnoPersonaId" ).autocomplete({
-                source: "autocompleteNombreAlumno",
-                minLength: 2,
-                select: function( event, ui ) {
-                    console.log(ui.item);
-                    $("#AlumnoPersonaId").val( ui.item.Persona.nombre_completo_persona );
-                    return false;
-                }
-            }).autocomplete( "instance" )._renderItem = function( ul, item ) {
-                return $( "<li>" )
-                    .append( "<div>" +item.Persona.nombre_completo_persona+ "</div>" )
-                    .appendTo( ul );
-            };
-        });
     </script>
 

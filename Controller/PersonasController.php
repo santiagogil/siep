@@ -229,5 +229,30 @@ class PersonasController extends AppController {
 		if ($day_diff < 0 && $month_diff < 0) $year_diff--;
                 return $year_diff;
 	}
+
+
+	public function autocompletePersonas() {
+		$term = null;
+
+		if(!empty($this->request->query('term'))) {
+			$term = $this->request->query('term');
+			$terminos = explode(' ', trim($term));
+			$terminos = array_diff($terminos,array(''));
+			$conditions = array();
+
+			foreach($terminos as $termino) {
+				$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
+			}
+
+			$personas = $this->Persona->find('all', array(
+					'recursive'	=> -1,
+					'conditions' => $conditions,
+					'fields' 	=> array('id', 'nombre_completo_persona'))
+			);
+		}
+
+		echo json_encode($personas);
+		$this->autoRender = false;
+	}
 }
 ?>
