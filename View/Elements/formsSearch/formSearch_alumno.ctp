@@ -8,3 +8,28 @@
     </span>
     <?php echo $this->Form->end(); ?>
 </div>
+
+<!-- Autocomplete -->
+<div>
+    <input id="AlumnoPersonaId" class="form-control" placeholder="Buscar por nombre y/o apellido">
+</div>
+<script>
+    $( function() {
+        $( "#AlumnoPersonaId" ).autocomplete({
+            source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombreAlumno'));?>",
+            minLength: 2,
+            select: function( event, ui ) {
+                $("#AlumnoPersonaId").val( ui.item.Persona.nombre_completo_persona );
+
+                window.location.href = "<?php echo $this->Html->url(array('controller'=>'alumnos','action'=>'view'));?>/"+ui.item.Persona.id;
+
+                return false;
+            }
+        }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+                .append( "<div>" +item.Persona.nombre_completo_persona+ "</div>" )
+                .appendTo( ul );
+        };
+    });
+</script>
+<!-- End Autocomplete -->

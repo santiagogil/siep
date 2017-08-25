@@ -130,5 +130,34 @@ class EmpleadosController extends AppController {
 		$this->Session->setFlash('El Empleado no fue borrado.', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
+
+	public function autocompleteEmpleados() {
+		$term = null;
+
+		if(!empty($this->request->query('term'))) {
+			$term = $this->request->query('term');
+			$terminos = explode(' ', trim($term));
+			$terminos = array_diff($terminos,array(''));
+			$conditions = array();
+
+			foreach($terminos as $termino) {
+				$conditions[] = array(
+						'OR' => array(
+							array('nombres LIKE' => '%' . $termino . '%'),
+							array('apellidos LIKE' => '%' . $termino . '%')
+						)
+				);
+			}
+
+			$emplados = $this->Empleado->find('all', array(
+					'recursive'	=> -1,
+					'conditions' => $conditions,
+					'fields' 	=> array('id', 'nombres','apellidos'))
+			);
+		}
+
+		echo json_encode($emplados);
+		$this->autoRender = false;
+	}
 }
 ?>
