@@ -9,10 +9,10 @@
  		      <div class="row perfil">
                  <div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
 					<!-- Sí no tiene foto presenta imagen de avatar según el sexo. -->
-	                <?php if(($foto == 0) && ($persona['Persona']['sexo'] == 'MASC')): ?>
+	                <?php if(($foto == 0) && ($persona['Persona']['sexo'] == 'MASCULINO')): ?>
 	                         <?php echo $this->Html->image('../img/avatar-masculino.png', array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
 	                <?php endif; ?>
-	                <?php if(($foto == 0) && ($persona['Persona']['sexo'] == 'FEM')): ?>
+	                <?php if(($foto == 0) && ($persona['Persona']['sexo'] == 'FEMENINO')): ?>
 	                         <?php echo $this->Html->image('../img/avatar-femenino.png', array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
 	                <?php endif; ?>
 	                <!-- Sí tiene foto la presenta. -->

@@ -56,7 +56,7 @@ class CursosController extends AppController {
 		}
 		$cursos = $this->paginate('Curso',$conditions);
 	    /* FIN */
-		/* SETS DE DATOS PARA COMBOBOX (INICIO). */
+		/* SETS DE DATOS PARA COMBOBOXS DEL FORM SEARCH (INICIO). */
 		$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
