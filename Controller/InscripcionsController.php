@@ -72,7 +72,11 @@ class InscripcionsController extends AppController {
 		$this->loadModel('Centro');
 		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
 		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-		$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
+		if (($userRole == 'superadmin') || ($userRole == 'usuario')) {
+			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla')));
+		} else if ($userRole == 'admin') {
+			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla'), 'conditions'=>array('id'=>$nivelCentroId)));	
+		}
 		$ciclos = $this->Inscripcion->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
 		/* FIN */
 		$this->set(compact('inscripcions', 'alumnoNombre', 'centros', 'ciclos'));
@@ -107,12 +111,16 @@ class InscripcionsController extends AppController {
 			//Genera el ciclo id y se deja en los datos que se intentaran guardar
 			$cicloId = $this->getLastCicloId();
 			$this->request->data['Inscripcion']['ciclo_id'] = $cicloId;
-			//Antes de guardar genera el número de legajo del Alumno.
+			//Antes de guardar genera el núm,ero de legajo del Alumno.
 			$ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
 			$ciclo = substr($ciclos['Ciclo']['nombre'], -2);
-			$alumnoId = $this->request->data['Inscripcion']['alumno_id'];
-			$personaDoc = $this->Inscripcion->Alumno->Persona->findById($alumnoId, 'documento_nro');
-            //$personaDoc = $personasDoc['Persona']['documento_nro'];
+			$personaId = $this->request->data['Inscripcion']['alumno_id'];
+			$this->loadModel('Persona');
+			$personaDoc = $this->Persona->find('list', array('fields'=>array('documento_nro'), 'conditions'=>array('id'=>$personaId)));
+			print_r($ciclo);
+			//Array to string conversion a $personaDoc.
+			print_r($personaDoc);
+
 			//Genera el nro de legajo y se deja en los datos que se intentaran guardar
 			$codigoActual = $this->__getCodigo($ciclo, $personaDoc);
 			//Comprueba que ese legajo no exista.
@@ -203,23 +211,31 @@ class InscripcionsController extends AppController {
 			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId)));	
 		}
 		$materias = $this->Inscripcion->Materia->find('list');
-    	//Sí es "superadmin" o "usuario" ve combobox con todos los alumnos. Sino ve los propios del centro.
-		$userRol = $this->Auth->user('role');
-		if (($userRol == 'superadmin') || ($userRol == 'usuario')) {
-			$personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
-		} else if ($userRol == 'admin') {
-			$userCentroId = $this->getUserCentroId();
-			$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+    	/*Sí es "superadmin" o "usuario" ve combobox con todos los alumnos. Sino ve los propios del centro.
+		*/	
+		$userCentroId = $this->getUserCentroId();
+		$userRole = $this->Auth->user('role');
+		if ($this->Auth->user('role') === 'admin') {
+			$this->loadModel('Alumno');
+			$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+		    $this->loadModel('Persona');
+			$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
+		} else if ($userRole === 'usuario') {
+			$this->loadModel('Centro');
+			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+			$personaId = $this->Inscripcion->find('list', array('fields'=>array('alumno_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+			$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
+		} else {
+			//Sí es superadmin
+			$this->loadModel('Persona');
+			$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));			
 		}
-		$personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$alumnos)));
-		$this->loadModel('Persona');
-		$personaNombre = $this->Inscripcion->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
-		print_r($personaNombre);
-		$this->set(compact('alumnos', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
+		$this->set(compact('personaNombre', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
 	}
 	
 	private function __getCodigo($ciclo, $personaDoc){
-		$legajo= $personaDoc."-".$ciclo;
+		$legajo = $personaDoc."-".$ciclo;
 		return $legajo;
     }
 }

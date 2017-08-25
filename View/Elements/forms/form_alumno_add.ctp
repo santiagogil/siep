@@ -14,9 +14,9 @@
 
           <!-- Autocomplete para nombre de Personas -->
           <div>
-              <label for="AlumnoPersonaId">Nombre completo*: </label>
+              <label for="AlumnoPersonaId">Nombres y Apellidos*: </label>
               <br>
-              <input id="AlumnoPersonaId" class="form-control" data-toggle="tooltip" data-placemente="bottom" title="Ingrese el nombre completo">
+              <input id="AlumnoPersonaId" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
           </div>
 
           <script>
