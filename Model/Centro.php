@@ -203,13 +203,32 @@ class Centro extends AppModel {
 				      )
 				),
 
-                    'ciudad' => array(
+                    'ciudad_id' => array(
                            'minLength' => array(
-                           'rule' => array('inList', array('RIO GRANDE' ,'TOLHUIN', 'USHUAIA')),
+                           'rule' => 'notBlank',
                            'allowEmpty' => false,
-                           'message' => 'Indicar una opcion.'
+                           'message' => 'Indicar una ciudad.'
                            )
                    ),
+
+									 'departamento_id' => array(
+
+                   'required' => array(
+						   	 	 'rule' => 'notBlank',
+						       'required' => 'create',
+                   'message' => 'seleccionar un departamento.'
+								 				)
+									 ),
+
+									 'barrio_id' => array(
+
+										'required' => array(
+									 'rule' => 'notBlank',
+									 'required' => 'create',
+										'message' => 'seleccionar un barrio.'
+												)
+										),
+
                    'telefono' => array(
                            'minLength' => array(
                            'rule' => array('minLength',6),
