@@ -8,7 +8,7 @@
 		<hr />
         <div class="text-right">
             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'materias', 'action' => 'view', $materia['Materia']['id']), array('class' => 'btn btn-success','escape' => false)); ?></span>
-           <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+           <?php if($current_user['role'] == 'superadmin'): ?>
             <span class="link"><?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('action' => 'edit', $materia['Materia']['id']), array('class' => 'btn btn-warning','escape' => false)); ?></span>
             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-trash"></i>', array('controller' => 'materias', 'action' => 'delete', $materia['Materia']['id']), array('confirm' => 'Está seguro de borrar la materia '.$materia['Materia']['alia'], 'class' => 'btn btn-danger','escape' => false)); ?></span>
            <?php endif; ?>  

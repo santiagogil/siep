@@ -20,10 +20,10 @@ class TitulacionsController extends AppController {
 		$this->Titulacion->recursive = -1;
 		$titulacions = $this->Titulacion->find('list', array('fields'=>array('id', 'nombre')));
 		$userCentroId = $this->getUserCentroId();
+		$titulacionsId = $this->Titulacion->CentrosTitulacion->find('list', array('fields'=>array('titulacion_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
 		if($this->Auth->user('role') === 'admin') {
-			$this->paginate['Titulacion']['conditions'] = array('Titulacion.nombre' => $userCentroId);
+			$this->paginate['Titulacion']['conditions'] = array('Titulacion.id' => $titulacionsId);
 		}
-
 		$this->redirectToNamed();
 		$conditions = array();
 		if(!empty($this->params['named']['nombre']))

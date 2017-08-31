@@ -79,6 +79,7 @@ class Inscripcion extends AppModel {
 						   'message' => 'Indicar una fecha y hora.'
                            )
                    ),
+				   /*
 				   'alumno_id' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
@@ -86,6 +87,7 @@ class Inscripcion extends AppModel {
 						   'message' => 'Indicar un alumno.'
                            )
                    ),
+                   */
 				   'legajo_nro' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
@@ -96,14 +98,15 @@ class Inscripcion extends AppModel {
 	                       'rule' => 'isUnique',
 	                       'message' => 'Este nº de legajo de alumno esta siendo usado.'
 	                     )
-                   ),				   
-				   'tipo_alta' => array(
+                   ),
+                   'tipo_alta' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
                            'required' => 'create',
 						   'message' => 'Indicar un tipo de alta.'
                            )
                    ),
+                   /*
                    'fecha_alta' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
@@ -115,18 +118,18 @@ class Inscripcion extends AppModel {
                            'message' => 'Indicar fecha valida.'
                            )
                    ),
+                   */
 				   'cursa' => array(
                            'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
+						   'allowEmpty' => true,
 						   'message' => 'Indicar una opción.'
                            )
                    ),
 				   'fines' => array(
                            'valid' => array(
 								'rule' => array('inList', array('No', 'Sí línea deudores de materias.', 'Sí línea trayectos educativos.')),
-								'message' => 'Indicar una opción',
-								'allowEmpty' => true
+								'allowEmpty' => true,
+								'message' => 'Indicar una opción'
 						)
                    ),
                    'fecha_baja' => array(

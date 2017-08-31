@@ -13,7 +13,7 @@
                     <b><?php echo __('Documento: '); ?></b>
                     <?php echo ($alumnoDocumentoTipo[$alumno['Alumno']['persona_id']]).' '.($alumnoDocumentoNumero[$alumno['Alumno']['persona_id']]); ?></p>
                     <b><?php echo __('Edad: '); ?></b>
-                    <?php echo ($alumnoEdad[$alumno['Alumno']['persona_id']]); ?></p>
+                    <?php echo ($alumnoEdad[$alumno['Alumno']['persona_id']])." ".'años'; ?></p>
                     <b><?php echo __('Legajo Físico N°: '); ?></b>
                     <?php echo $alumno['Alumno']['legajo_fisico_nro']; ?></p>                   
                  </div>
@@ -92,10 +92,12 @@
 		            <hr>
 		            <div class="text-right">
 			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-			            <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+			          <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
 			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+					  <?php endif; ?>
+					  <?php if($current_user['role'] == 'superadmin'): ?>	
 						<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
-						<?php endif; ?>
+					  <?php endif; ?>
 					</div>
 				</div>
 			</div>

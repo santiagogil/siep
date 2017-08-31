@@ -10,7 +10,7 @@
         </div>
         <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Centro:</b> <?php echo $this->Html->link($centros[$inscripcion['Inscripcion']['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['Inscripcion']['centro_id'])); ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Código:</b> <?php echo $inscripcion['Inscripcion']['legajo_nro']; ?></span><br/>
-        <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($alumnoNombre[$inscripcion['Inscripcion']['alumno_id']], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['Inscripcion']['alumno_id'])); ?></span><br/>
+        <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($personaNombre[$inscripcion['Inscripcion']['alumno_id']], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['Inscripcion']['alumno_id'])); ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-calendar"></span> <b>Alta:</b> <?php echo $this->Html->formatTime($inscripcion['Inscripcion']['fecha_alta']);?></span><br/>
         <!--<span class="name"><span class="glyphicon glyphicon-calendar"></span> <b>Baja:</b> <?php echo $this->Html->formatTime($inscripcion['Inscripcion']['fecha_baja']);?></span><br/> 		   
         <span class="name"><span class="glyphicon glyphicon-calendar"></span> <b>Egreso:</b> <?php echo $this->Html->formatTime($inscripcion['Inscripcion']['fecha_egreso']);?></span><br/>-->       
@@ -19,6 +19,8 @@
             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['Inscripcion']['id']), array('class' => 'btn btn-success','escape' => false)); ?></span>
           <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>  
             <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-edit"></i>', array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['Inscripcion']['id']), array('class' => 'btn btn-warning','escape' => false)); ?></span>
+          <?php endif; ?>  
+          <?php if($current_user['role'] == 'superadmin'): ?>  
             <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-trash"></i>', array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['Inscripcion']['id']), array('confirm' => 'Está seguro de borrar la inscripción nro.'.$inscripcion['Inscripcion']['id'], 'class' => 'btn btn-danger','escape' => false)); ?></span>
           <?php endif; ?>   
 		</div>

@@ -25,6 +25,12 @@ class DisenoCurricularsController extends AppController {
 	public function index() {
 	    //
 	    $this->Disenocurricular->recursive = -1;
+		$userCentroId = $this->getUserCentroId();
+		$titulacionsId = $this->Disenocurricular->Titulacion->CentrosTitulacion->find('list', array('fields'=>array('titulacion_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+		if($this->Auth->user('role') === 'admin') {
+			$this->paginate['Disenocurricular']['conditions'] = array('Disenocurricular.titulacion_id' => $titulacionsId);
+		}
+
 		$disenocurriculars = $this->paginate('Disenocurricular');
 		
         $this->redirectToNamed();

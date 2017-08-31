@@ -40,6 +40,7 @@
 		</div>
     </div>
 <!-- end main -->
+<?php if(($userCentroNivel == 'Común - Inicial') || ($userCentroNivel == 'Común - Primario')): ?>
 <!-- Cargos Relacionados -->
 <!--<div class="related">
 	<h3><?php echo __('Cargos Relacionados');?></h3>
@@ -148,6 +149,7 @@
     </div>
 </div>
 <!-- end Materias Relacionadas -->
+<?php endif; ?>
 <!-- Inscripciones Relacionadas -->
 <div id="click_01" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_01">
@@ -161,7 +163,7 @@
 	<div class="col-md-6">
 		<div class="unit">
 			<?php echo '<b>Inscripción:</b> '.($this->Html->link($inscripcion['legajo_nro'], array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id'])));?><br>
-			<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$inscripcion['persona_id']], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['persona_id'])));?><br>
+			<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$inscripcion['alumno_id']], array('controller' => 'personas', 'action' => 'view', $inscripcion['alumno_id'])));?><br>
             <?php echo '<b>Fecha_alta:</b> '.($this->Html->formatTime($inscripcion['fecha_alta']));?><br>
 			<!--<?php echo '<b>Fecha_baja:</b> '.($this->Html->formatTime($inscripcion['fecha_baja']));?><br>
             <?php echo '<b>Fecha_egreso:</b> '.($this->Html->formatTime($inscripcion['fecha_egreso']));?><br>-->
@@ -169,6 +171,8 @@
 	            <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
               <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
 	            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+	          <?php endif; ?>  
+			  <?php if($current_user['role'] == 'superadmin'): ?>	
 				<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
 			  <?php endif; ?>	
             </div>
