@@ -75,18 +75,19 @@ class AlumnosController extends AppController {
         $alumnoDocumentoTipo = $this->Persona->find('list', array('fields'=>array('documento_tipo'), 'conditions' => array('id' => $alumnoId)));
         $alumnoDocumentoNumero = $this->Persona->find('list', array('fields'=>array('documento_nro'), 'conditions' => array('id' => $alumnoId)));
         $alumnoEdad = $this->Persona->find('list', array('fields'=>array('edad'), 'conditions' => array('id' => $alumnoId)));
-
+    	/*
         $notaCicloId = $this->Alumno->Nota->find('list', array('fields'=>array('ciclo_id')));
 		$this->loadModel('Ciclo');
 		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions'=>array('id'=>$notaCicloId)));
-        
-		$centroId = $this->Alumno->Inscripcion->find('list', array('fields'=>array('centro_id')));
+        */
+		$centroId = $this->Alumno->find('list', array('fields'=>array('centro_id'), 'conditions'=>array('id'=>$id)));
 		$this->loadModel('Centro');
 		$centroNombre = $this->Centro->find('list', array('fields'=>array('nombre'), 'conditions'=>array('id'=>$centroId)));
-        
+        /*
 		$notaMateriaId = $this->Alumno->Nota->find('list', array('fields'=>array('materia_id')));
 		$this->loadModel('Materia');
 		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$notaMateriaId)));
+		*/
 		//Familiares relacionados.
         $this->loadModel('Persona');
         $familiarNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));

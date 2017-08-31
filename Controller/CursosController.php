@@ -25,7 +25,8 @@ class CursosController extends AppController {
 		$this->paginate['Curso']['limit'] = 6;
 		$this->paginate['Curso']['order'] = array('Curso.anio' => 'ASC');
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
-		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
+		*  Sí el usuario es "admin" muestra los cursos del establecimiento. 
+		*  Sino sí es "usuario" externo muestra los cursos del nivel.
 		*/ 
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
@@ -70,19 +71,21 @@ class CursosController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('curso', $this->Curso->read(null, $id));
-		
-		//genera nombres para datos relacionados.
-		$inscripcionAlumnoId = $this->Curso->Inscripcion->find('list', array('fields'=>array('alumno_id')));
-		$personaId = $this->Curso->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$inscripcionAlumnoId)));
+		/* GENERA NOMBRES PARA DATOS RELACIONADOS. (INICIO) */
 		$this->loadModel('Persona');
-		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
-
-		//genera número de matriculados.
+		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
+		/* FIN */
+		/* GENERA NÚMERO DE MATRICULADOS. (INICIO) */
 		$cursoId = $this->Curso->id;
 		$alumnosInscriptos = $this->Curso->CursosInscripcion->find('list', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoId)));
 		$matriculados = (count($alumnosInscriptos));
-
-		$this->set(compact('personaNombre', 'cicloNombre', 'matriculados'));
+		/* FIN */
+		/* MUESTRA UNIDADES CURRICULARES RELACIONADAS DEPENDIENDO EL NIVEL (INICIO). 
+		* Sólo muestra materias para los niveles secundario y superior.
+		*/		
+		$userCentroNivel = $this->getUserCentroNivel();
+		/* FIN */
+		$this->set(compact('personaNombre', 'cicloNombre', 'matriculados', 'userCentroNivel'));
 	}
 
 	function add() {

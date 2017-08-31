@@ -101,6 +101,17 @@ class AppController extends Controller {
 	{
 	    $centroId = $this->Auth->user('centro_id');
 	    return $centroId;
+	}
+
+	/**
+	* Devuelve el nivel del Centro al que pertenece el usuario logueado.  
+	*/
+	function getUserCentroNivel()
+	{
+	    $centroId = $this->Auth->user('centro_id');
+	    $this->loadModel('Centro');
+	    $centroNivel = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$centroId)));
+	    return $centroNivel;
 	}	
 
 	/**
