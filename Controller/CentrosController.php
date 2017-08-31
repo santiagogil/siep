@@ -154,6 +154,32 @@ class CentrosController extends AppController {
 	    $this->__createCentroPDF($centro);
 	}
 
+	public function listarCiudad($id) {
+		if (is_numeric($id)) {
+
+			$this->layout = 'ajax';
+			$this->loadModel('Ciudad');
+
+			$lista_Ciudad=$this->Ciudad->find('list',array('conditions' => array('departamento_id' => $id)));
+			$this->set('lista_Ciudad',$lista_Ciudad);
+		}
+		echo json_encode($lista_Ciudad);
+		$this->autoRender = false;
+	}
+
+	public function listarBarrios($id) {
+		if (is_numeric($id)) {
+
+			$this->layout = 'ajax';
+			$this->loadModel('Barrio');
+
+			$lista_barrios=$this->Barrio->find('list',array('conditions' => array('ciudad_id' => $id)));
+			$this->set('lista_barrios',$lista_barrios);
+    }
+		echo json_encode($lista_barrios);
+		$this->autoRender = false;
+	}
+
 	// metodos privados.
 
 	function __createCentroPDF($centro)

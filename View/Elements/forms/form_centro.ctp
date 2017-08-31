@@ -31,9 +31,9 @@
 			echo $this->Form->input('direccion', array('id'=>'direccion', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una dirección', 'placeholder' => 'Ingrese la dirección...'));
 			echo $this->Form->input('cp', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un código postal', 'placeholder' => 'Ingrese el código postal...'));
 			echo $this->Form->input('codigo_localidad', array('between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un código de localidad', 'placeholder' => 'Ingrese el código de localidad...'));
-			echo $this->Form->input('departamento_id', array('label' => '*Departamento', 'options' => $departamentos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
-		  echo $this->Form->input('ciudad_id', array('label' => '*ciudad', 'options' => $ciudades, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
-			echo $this->Form->input('barrio_id', array('label' => 'barrio', 'options' => $barrios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
+			echo $this->Form->input('departamento_id', array('label' => '*Departamento', 'id'=> 'comboDepto','options' => $departamentos,'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom','empty' => 'Ingrese un departamento...', 'title' => 'Seleccione una opción...'));
+		  echo $this->Form->input('ciudad_id', array('label' => '*ciudad' ,'id'=> 'comboCiudad','options' => $ciudades, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
+			echo $this->Form->input('barrio_id', array('label' => 'barrio','id'=> 'comboBarrio', 'options' => $barrios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
 		?>
 	</div>
 	<?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
@@ -74,4 +74,43 @@
 				  }
                });
 </script>
+<script>
+	 	$(document).ready(function(){
+	 		var el = $("#comboDepto")
+			var elCiudad = $("#comboCiudad")
+			$("#comboBarrio").empty(); //si se produce un cambio en #comboDepto-> se vacia el #comboBarrio
+			$("#comboCiudad").empty(); //si se produce un cambio en #comboDepto-> se vacia el #comboBarrio
+	 		el.on("change", function(){
+	 			console.log($(this).val());
+				$("#comboCiudad").empty();
+				$("#comboBarrio").empty();
+	 			$.ajax({
+	 				type:"GET",
+	 				url:basePath+"centros/listarCiudad/" + $(this).val(),
+	 				success: function(respuesta){
+						var lista = JSON.parse(respuesta);
+						$("#comboCiudad").append('<option value="' +''+ '"> ' + 'seleccione una ciudad'+ '</option>');
+						for (var key in lista) {
+							$("#comboCiudad").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
+						}
+					}
+	 		})
+	 	});
+		elCiudad.on("change", function(){
+			console.log($(this).val());
+			$("#comboBarrio").empty();
+			$.ajax({
+				type:"GET",
+				url:basePath+"centros/listarBarrios/" + $(this).val(),
+				success: function(respuesta){
+					var lista = JSON.parse(respuesta);
+					$("#comboBarrio").append('<option value="' +''+ '"> ' + 'seleccione un barrio'+ '</option>');
+					for (var key in lista) {
+						$("#comboBarrio").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
+					}
+				}
+		})
+	});
+	});
+	 	</script>
 </div>
