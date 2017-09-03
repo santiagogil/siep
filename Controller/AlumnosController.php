@@ -120,9 +120,7 @@ class AlumnosController extends AppController {
 				$this->Session->setFlash('El alumno no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-
         $personas = $this->Alumno->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
-
         $this->set(compact('alumnos', 'personas'));
 	}
 
