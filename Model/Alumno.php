@@ -150,16 +150,31 @@ class Alumno extends AppModel {
                            'required' => 'create',
 						   'message' => 'Indicar una fecha y hora.'
                            )
-                   )
-				   /*
-				   'pendiente' => array(
-                           'boolean' => array(
-                           'rule' => array('boolean'),
-					       'message' => 'Indicar una opción'
-				           )
                    ),
-                   */ 		   		   
-        );
+				   /*
+				   'persona_id' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+						   'message' => 'Indicar una persona.'
+                           )
+                   ),
+                   */
+                   'centro_id' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+						   'message' => 'Indicar un centro.'
+                           )
+                   ),
+                   'legajo_fisico_nro' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+						   'message' => 'Indicar un número de legajo.'
+                           )
+                   )
+	       );
 		
 	//Funciones privadas.
 	
