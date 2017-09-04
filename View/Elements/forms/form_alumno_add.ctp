@@ -14,25 +14,50 @@
 
           <!-- Autocomplete para nombre de Personas -->
           <div>
-              <label for="AlumnoPersonaId">Nombres y Apellidos*: </label>
+              <label for="AlumnoNombreCompleto">Nombres y Apellidos*: </label>
               <br>
-              <input id="AlumnoPersonaId" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
+							<input id="AlumnoNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
+							<input id="AlumnoPersonaId" name="data[Alumno][persona_id]" type="hidden">
+
+							<div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
+							  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							  <span class="sr-only">Error:</span>
+							  No existe una persona con ese nombre:
+								<?php echo $this->Html->link("Crear persona",array('controller'=>'personas','action'=>'add'));?>
+							</div>
           </div>
 
           <script>
               $( function() {
-                  $( "#AlumnoPersonaId" ).autocomplete({
+                  $( "#AlumnoNombreCompleto" ).autocomplete({
                       source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombreAlumno'));?>",
-                      minLength: 2,
+											minLength: 2,
+										  // Evento: se ejecuta al seleccionar el resultado
                       select: function( event, ui ) {
-                          console.log(ui.item);
-                          $("#AlumnoPersonaId").val( ui.item.Persona.nombre_completo_persona );
-                          return false;
-                      }
-                  }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+												// Elimina ID de persona previo a establecer la seleccion
+												$("#AlumnoPersonaId").val("");
+
+												if(ui.item != undefined) {
+													$("#AlumnoNombreCompleto").val(ui.item.Persona.nombre_completo_persona);
+													$("#AlumnoPersonaId").val(ui.item.Persona.id);
+	                        return false;
+												}
+                      },
+											response: function(event, ui) {
+												  // Elimina ID de persona al obtener respuesta
+													$("#AlumnoPersonaId").val("");
+							            if (ui.content.length === 0) {
+														  $("#AutocompleteError").show();
+															$("#AlumnoPersonaId").val("");
+							            } else {
+															$("#AutocompleteError").hide();
+							            }
+							        }
+                  }).autocomplete("instance")._renderItem = function( ul, item ) {
+										  // Renderiza el resultado de la respuesta
                       return $( "<li>" )
                           .append( "<div>" +item.Persona.nombre_completo_persona+ "</div>" )
-                          .appendTo( ul );
+                        	.appendTo( ul );
                   };
               });
           </script>
@@ -65,4 +90,3 @@
               }
            });
     </script>
-
