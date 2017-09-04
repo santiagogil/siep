@@ -32,7 +32,7 @@
 		    <div class="unit">
 		 		<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Secciones'), array('action' => 'index')); ?></div>
-			  <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>	
+			  <?php if($current_user['role'] == 'superadmin'): ?>	
 				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $curso['Curso']['id'])); ?></div>
 				<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $curso['Curso']['id']), null, sprintf(__('Esta seguro de borrar el curso %s?'), $curso['Curso']['division'])); ?></div>
 			  <?php endif; ?>	
@@ -130,8 +130,8 @@
 			<?php echo '<b>Carga horaria semanal:</b> '.$materia['carga_horaria_semanal'];?><br>
         <div class="text-right">
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'materias', 'action' => 'view', $materia['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-          <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?> 
-		    <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'materias', 'action' => 'edit', $materia['id']), array('class' => 'btn btn-warning','escape' => false)); ?>	
+            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'materias', 'action' => 'edit', $materia['id']), array('class' => 'btn btn-warning','escape' => false)); ?>	
+		   <?php if($current_user['role'] == 'superadmin'): ?>	
 			<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('cont""roller' => 'materias', 'action' => 'delete', $materia['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
           <?php endif; ?>  
             </div>

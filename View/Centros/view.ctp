@@ -161,7 +161,7 @@
 			        <hr>
                     <div class="text-right">
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'titulacions', 'action' => 'view', $titulacion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                        <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+                        <?php if($current_user['role'] == 'superadmin'): ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'titulacions', 'action' => 'edit', $titulacion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'titulacions', 'action' => 'delete', $titulacion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
                         <?php endif; ?>
@@ -193,10 +193,10 @@
                     <hr>
                     <div class="text-right">
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'cursos', 'action' => 'view', $curso['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                        <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+                       <?php if($current_user['role'] == 'superadmin'): ?> 
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'cursos', 'action' => 'edit', $curso['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
                         <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'cursos', 'action' => 'delete', $curso['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
-                        <?php endif; ?>
+                       <?php endif; ?>
                     </div>
                 </div>
             </div>
