@@ -123,8 +123,8 @@
               <div class="unit">
  			      <div class="subtitulo">Opciones</div>
                   <div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('action' => 'index')); ?></div>
-                <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>  
                   <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['Inscripcion']['id'])); ?> </div>
+                <?php if($current_user['role'] == 'superadmin'): ?> 
                   <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $inscripcion['Inscripcion']['id']), null, sprintf(__('Esta seguro de borrar la inscripción %s?'), $inscripcion['Inscripcion']['id'])); ?></div>
                 <?php endif; ?>  
               </div>
@@ -149,7 +149,7 @@
                         <hr>
                         <div class="text-right">
                             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'cursos', 'action' => 'view', $curso['id']), array('class' => 'btn btn-success','escape' => false)); ?>
-                          <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+                          <?php if($current_user['role'] == 'superadmin'): ?>
                             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'cursos', 'action' => 'edit', $curso['id']), array('class' => 'btn btn-warning','escape'  => false)); ?>
                             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'cursos', 'action' => 'delete', $curso['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
                           <?php endif; ?>  

@@ -226,7 +226,7 @@ class PersonasController extends AppController {
 	}
 
 
-	public function autocompletePersonas() {
+public function autocompletePersonas() {
 		$term = null;
 
 		if(!empty($this->request->query('term'))) {
@@ -236,13 +236,18 @@ class PersonasController extends AppController {
 			$conditions = array();
 
 			foreach($terminos as $termino) {
-				$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
+				$conditions[] = array(
+						'OR' => array(
+							array('nombres LIKE' => '%' . $termino . '%'),
+							array('apellidos LIKE' => '%' . $termino . '%')
+						)
+				);
 			}
 
 			$personas = $this->Persona->find('all', array(
 					'recursive'	=> -1,
 					'conditions' => $conditions,
-					'fields' 	=> array('id', 'nombre_completo_persona'))
+					'fields' 	=> array('id', 'nombres','apellidos'))
 			);
 		}
 
