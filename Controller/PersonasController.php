@@ -69,7 +69,7 @@ class PersonasController extends AppController {
 		}
 		$this->loadModel('Barrio');
 		$barrioNombre = $this->Barrio->find('list', array('fields'=>array('nombre')));
-	  $this->set(compact('foto', 'barrioNombre'));
+		$this->set(compact('foto', 'barrioNombre'));
 
 		$this->loadModel('Asentamiento');
 		$AsentamientoNombre = $this->Asentamiento->find('list', array('fields'=>array('nombre')));
@@ -162,23 +162,18 @@ class PersonasController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Persona->read(null, $id);
 		}
-
 		$this->loadModel('Ciudad');
-				$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
-				$this->set('ciudades', $ciudades);
-
+		$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+		$this->set('ciudades', $ciudades);
 		$this->loadModel('Barrio');
-					$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
-					$this->set('barrios', $barrios);
-
-			$this->loadModel('PuebloOriginario');
+		$barrios = $this->Barrio->find('list', array('fields' => array('nombre')));
+		$this->set('barrios', $barrios);
+		$this->loadModel('PuebloOriginario');
 		$nativos = $this->PuebloOriginario->find('list', array('fields' => array('nombre')));
 		$this->set('nativos', $nativos);
-
 		$this->loadModel('Asentamiento');
-				$asentamientos = $this->Asentamiento->find('list', array('fields' => array('nombre')));
-				$this->set('asentamientos', $asentamientos);
-
+		$asentamientos = $this->Asentamiento->find('list', array('fields' => array('nombre')));
+		$this->set('asentamientos', $asentamientos);
 	}
 
 	public function delete($id = null) {
