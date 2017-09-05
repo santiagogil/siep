@@ -4,7 +4,7 @@ class Curso extends AppModel {
     //var $displayField = 'division';
 	public $virtualFields = array('nombre_completo_curso'=> 'CONCAT(Curso.anio, " ", Curso.division)');
     public $actsAs = array('Containable');
-    
+
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
@@ -98,15 +98,20 @@ class Curso extends AppModel {
 						   'message' => 'Indicar una fecha y hora.'
 						   )
                    ),
-                   /*
+
 				   'tipo' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar un tipo.'
-                           )
+												 ),
+												 'alphaBet' => array(
+												 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{4,}$/i',
+												 'message' => 'Indicar una opción válida'
+                   )
+
                    ),
-                   */
+
 				   'anio' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
@@ -121,13 +126,17 @@ class Curso extends AppModel {
                            'message' => 'Indicar una división.'
                            )
                    ),
+
                    'turno' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar un turno.'
-                           )
-                   ),
+												 ),
+												 'alphaBet' => array(
+												 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{4,}$/i',
+												 'message' => 'Indicar un turno válido'
+                   )),
                    /*
                    'matricula' => array(
                            'required' => array(
@@ -148,37 +157,36 @@ class Curso extends AppModel {
 						   'required' => 'create',
                            'message' => 'Indicar un aula.'
                            ),
-						   'numeric' => array(
-                           'rule' => 'numeric',
-                           'allowEmpty' => false,
-                           'message' => 'Indicar un nº.'
-                           )
+													 'numeric' => array(
+								 						'rule' => 'naturalNumber',
+								 						'message' => 'Indicar número sin puntos ni comas ni espacios.'
+								 					)
                    ),
-                   /*
-                   'centro_id' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-                           'message' => 'Indicar un centro.'
-                            )
-                   ),
-                   */
+
                    'ciclo_id' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar un ciclo.'
-                            )
-                   )
-				   /*
+												 ),
+												 'numeric' => array(
+							 						'rule' => 'naturalNumber',
+							 						'message' => 'Indicar número sin puntos ni comas ni espacios.'
+							 					)
+                   ),
+
 				   'titulacion_id' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar una titulación.'
-                            )
+												 ),
+												 'numeric' => array(
+							 						'rule' => 'naturalNumber',
+							 						'message' => 'Indicar número sin puntos ni comas ni espacios.'
+							 					)
                    )
-                   */
+
      );
 }
 ?>
