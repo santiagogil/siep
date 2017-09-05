@@ -2,7 +2,7 @@
 App::uses('AppModel', 'Model');
 
 class Alumno extends AppModel {
-	
+
 	var $name = 'Alumno';
     //var $displayField = 'apellido';
 	//public $virtualFields = array('nombre_completo_alumno'=> 'CONCAT(Alumno.apellidos, " ", Alumno.nombres)');
@@ -24,7 +24,7 @@ class Alumno extends AppModel {
 			)
 		);
 	*/
-	
+
     var $belongsTo = array(
 		'Persona' => array(
 			'className' => 'Persona',
@@ -34,7 +34,7 @@ class Alumno extends AppModel {
 			'order' => ''
 		)
 	);
-   
+
 	var $hasMany = array(
 	    'Integracion' => array(
 	      'className' => 'Integracion',
@@ -145,39 +145,50 @@ class Alumno extends AppModel {
 
         var $validate = array(
                    'created' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar una fecha y hora.'
+                   'required' => array(
+					    	   'rule' => 'notBlank',
+                   'required' => 'create',
+			    			   'message' => 'Indicar una fecha y hora.'
                            )
                    ),
-				   /*
-				   'persona_id' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar una persona.'
-                           )
-                   ),
-                   */
+
+									 'persona_id' => array(
+										 'required' => array(
+										 'rule' => 'notBlank',
+										 'required' => true,
+										 'message' => 'Indicar los nombres.'
+										 ),
+										 'numeric' => array(
+	 	                  'rule' => 'naturalNumber',
+	 	                ),
+									 ),
+
                    'centro_id' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un centro.'
-                           )
+                    'required' => array(
+	  				   			'rule' => 'notBlank',
+                    'required' => 'create',
+		      				  'message' => 'Indicar un centro.'
+									),
+									'numeric' => array(
+	                  'rule' => 'naturalNumber',
+	                ),
                    ),
+
                    'legajo_fisico_nro' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un número de legajo.'
-                           )
+                    'required' => array(
+						   			'rule' => 'notBlank',
+                    'required' => 'create',
+						   		  'message' => 'Indicar un número de legajo.'
+									),
+									'numeric' => array(
+	                  'rule' => 'naturalNumber',
+	                  'message' => 'Indicar número sin puntos ni comas ni espacios.'
+	                )
                    )
 	       );
-		
+
 	//Funciones privadas.
-	
+
 	function addAsterisco($id){
 	   $this->id = $id;
 	   $this->saveField('pendientes', 1);

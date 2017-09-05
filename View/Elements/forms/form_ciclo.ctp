@@ -10,7 +10,7 @@
       <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
 		  <?php
               echo $this->Form->input('nombre', array('label' => 'Nombre*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese el año con formato AAAA', 'Placeholder' => 'Ingrese año del ciclo...'));
-              echo $this->Form->input('fechaInicio', array('label' => 'Fecha de Incio*', 'type' => 'text', 'between' => '<br>', 'class' => 'datepicker form-control', 'Placeholder' => 'Ingrese la fecha de incio...'));
+              echo $this->Form->input('fechaInicio', array('label' => 'Fecha de Inicio*', 'type' => 'text', 'between' => '<br>', 'class' => 'datepicker form-control', 'Placeholder' => 'Ingrese la fecha de inicio...'));
               echo $this->Form->input('fechaFinal', array('label' => 'Fecha de Finalización*', 'between' => '<br>', 'type' => 'text', 'class' => 'datepicker form-control', 'placeholder' => 'Ingrese la fecha de finalización...'));
           ?>
       </div></br>
@@ -28,7 +28,7 @@
        <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
   </div>-->
   <script type="text/javascript">
-            $('#datetimepicker1').datetimepicker({ 
+            $('#datetimepicker1').datetimepicker({
 			useCurrent: true, //this is important as the functions sets the default date value to the current value
 			format: 'YYYY-MM-DD hh:mm',
 			}).on('dp.change', function (e) {
@@ -42,4 +42,3 @@
   </script>
   <!--<script>tinymce.init({ selector:'textarea' });</script>-->
 </div>
-  

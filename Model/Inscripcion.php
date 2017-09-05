@@ -3,7 +3,7 @@ class Inscripcion extends AppModel {
 	var $name = 'Inscripcion';
 	public $displayField = 'legajo_nro';
 	public $actsAs = array('Containable');
-	
+
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
@@ -36,7 +36,7 @@ class Inscripcion extends AppModel {
 			'order' => ''
 		)
 	);
-	
+
 	var $hasAndBelongsToMany = array(
 		'Curso' => array(
 			'className' => 'Curso',
@@ -68,7 +68,7 @@ class Inscripcion extends AppModel {
 			'deleteQuery' => '',
 			'insertQuery' => ''
 		)
-	);	
+	);
 
 	//Validaciones
                 var $validate = array(
@@ -79,15 +79,19 @@ class Inscripcion extends AppModel {
 						   'message' => 'Indicar una fecha y hora.'
                            )
                    ),
-				   /*
+
 				   'alumno_id' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
                            'required' => 'create',
 						   'message' => 'Indicar un alumno.'
-                           )
+						 ),
+						 'numeric' => array(
+	 						'rule' => 'naturalNumber',
+	 						'message' => 'Indicar un alumno válido.'
+	 					)
                    ),
-                   */
+
 				   'legajo_nro' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
@@ -104,9 +108,12 @@ class Inscripcion extends AppModel {
 						   'rule' => 'notBlank',
                            'required' => 'create',
 						   'message' => 'Indicar un tipo de alta.'
-                           )
+						 ),
+						 'alphaBet' => array(
+		 				'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+		 				)
                    ),
-                   /*
+
                    'fecha_alta' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
@@ -118,19 +125,25 @@ class Inscripcion extends AppModel {
                            'message' => 'Indicar fecha valida.'
                            )
                    ),
-                   */
+
 				   'cursa' => array(
                            'required' => array(
-						   'allowEmpty' => true,
+						   'allowEmpty' => false,
 						   'message' => 'Indicar una opción.'
-                           )
+						 ),
+						 'alphaBet' => array(
+					 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+					 )
                    ),
 				   'fines' => array(
                            'valid' => array(
 								'rule' => array('inList', array('No', 'Sí línea deudores de materias.', 'Sí línea trayectos educativos.')),
-								'allowEmpty' => true,
+								'allowEmpty' => false,
 								'message' => 'Indicar una opción'
-						)
+						),
+						'alphaBet' => array(
+					 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+					 )
                    ),
                    'fecha_baja' => array(
                            'date' => array(
@@ -141,17 +154,23 @@ class Inscripcion extends AppModel {
                    ),
 				   'tipo_baja' => array(
                            'minLength' => array(
-                           'rule' => array('minLength', 3), 
-                           'allowEmpty' => true,       
+                           'rule' => array('minLength', 3),
+                           'allowEmpty' => true,
                            'message' => 'Indicar una opción.'
-                           )
+												 ),
+												 'alphaBet' => array(
+											 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
+											 )
                    ),
 				   'motivo_baja' => array(
                            'minLength' => array(
-                           'rule' => array('minLength', 3), 
-                           'allowEmpty' => true,       
+                           'rule' => array('minLength', 3),
+                           'allowEmpty' => true,
                            'message' => 'Indicar una opción.'
-                           )
+												 ),
+												 'alphaBet' => array(
+ 											'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
+ 											)
                    ),
 				   'fecha_egreso' => array(
                            'date' => array(
@@ -161,25 +180,30 @@ class Inscripcion extends AppModel {
                            )
                    ),
 				   'acta_nro' => array(
-                           'naturalNumber' => array(
-                           'rule' => array('naturalNumber', true),
-                           'allowEmpty' => true,
-						   'message' => 'indicar un nº de acta.'
-                           )
+						 'minLength' => array(
+				'rule' => array('minLength',4),
+				'allowEmpty' => true,
+				'message' => 'Indicar código postal.'
+			),
+			'numeric' => array(
+				'rule' => 'naturalNumber',
+				'message' => 'Indicar número sin puntos ni comas ni espacios.'
+			)
                    ),
 				   'libro_nro' => array(
-                           'naturalNumber' => array(
-                           'rule' => array('naturalNumber', true),
-                           'allowEmpty' => true,
-						   'message' => 'indicar un nº de libro.'
-                           )
+						 'numeric' => array(
+						 'rule' => 'naturalNumber',
+						 'allowEmpty' => true,
+						 'message' => 'Indicar número de libro sin puntos ni comas ni espacios.'
+					 )
                    ),
 				   'folio_nro' => array(
-                           'naturalNumber' => array(
-                           'rule' => array('naturalNumber', true),
-                           'allowEmpty' => true,
-						   'message' => 'indicar un nº de folio.'
-                           )
+
+						 'numeric' => array(
+			 				'rule' => 'naturalNumber',
+							'allowEmpty' => true,
+			 				'message' => 'Indicar número sin puntos ni comas ni espacios.'
+			 			)
                    ),
 				   'fecha_emision_titulo' => array(
                            'date' => array(
@@ -197,8 +221,8 @@ class Inscripcion extends AppModel {
                    ),
 				   'condicion_aprobacion' => array(
                            'minLength' => array(
-                           'rule' => array('minLength', 3), 
-                           'allowEmpty' => true,       
+                           'rule' => array('minLength', 3),
+                           'allowEmpty' => false,
                            'message' => 'Indicar una opción.'
                            )
                    ),
@@ -230,6 +254,6 @@ class Inscripcion extends AppModel {
 					       'message' => 'Indicar una opción'
 				           )
                    )
-         );              
+         );
 }
 ?>
