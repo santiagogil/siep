@@ -144,48 +144,45 @@ class Alumno extends AppModel {
 //Validaciones
 
         var $validate = array(
-                   'created' => array(
-                   'required' => array(
-					    	   'rule' => 'notBlank',
-                   'required' => 'create',
-			    			   'message' => 'Indicar una fecha y hora.'
-                           )
-                   ),
-
-									 'persona_id' => array(
-										 'required' => array(
-										 'rule' => 'notBlank',
-										 'required' => true,
-										 'message' => 'Indicar los nombres.'
-										 ),
-										 'numeric' => array(
-	 	                  'rule' => 'naturalNumber',
-	 	                ),
-									 ),
-
-                   'centro_id' => array(
-                    'required' => array(
-	  				   			'rule' => 'notBlank',
-                    'required' => 'create',
-		      				  'message' => 'Indicar un centro.'
-									),
-									'numeric' => array(
-	                  'rule' => 'naturalNumber',
-	                ),
-                   ),
-
-                   'legajo_fisico_nro' => array(
-                    'required' => array(
-						   			'rule' => 'notBlank',
-                    'required' => 'create',
-						   		  'message' => 'Indicar un número de legajo.'
-									),
-									'numeric' => array(
-	                  'rule' => 'naturalNumber',
-	                  'message' => 'Indicar número sin puntos ni comas ni espacios.'
-	                )
-                   )
-	       );
+            'created' => array(
+                'required' => array(
+	    	   	'rule' => 'notBlank',
+                'required' => 'create',
+			    'message' => 'Indicar una fecha y hora.'
+                )
+            ),
+			'persona_id' => array(
+			    'required' => array(
+				'rule' => 'notBlank',
+				'required' => true,
+				'message' => 'Indicar los nombres.'
+				),
+				'numeric' => array(
+	 	        'rule' => 'naturalNumber',
+	 	        ),
+			),
+            'centro_id' => array(
+                'required' => array(
+	   			'rule' => 'notBlank',
+                'required' => 'create',
+	  		    'message' => 'Indicar un centro.'
+				),
+				'numeric' => array(
+	                'rule' => 'naturalNumber',
+	            ),
+            ),
+            'legajo_fisico_nro' => array(
+                'required' => array(
+	   			'rule' => 'notBlank',
+                'required' => 'create',
+	   		    'message' => 'Indicar un número de legajo.'
+				),
+				'numeric' => array(
+	            'rule' => 'naturalNumber',
+	            'message' => 'Indicar número sin puntos ni comas ni espacios.'
+	            )
+            )
+	    );
 
 	//Funciones privadas.
 

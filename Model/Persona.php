@@ -150,14 +150,13 @@ class Persona extends AppModel {
             'estado_civil' => array(
                 'required' => array(
                 'rule' => array('inList', array('Soltero','Casado','Viudo','Divorciado','Concubinato','Unión civil')),
-                'required' => true,
+                'allowEmpty' => true,
                 'message' => 'Indicar un estado civil.'
                 )
             ),
             'ocupacion' => array(
                 'required' => array(
-                'rule' => 'notBlank',
-                'required' => 'create',
+                'allowEmpty' => true,
                 'message' => 'Indicar una ocupación.'
                 ),
                 'alphaBet' => array(
@@ -199,17 +198,15 @@ class Persona extends AppModel {
             ),
             'telefono_nro' => array(
                 'numeric' => array(
-                'rule' => 'naturalNumber',
+                'rule' => '/^[ 0-9]{6,}$/i',
                 'required' => true,
-                'message' => 'Indicar un número de teléfono (sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
+                'message' => 'Indicar un número de teléfono (mínimo 6 números, sólo números, sin puntos, ni comas, ni guiones, ni espacios).'
                 )
             ),
             'email' => array(
-                'email' => array(
-                'rule' => array('email', true),
-                'required' => false,
-                'message' => 'Indicar un correo electrónico válido.'
-                )
+                'rule' => 'email',
+                'allowEmpty' => true,
+                'message' => 'Indicar un formato válido.'
             ),
             'calle_nombre' => array(
                 'required' => array(

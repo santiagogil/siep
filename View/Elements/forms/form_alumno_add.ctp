@@ -14,23 +14,21 @@
 
           <!-- Autocomplete para nombre de Personas -->
           <div>
-              <label for="AlumnoNombreCompleto">Nombres y Apellidos*: </label>
-              <br>
-							<input id="AlumnoNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
-							<input id="AlumnoPersonaId" name="data[Alumno][persona_id]" type="hidden">
-
-							<div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
-							  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-							  <span class="sr-only">Error:</span>
+            <label for="AlumnoNombreCompleto">Nombres y Apellidos*: </label>
+            <br>
+						<input id="AlumnoNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
+						<input id="AlumnoPersonaId" name="data[Alumno][persona_id]" type="hidden">
+						<div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
+  					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	   				  <span class="sr-only">Error:</span>
 							  No existe una persona con ese nombre:
-								<?php echo $this->Html->link("Crear persona",array('controller'=>'personas','action'=>'add'));?>
-							</div>
+							<?php echo $this->Html->link("Crear persona",array('controller'=>'personas','action'=>'add'));?>
+						</div>
           </div>
-
           <script>
               $( function() {
                   $( "#AlumnoNombreCompleto" ).autocomplete({
-                      source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombreAlumno'));?>",
+                      source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombrePersona'));?>",
 											minLength: 2,
 										  // Evento: se ejecuta al seleccionar el resultado
                       select: function( event, ui ) {
@@ -62,7 +60,6 @@
               });
           </script>
           <!-- End Autocomplete -->
-
       </div>
     </div>
     <div class="col-md-4 col-sm-6 col-xs-12">
