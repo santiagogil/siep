@@ -1,7 +1,7 @@
 <div class="col-md-4">
 	<div class="unit">
         <span class="name"><span class="glyphicon glyphicon-calendar"></span> <b>Institución:</b> 
-        <?php echo $this->Html->link($centros[$materia['Curso']['centro_id']], array('controller' => 'centros', 'action' => 'view', $materia['Curso']['centro_id'])); ?></span><br/>
+        <?php echo $this->Html->link($centrosNombre[$materia['Materia']['curso_id']], array('controller' => 'centros', 'action' => 'view', $materia['Curso']['centro_id'])); ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Alia: </b> <?php echo $materia['Materia']['alia']; ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Dictado: </b> <?php echo $materia['Materia']['dictado']; ?></span><br/>
          <!--<span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Obligatoriedad: </b> <?php echo $materia['Materia']['obligatoriedad']; ?></span><br/>-->

@@ -28,7 +28,7 @@ class AlumnosController extends AppController {
 		*/
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
-		if ($this->Auth->user('role') === 'admin') {
+		if ($userRole === 'admin') {
 		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
 		} else if ($userRole === 'usuario') {
 			$this->loadModel('Centro');
@@ -44,6 +44,9 @@ class AlumnosController extends AppController {
 		$conditions = array();
         if (!empty($this->params['named']['legajo_fisico_nro'])) {
 			$conditions['Alumno.legajo_fisico_nro ='] = $this->params['named']['legajo_fisico_nro'];
+		}
+		if (!empty($this->params['named']['persona_id'])) {
+			$conditions['Alumno.persona_id ='] = $this->params['named']['persona_id'];
 		}
 		$alumnos = $this->paginate('Alumno', $conditions);
 	    /* FIN */
@@ -106,19 +109,16 @@ class AlumnosController extends AppController {
 			$this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
   		$this->redirect( array( 'action' => 'index' ));
 		}
-
 		if (!empty($this->data)) {
 			// Si no esta definido la persona_id, no se crea el alumno
 			if(empty($this->params['data']['persona_id'])){
-						$this->Session->setFlash('No se agrego el alumno, la persona no existe!.', 'default', array('class' => 'alert alert-warning'));
-						$this->redirect( array( 'action' => 'index' ));
+				$this->Session->setFlash('No se agrego el alumno, la persona no existe!.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect( array( 'action' => 'index' ));
 			}
-
 			$this->Alumno->create();
 			// Obtiene y asigna el centro al alumno
 			$centroId = $this->getUserCentroId();
 			$this->request->data['Alumno']['centro_id'] = $centroId;
-
 			if ($this->Alumno->save($this->request->data)) {
 				$this->Session->setFlash('El alumno ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Alumno->id;
@@ -180,29 +180,100 @@ class AlumnosController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
-	public function autocompleteNombreAlumno() {
-		$term = null;
+	
+	/*
+	$userCentroId = $this->getUserCentroId();
+		$userRole = $this->Auth->user('role');
+		if ($this->Auth->user('role') === 'admin') {
+		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
+		} else if ($userRole === 'usuario') {
+			$this->loadModel('Centro');
+			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $nivelCentroId);
+		}
+	*/
 
+	
+
+	public function autocompleteNombrePersona() {
+		$term = null;
 		if(!empty($this->request->query('term'))) {
 			$term = $this->request->query('term');
 			$terminos = explode(' ', trim($term));
 			$terminos = array_diff($terminos,array(''));
 			$conditions = array();
-
 			foreach($terminos as $termino) {
 				$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
 			}
-
 			$personas = $this->Alumno->Persona->find('all', array(
 				'recursive'	=> -1,
 				'conditions' => $conditions,
 				'fields' 	=> array('id', 'nombre_completo_persona'))
 			);
-
 			echo json_encode($personas);
 		}
 		// No renderiza el layout
 		$this->autoRender = false;
 	}
-}
+
+	/* AUTOCOMPLETE PARA EL FORMULARIO DE BÚSQUEDA (INICIO).
+	*  Sí el usuario es "admin" muestra sólo los alumnos del establecimiento. 
+	*  Sino sí es "usuario", muestra los alumnos del nivel correspondiente al centro.
+	*  Sino sí es "superadmin" muestra todos los alumnos.
+	*/
+	public function autocompleteNombreAlumno() {
+		$term = null;
+		// Inicia el Autocomplete.
+		if(!empty($this->request->query('term'))) {
+			$term = $this->request->query('term');
+			$terminos = explode(' ', trim($term));
+			$terminos = array_diff($terminos,array(''));
+			$conditions = array();
+			foreach($terminos as $termino) {
+				$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
+			}
+			$userRole = $this->Auth->user('role');
+			$userCentroId = $this->getUserCentroId();
+			if ($userRole === 'admin') {
+				// Obtiene el id de persona de los alumnos del centro correspondiente.
+				$personasId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+				// Consulta por esos id de personas.
+				$personas = $this->Alumno->Persona->find('all', array(
+					'recursive'	=> -1,
+					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente. 
+					'conditions' => array($conditions, 'id' => $personasId),
+					'fields' 	=> array('id', 'nombre_completo_persona')
+					)
+				);
+			} else if ($userRole === 'usuario') {
+				// Obtiene el id de persona del nivel del centro correspondiente.
+				$this->loadModel('Centro');
+				$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+				$personasId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+				// Consulta por esos id de personas.
+				$personas = $this->Alumno->Persona->find('all', array(
+					'recursive'	=> -1,
+					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente. 
+					'conditions' => array($conditions, 'id' => $personasId),
+					'fields' 	=> array('id', 'nombre_completo_persona')
+					)
+				);
+			} else if ($userRole === 'superadmin') {
+				$personas = $this->Alumno->Persona->find('all', array(
+					'recursive'	=> -1,
+					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente. 
+					'conditions' => $conditions,
+					'fields' 	=> array('id', 'nombre_completo_persona')
+					)
+				);
+			}
+			echo json_encode($personas);
+			}
+			// No renderiza el layout
+			$this->autoRender = false;
+		}
+		/* FIN */
+	}
 ?>
