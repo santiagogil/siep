@@ -111,7 +111,7 @@ class AlumnosController extends AppController {
 		}
 		if (!empty($this->data)) {
 			// Si no esta definido la persona_id, no se crea el alumno
-			if(empty($this->params['data']['persona_id'])){
+			if(empty($this->request->data['Alumno']['persona_id'])){
 				$this->Session->setFlash('No se agrego el alumno, la persona no existe!.', 'default', array('class' => 'alert alert-warning'));
 				$this->redirect( array( 'action' => 'index' ));
 			}
@@ -145,7 +145,7 @@ class AlumnosController extends AppController {
 		  }
 
 			// Si no esta definido la persona_id, no se crea el alumno
-			if(empty($this->params['data']['persona_id'])){
+			if(empty($this->request->data['Alumno']['persona_id'])){
 						$this->Session->setFlash('No se edito al alumno, la persona no existe!.', 'default', array('class' => 'alert alert-warning'));
 						$this->redirect( array( 'action' => 'index' ));
 			}
@@ -180,7 +180,7 @@ class AlumnosController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
-	
+
 	/*
 	$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
@@ -194,7 +194,7 @@ class AlumnosController extends AppController {
 		}
 	*/
 
-	
+
 
 	public function autocompleteNombrePersona() {
 		$term = null;
@@ -218,7 +218,7 @@ class AlumnosController extends AppController {
 	}
 
 	/* AUTOCOMPLETE PARA EL FORMULARIO DE BÚSQUEDA (INICIO).
-	*  Sí el usuario es "admin" muestra sólo los alumnos del establecimiento. 
+	*  Sí el usuario es "admin" muestra sólo los alumnos del establecimiento.
 	*  Sino sí es "usuario", muestra los alumnos del nivel correspondiente al centro.
 	*  Sino sí es "superadmin" muestra todos los alumnos.
 	*/
@@ -241,7 +241,7 @@ class AlumnosController extends AppController {
 				// Consulta por esos id de personas.
 				$personas = $this->Alumno->Persona->find('all', array(
 					'recursive'	=> -1,
-					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente. 
+					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
 					'conditions' => array($conditions, 'id' => $personasId),
 					'fields' 	=> array('id', 'nombre_completo_persona')
 					)
@@ -255,7 +255,7 @@ class AlumnosController extends AppController {
 				// Consulta por esos id de personas.
 				$personas = $this->Alumno->Persona->find('all', array(
 					'recursive'	=> -1,
-					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente. 
+					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
 					'conditions' => array($conditions, 'id' => $personasId),
 					'fields' 	=> array('id', 'nombre_completo_persona')
 					)
@@ -263,7 +263,7 @@ class AlumnosController extends AppController {
 			} else if ($userRole === 'superadmin') {
 				$personas = $this->Alumno->Persona->find('all', array(
 					'recursive'	=> -1,
-					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente. 
+					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
 					'conditions' => $conditions,
 					'fields' 	=> array('id', 'nombre_completo_persona')
 					)
