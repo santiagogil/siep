@@ -17,7 +17,7 @@
             <label for="AlumnoNombreCompleto">Nombres y Apellidos*: </label>
             <br>
 						<input id="AlumnoNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
-						<input id="AlumnoPersonaId" name="data[Alumno][persona_id]" type="hidden">
+						<input id="AlumnoPersonaId" name="data[Alumno][persona_id]" type="text" style="display:none;">
 						<div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
   					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 	   				  <span class="sr-only">Error:</span>
