@@ -43,12 +43,12 @@ class TitulacionsController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('titulacion', $this->Titulacion->read(null, $id));
-		
 		$resolucionsId = $this->Titulacion->Disenocurricular->find('list', array('fields'=>array('resolucion_id')));
         $this->loadModel('Resolucion');
         $resolucions = $this->Resolucion->find('list', array('fields'=>array('numero_completo_resolucion'), 'conditions' => array('id' => $resolucionsId)));
-		
-		$this->set(compact('resolucions'));	
+		$this->loadModel('Ciudad');
+		$ciudades = $this->Ciudad->find('list', array('fields'=>array('nombre')));
+		$this->set(compact('resolucions', 'ciudades'));	
 	}
 
 	function add() {

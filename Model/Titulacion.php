@@ -50,31 +50,31 @@ class Titulacion extends AppModel {
 	//Validaciones
         var $validate = array(
             'created' => array(
-						   'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-						   'message' => 'Indicar una fecha y hora.'
-						          )
-					     ),
-				    'nombre' => array(
-               'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-               'message' => 'Indicar una opcion.'
-               ),
-						   'isUnique' => array(
-	                       'rule' => 'isUnique',
-	                       'message' => 'Este nombre esta siendo usado.'
-	                     ),
-											 'alphaBet' => array(
-											 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
-											 'message' => 'Indicar el nombre de la titulación (Sólo letras y espacios)'
-										 )
-               ),
+			    'required' => array(
+				'rule' => 'notBlank',
+				'required' => 'create',
+				'message' => 'Indicar una fecha y hora.'
+				)
+			),
+			'nombre' => array(
+                'required' => array(
+				'rule' => 'notBlank',
+				'required' => 'create',
+                'message' => 'Indicar una opcion.'
+                ),
+				'isUnique' => array(
+	            'rule' => 'isUnique',
+	            'message' => 'Este nombre esta siendo usado.'
+	            ),
+				'alphaBet' => array(
+				'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+				'message' => 'Indicar el nombre de la titulación (Sólo letras y espacios)'
+				)
+            ),
             'certificacion' => array(
-               'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
+                'required' => array(
+				'rule' => 'notBlank',
+				'required' => 'create',
                'message' => 'Indicar la certificación.'
 						 ),
 						 'alphaBet' => array(
@@ -107,8 +107,7 @@ class Titulacion extends AppModel {
 							 'ciclo_finalizacion' => array(
 		               'required' => array(
 									 'allowEmpty' => true,
-								   'required' => 'create',
-		               'message' => 'Indicar el ciclo de finalización.'
+								     'message' => 'Indicar el ciclo de finalización.'
 								 ),
 								 'numeric' => array(
 			 						'rule' => 'naturalNumber',
