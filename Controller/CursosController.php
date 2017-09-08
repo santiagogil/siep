@@ -31,7 +31,7 @@ class CursosController extends AppController {
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
 		if ($userRole === 'admin') {
-		$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId);
+			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId);
 		} else if ($userRole === 'usuario') {
 			$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
@@ -57,10 +57,17 @@ class CursosController extends AppController {
 		}
 		$cursos = $this->paginate('Curso',$conditions);
 	    /* FIN */
-		/* SETS DE DATOS PARA COMBOBOXS DEL FORM SEARCH (INICIO). */
+		/* SETS DE DATOS PARA COMBOBOXS DEL FORM SEARCH (INICIO). 
+        *  Sí es 'superadmin' el combobox de centros trae todas las instituciones.
+        *  Sino sí es 'usuario' trae sólo los centros correspondientes al nivel. 
+		*/
 		$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-		$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
+		if ($userRole === 'superadmin') {
+			$centros= $this->Curso->Centro->find('list', array('fields'=>array('sigla')));
+		} else if ($userRole === 'usuario') {
+			$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
+		}
 		/* FIN */
 		$this->set(compact('cursos', 'centros'));
 	}

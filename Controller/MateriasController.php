@@ -32,18 +32,23 @@ class MateriasController extends AppController {
 		$this->Materia->recursive = 1;
 		$this->paginate['Materia']['limit'] = 6;
 		$this->paginate['Materia']['order'] = $this->Materia->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'order'=>'Curso.anio ASC'));
+		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
+		*  Sí el usuario es "admin" muestra las materias del establecimiento. 
+		*  Sino sí es "usuario" externo muestra los materias del nivel.
+		*/ 
 		$userCentroId = $this->getUserCentroId();
-		if($this->Auth->user('role') === 'admin') {
-        	$this->paginate['Materia']['conditions'] = array('Curso.centro_id' => $userCentroId);
+		$userRole = $this->Auth->user('role');
+		if ($userRole === 'admin') {
+			$cursosId = $this->Materia->Curso->find('list', array('fields'=>array('id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+			$this->paginate['Materia']['conditions'] = array('Materia.curso_id' => $cursosId);
+		} else if ($userRole === 'usuario') {
+			$nivelCentro = $this->Materia->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+			$nivelCursoId = $this->Materia->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+			$this->paginate['Materia']['conditions'] = array('Materia.curso_id' => $nivelCursoId);
 		}
-		$this->loadModel('Centro');
-        $centrosId = $this->Materia->Curso->find('list', array('fields'=>array('centro_id')));
-        $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
-        $cursosId = $this->Materia->find('list', array('fields'=>array('curso_id')));
-        $cursos = $this->Materia->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions' => array('id' => $cursosId)));
+		/* FIN */
 		$this->redirectToNamed();
 		$conditions = array();
-		
 		if(!empty($this->params['named']['centro_id']))
 		{
 			$conditions['Curso.centro_id ='] = $this->params['named']['centro_id'];
@@ -60,9 +65,13 @@ class MateriasController extends AppController {
 		{
 			$conditions['Materia.plan_de_estudio ='] = $this->params['named']['plan_de_estudio'];
 		}
-
 		$materias = $this->paginate('Materia', $conditions);
-		$this->set(compact('materias', 'cursos', 'centros'));
+		$cursosId = $this->Materia->find('list', array('fields'=>array('curso_id')));
+        $cursos = $this->Materia->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions' => array('id' => $cursosId)));
+		$centrosId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('id'=>$cursosId)));
+        $this->loadModel('Centro');
+        $centrosNombre = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('id'=>$centrosId)));
+        $this->set(compact('materias', 'cursos', 'centrosNombre'));
 	}
 
 	public function view($id = null) {

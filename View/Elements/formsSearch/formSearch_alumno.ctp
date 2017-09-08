@@ -19,9 +19,7 @@
             minLength: 2,
             select: function( event, ui ) {
                 $("#AlumnoPersonaId").val( ui.item.Persona.nombre_completo_persona );
-
                 window.location.href = "<?php echo $this->Html->url(array('controller'=>'alumnos','action'=>'view'));?>/"+ui.item.Persona.id;
-
                 return false;
             }
         }).autocomplete( "instance" )._renderItem = function( ul, item ) {
