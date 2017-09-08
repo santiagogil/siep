@@ -52,7 +52,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar los nombres.'
                 ),
                 'alphaBet' => array(
-                'rule' => '/^[ a-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 ),
             ),
@@ -155,19 +155,15 @@ class Persona extends AppModel {
                 )
             ),
             'ocupacion' => array(
-                'required' => array(
-                'rule' => 'notBlank',
-                'required' => 'create',
-                'message' => 'Indicar una ocupación.'
-                ),
                 'alphaBet' => array(
-                'rule' => '/^[ a-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[ a-zA-ZñÑ]{0,}$/i',
+								'required' => false,
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 )
             ),
             'lugar_de_trabajo' => array(
                 'alphaBet' => array(
-                'rule' => '/^[ a-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[ a-zA-ZñÑ]{0,}$/i',
                 'required' => false,
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 )
@@ -218,7 +214,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar un nombre de calle.'
                 ),
                 'alphaBet' => array(
-                'rule' => '/^[ a-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[áÁéÉíÍóÓúÚa-zA-ZñÑ 0-9]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 )
             ),
