@@ -66,11 +66,9 @@ class MateriasController extends AppController {
 			$conditions['Materia.plan_de_estudio ='] = $this->params['named']['plan_de_estudio'];
 		}
 		$materias = $this->paginate('Materia', $conditions);
-		$cursosId = $this->Materia->find('list', array('fields'=>array('curso_id')));
-        $cursos = $this->Materia->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions' => array('id' => $cursosId)));
-		$centrosId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('id'=>$cursosId)));
+		$centrosId = $this->Materia->Curso->find('list', array('fields'=>array('centro_id')));
         $this->loadModel('Centro');
-        $centrosNombre = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('id'=>$centrosId)));
+        $centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla')));
         $this->set(compact('materias', 'cursos', 'centrosNombre'));
 	}
 
