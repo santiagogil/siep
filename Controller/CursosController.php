@@ -84,15 +84,17 @@ class CursosController extends AppController {
 		/* FIN */
 		/* GENERA NÚMERO DE MATRICULADOS. (INICIO) */
 		$cursoId = $this->Curso->id;
-		$alumnosInscriptos = $this->Curso->CursosInscripcion->find('list', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoId)));
-		$matriculados = (count($alumnosInscriptos));
+		$matriculados = $this->Curso->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoId)));
+		$cursoPlazasArray = $this->Curso->findById($cursoId, 'plazas');
+		$cursoPlazasString = $cursoPlazasArray['Curso']['plazas'];
+		$vacantes = $cursoPlazasString - $matriculados;
 		/* FIN */
 		/* MUESTRA UNIDADES CURRICULARES RELACIONADAS DEPENDIENDO EL NIVEL (INICIO). 
 		* Sólo muestra materias para los niveles secundario y superior.
 		*/		
 		$userCentroNivel = $this->getUserCentroNivel();
 		/* FIN */
-		$this->set(compact('personaNombre', 'cicloNombre', 'matriculados', 'userCentroNivel'));
+		$this->set(compact('personaNombre', 'cicloNombre', 'matriculados', 'userCentroNivel', 'vacantes', 'cursoPlazasString'));
 	}
 
 	function add() {
