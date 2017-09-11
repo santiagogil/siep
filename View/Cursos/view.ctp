@@ -16,8 +16,12 @@
 							<?php echo ($curso['Curso']['turno']); ?></p>
 						<b><?php echo __('Aula: '); ?></b>
 							<?php echo ($curso['Curso']['aula_nro']); ?></p>
-			            <!--<b><?php echo __('Matriculados: '); ?></b>-->
-						<button class="btn btn-primary" type="button">Matriculados: <span class="badge"><?php echo ($matriculados); ?></span></button>
+			            <b><?php echo __('Plazas: '); ?></b> 
+			            	<span class="badge"><?php echo ($cursoPlazasString); ?></span></button></b>
+						<b><?php echo __(' | Matriculados: '); ?></b>
+							<span class="badge"><?php echo ($matriculados); ?></span></button></b><br/><br/>
+						<button class="btn btn-primary" type="button">Vacantes: 
+							<span class="badge"><?php echo ($vacantes); ?></span></button>
                     </div>
                     <!--<div class="col-md-4 col-sm-6 col-xs-8">	
 			            <b><?php echo __('Organización de cursada: '); ?></b>

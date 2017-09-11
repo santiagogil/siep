@@ -5,22 +5,21 @@
 <div class="TituloSec">Matriculas</div>
 <div id="ContenidoSec">
   <div id="main">
-
     <table id="matriculasDatatable" class="display" width="100%" cellspacing="0">
       <thead>
         <tr>
-          <th>Tipo</th>
+          <th>Centro</th>
           <th>Año</th>
           <th>Division</th>
           <th>Turno</th>
+          <th>Plazas</th>
           <th>Matricula</th>
-          <th>Curso</th>
+          <th>Vacantes</th>
         </tr>
       </thead>
       <tbody>
       </tbody>
     </table>
-
     <script>
       $(function(){
         $('#matriculasDatatable').DataTable({
@@ -31,17 +30,17 @@
             "url": "<?php echo $this->Html->url('/matriculas/requestDatatable'); ?>"
           },
           "columns" : [
-            { "data" : "Curso.id" },
+            { "data" : "Curso.centro_id" },
             { "data" : "Curso.anio" },
             { "data" : "Curso.division" },
             { "data" : "Curso.turno" },
+            { "data" : "Curso.plazas" },
             { "data" : "Curso.matricula" },
-            { "data" : "Curso.nombre_completo_curso" }
+            { "data" : "Curso.vacantes" },
           ]
         });
       });
     </script>
-
   </div>
 </div>
 <!-- end main -->

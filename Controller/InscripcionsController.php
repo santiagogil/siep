@@ -136,13 +136,29 @@ class InscripcionsController extends AppController {
 			        $estado = "PENDIENTE";
 			    }
 			//Genera el estado y se deja en los datos que se intentaran guardar
-			    $this->request->data['Inscripcion']['estado'] = $estado;
-				if ($this->Inscripcion->save($this->data)) {
-					$this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
-					$inserted_id = $this->Inscripcion->id;
-					$this->redirect(array('action' => 'view', $inserted_id));
-				} else {
-					$this->Session->setFlash('La inscripcion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
+			$this->request->data['Inscripcion']['estado'] = $estado;
+
+			if ($this->Inscripcion->save($this->data)) {
+				$this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
+				/* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
+		  		* Al registrarse una Inscripción, actualiza valores de matrícula y vacantes
+		  		* del curso correspondiente en el modelo Curso.
+		  		*/
+				$this->loadModel('Curso');
+				$cursoIdArray = $this->request->data['Curso'];					
+				$cursoIdString = $cursoIdArray['Curso'];
+				$matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdString)));
+				$this->Curso->id=$cursoIdString;
+				$this->Curso->saveField("matricula", $matriculaActual);
+				$plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
+				$plazasString = $plazasArray['Curso']['plazas'];
+				$vacantesActual = $plazasString - $matriculaActual;   
+				$this->Curso->saveField("vacantes", $vacantesActual);							
+			    /* FIN */
+				$inserted_id = $this->Inscripcion->id;
+				$this->redirect(array('action' => 'view', $inserted_id));
+			} else {
+				$this->Session->setFlash('La inscripcion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
 				}
 			}
 		}

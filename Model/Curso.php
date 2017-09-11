@@ -137,20 +137,31 @@ class Curso extends AppModel {
 												 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{4,}$/i',
 												 'message' => 'Indicar un turno válido'
                    )),
-                   /*
-                   'matricula' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-                           'message' => 'Indicar un número.'
-                           ),
-						   'numeric' => array(
-                           'rule' => 'numeric',
-                           'allowEmpty' => false,
-                           'message' => 'Indicar un número.'
-                           )
+                   'plazas' => array(
+                   			'required' => array(
+						   	'rule' => 'notBlank',
+						   	'required' => 'create',
+                           	'message' => 'Indicar una matrícula.'
+                           	),
+							'numeric' => array(
+							'rule' => 'naturalNumber',
+							'message' => 'Indicar número sin puntos ni comas ni espacios.'
+							)
                    ),
-                   */
+                   'matricula' => array(
+		                'numeric' => array(
+		                'rule' => 'naturalNumber',
+		                'required' => true,
+		                'message' => 'Indicar número sin puntos ni comas ni espacios.'
+		                )
+		            ),
+                   	'vacantes' => array(
+		                'numeric' => array(
+		                'rule' => 'naturalNumber',
+		                'required' => true,
+		                'message' => 'Indicar número sin puntos ni comas ni espacios.'
+		                )
+		            ),
 				   'aula_nro' => array(
                            'required' => array(
 						   'rule' => 'notBlank',

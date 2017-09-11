@@ -50,10 +50,10 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnado <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
+            <li><?php echo $this->Html->link(__('Familiares'), array('controller'=>'familiars', 'action'=>'add')); ?></li>
             <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
-            <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
-            <li><?php echo $this->Html->link(__('Alumnos por Unidad'), '/inscripcions_materias');?></li>
-            <li><?php echo $this->Html->link(__('Matriculas'), '/matriculas');?></li>
+            <li><?php echo $this->Html->link(__('Pre-Inscripciones'), '/pre-inscripcions'); ?></li>
+            <li><?php echo $this->Html->link(__('Pases'), '/pases'); ?></li>
             <!--<li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Calificaciones'), '/notas'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Mesa de Exámenes'), '/mesaexamens'); ?></li>-->
@@ -71,17 +71,18 @@
           </ul>
         </li>
       <li>-->
-      <!--<li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver <span class="caret"></span></a>
+      <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver... <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
-            <li><?php echo $this->Html->link(__('Alumnos por Unidad'), '/inscripcions_materias');?></li>
+            <li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>
+            <li><?php echo $this->Html->link(__('Tabla de Matriculas'), '/matriculas');?></li>
+            <li><?php echo $this->Html->link(__('Gráficos Estadísticos'), '/graficos'); ?></li>
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>
-            <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>
-            <!--<li><?php echo $this->Html->link(__('Gráficos'), '/graficos'); ?></li>
-            <!--<li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>
+            <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
+            <!--<li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>-->
           </ul>
-        </li>-->
+        </li>
       <li>
       <?php echo $this->Html->link('CERRAR SESIÓN', '/logout', array('class' => 'btn btn-success navbar-btn btn-lg', 'escape' => false)); ?>
       </li>
