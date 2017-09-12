@@ -16,7 +16,7 @@ class MatriculasController extends AppController
                 $this->Auth->allow();
             break;
             case 'usuario':
-                $this->Auth->allow('index', 'view');
+                $this->Auth->allow('index', 'view', 'requestDatatable');
             break;
         }
     }
@@ -33,25 +33,40 @@ class MatriculasController extends AppController
         $userRole = $this->Auth->user('role');
 
         // Modifique las rutas de ROLES al formato SWITCH que es mas llevadero que los IF
-        switch ($userRole) {
-            case 'admin':
-                $result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $userCentroId)));
-            break;
-            case 'usuario':
-                $nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-                $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-                $result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $nivelCentroId)));
-            break;
-            case 'superadmin':
-	              // Al definir contain solo relaciona el modelo solicitado en el array y no todas las dependencias definidas en el modelo
-	              $result = $this->Curso->find('all', array(
-	                   'contain' => array('Centro')
-	              ));
-            break;
-        }
+				switch ($userRole) {
+					case 'admin':
+						$result = $this->Curso->find('all', array(
+							'contain' => array('Centro'),
+							'conditions'=>array('Curso.centro_id' => $userCentroId)
+						));
+					break;
+					case 'usuario':
+
+						$nivelCentro = $this->Curso->Centro->find('list', array(
+							'fields'=>array('nivel_servicio'),
+							'conditions'=>array('id'=>$userCentroId)
+						));
+
+						$nivelCentroId = $this->Curso->Centro->find('list', array(
+							'fields'=>array('id'),
+							'conditions'=>array('nivel_servicio'=>$nivelCentro)
+						));
+
+						$result = $this->Curso->find('all', array(
+							'conditions'=>array('Curso.centro_id' => $nivelCentroId)
+						));
+
+					break;
+					case 'superadmin':
+						// Al definir contain solo relaciona el modelo solicitado en el array y no todas las dependencias definidas en el modelo
+						$result = $this->Curso->find('all', array(
+							'contain' => array('Centro')
+						));
+					break;
+				}
 
         $result = [
-            "data" => $result
+        	"data" => $result
         ];
 
         $this->autoRender = false;
