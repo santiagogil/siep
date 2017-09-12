@@ -100,6 +100,19 @@ class Alumno extends AppModel {
 	      'exclusive' => '',
 	      'finderQuery' => '',
 	      'counterQuery' => ''
+	    ),
+	    'Pase' => array(
+	      'className' => 'Pase',
+	      'foreignKey' => 'alumno_id',
+	      'dependent' => false,
+	      'conditions' => '',
+	      'fields' => '',
+	      'order' => '',
+	      'limit' => '',
+	      'offset' => '',
+	      'exclusive' => '',
+	      'finderQuery' => '',
+	      'counterQuery' => ''
 	    )
 	);
 

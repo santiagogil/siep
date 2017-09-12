@@ -21,9 +21,20 @@ class MatriculasController extends AppController
         }
     }
 
-    public function index()
-    {
-    }
+    public function index() {
+      /*
+      $this->loadModel('Curso');
+      $this->Curso->contain();
+
+      $userCentroId = $this->getUserCentroId();
+      $userRole = $this->Auth->user('role');
+      $nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+      $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+      $resultArray = $this->Curso->findById($nivelCentroId, 'id');
+      $resultString = $resultArray['Curso'];
+      print_r($resultString);
+      */
+  	}
 
     public function requestDatatable()
     {
