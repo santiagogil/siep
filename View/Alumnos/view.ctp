@@ -108,6 +108,39 @@
 	</div>
 </div>
 <!-- end Inscripciones Relacionadas -->
+<!-- Pases Relacionados -->
+	<div id="click_03" class="titulo_acordeon">Pases Relacionados <span class="caret"></span></div>
+	<div id="acordeon_03">
+		<div class="row">
+			<?php if (!empty($alumno['Pase'])):?>
+  			<div class="col-xs-12 col-sm-6 col-md-8">
+				<?php foreach ($alumno['Pase'] as $pase):	?>
+			<div class="col-md-4">
+				<div class="unit">
+					<?php echo '<b>Ciclo:</b> '.($this->Html->link($pase['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $pase['ciclo_id'])));?><br>
+					<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id'])));?><br>
+					<!--<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>-->
+					<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$pase['alumno_id']], array('controller' => 'alumnos', 'action' => 'view', $pase['alumno_id'])));?><br>
+		            <b>Estado:</b> <?php if($pase['estado'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $pase['estado']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $pase['estado']; ?></span><?php } ?></br>
+		            <hr>
+		            <div class="text-right">
+			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'pases', 'action' => 'view', $pase['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+			          <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'pases', 'action' => 'edit', $pase['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+					  <?php endif; ?>
+					  <?php if($current_user['role'] == 'superadmin'): ?>	
+						<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'pases', 'action' => 'delete', $pase['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+					  <?php endif; ?>
+					</div>
+				</div>
+			</div>
+			<?php endforeach; ?>
+		</div>
+		<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
+		<?php endif; ?>
+	</div>
+</div>
+<!-- end Pases Relacionados -->
 <!-- Integraciones Relacionadas 
 	<div id="click_03" class="titulo_acordeon">Integraciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_03">

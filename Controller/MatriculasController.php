@@ -17,7 +17,18 @@ class MatriculasController extends AppController {
 	}
 
 	function index() {
-
+		/*
+		$this->loadModel('Curso');
+		$this->Curso->contain();
+		
+		$userCentroId = $this->getUserCentroId();
+		$userRole = $this->Auth->user('role');
+		$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+		$resultArray = $this->Curso->findById($nivelCentroId, 'id');
+		$resultString = $resultArray['Curso'];
+		print_r($resultString);
+		*/
 	}
 
 	function requestDatatable() {
@@ -32,7 +43,9 @@ class MatriculasController extends AppController {
 		} else if ($userRole === 'usuario') {
 			$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-			$result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $nivelCentroId)));
+			$resultArray = $this->Curso->findById($nivelCentroId, 'id');
+			$resultString = $resultArray['Curso'];
+			$result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $resultString)));
 		} else if ($userRole === 'superadmin') {
 			$result = $this->Curso->Centro->find('all');
 		}	
