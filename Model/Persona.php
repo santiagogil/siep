@@ -52,7 +52,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar los nombres.'
                 ),
                 'alphaBet' => array(
-                'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 ),
             ),
@@ -150,7 +150,7 @@ class Persona extends AppModel {
             'estado_civil' => array(
                 'required' => array(
                 'rule' => array('inList', array('Soltero','Casado','Viudo','Divorciado','Concubinato','Unión civil')),
-                'allowEmpty' => true,
+                'required' => false,
                 'message' => 'Indicar un estado civil.'
                 )
             ),
