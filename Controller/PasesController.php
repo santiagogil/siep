@@ -5,7 +5,7 @@ class PasesController extends AppController {
 
 	var $name = 'Pases';
     var $paginate = array('Pase' => array('limit' => 4, 'order' => 'Pase.created DESC'));
-		
+
 	function beforeFilter(){
 	    parent::beforeFilter();
 		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
@@ -14,12 +14,12 @@ class PasesController extends AppController {
         */
         if (($this->Auth->user('role') === 'superadmin') || ($this->Auth->user('role') === 'admin')) {
 	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	    } elseif ($this->Auth->user('role') === 'usuario') {
 	        $this->Auth->allow('index', 'view');
 	    }
 	    /* FIN */
     }
-	
+
 	public function index() {
 		$this->Pase->recursive = -1;
 		$this->paginate['Pase']['limit'] = 4;
@@ -27,11 +27,11 @@ class PasesController extends AppController {
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
 		if ($userRole === 'admin') {
-		$this->paginate['Pase']['conditions'] = array('Pase.centro_id_origen' => $userCentroId);	
+		$this->paginate['Pase']['conditions'] = array('Pase.centro_id_origen' => $userCentroId);
 		} else if ($userRole === 'usuario') {
 			$this->loadModel('Centro');
-			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 			$this->paginate['Pase']['conditions'] = array('Pase.centro_id' => $nivelCentroId);
 		}
 		$this->redirectToNamed();
@@ -54,27 +54,48 @@ class PasesController extends AppController {
 		$this->loadModel('Centro');
 		$centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla')));
 		$this->loadModel('Persona');
-		$personasNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-		$this->set(compact('pases', 'ciclosNombre', 'personasNombre', 'centrosNombre'));
+		$personasId = $this->Persona->find('list', array('fields' => array('id')));
+    $personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personasId)));
+  	$this->set(compact('pases', 'ciclosNombre', 'personaNombre', 'centrosNombre'));
+
+		$this->loadModel('Alumno');
+		$alumnosId = $this->Alumno->find('list', array('fields' => array('persona_id')));
+		$this->set('alumnosId', $alumnosId);
 	}
-    
+
 	public function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Pase no válido.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('pase', $this->Pase->read(null, $id));
-        
-		$personaId = $this->Pase->find('list', array('fields'=>array('alumno_id'), 'conditions'=>array('id'=>$id)));
+
 		$this->loadModel('Persona');
-        $personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
-        $this->set(compact('pases', 'personaNombre'));
+		$personasId = $this->Persona->find('list', array('fields' => array('id')));
+    $personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personasId)));
+    $this->set(compact('pases', 'personaNombre'));
+
+		$this->loadModel('Ciclo');
+		$ciclos = $this->Ciclo->find('list', array('fields' => array('nombre')));
+		$this->set('ciclos', $ciclos);
+
+
+		$this->loadModel('Centro');
+		$centros = $this->Centro->find('list', array('fields' => array('nombre')));
+		$this->set('centros', $centros);
+
+		$this->loadModel('Alumno');
+		$alumnosId = $this->Alumno->find('list', array('fields' => array('persona_id')));
+		$this->set('alumnosId', $alumnosId);
+
+
+
 	}
-        
+
 	public function add() {
 		/* BOTÓN CANCELAR (INICIO).
 		*abort if cancel button was pressed.
-		*/  
+		*/
         if(isset($this->params['data']['cancel'])){
             $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect( array( 'action' => 'index' ));
@@ -90,7 +111,7 @@ class PasesController extends AppController {
 			$this->request->data['Pase']['centro_id_origen'] = $userCentroId;
  		    //Antes de guardar genera el estado de la inscripción
 			if ($this->request->data['Inscripcion']['tutor_nota'] == true) {
-			    	$estado = "COMPLETA";	
+			    	$estado = "COMPLETA";
 			    }else{
 			        $estado = "PENDIENTE";
 			    }
@@ -113,21 +134,21 @@ class PasesController extends AppController {
 		$centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla')));
 		$this->set(compact('pases', 'ciclos', 'personasNombre', 'centrosNombre'));
 	}
-            
+
 	public function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Pase no válido.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
-		  //abort if cancel button was pressed  
+		  //abort if cancel button was pressed
             if (isset($this->params['data']['cancel'])) {
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
 		    }
 			//Antes de guardar genera el estado de la inscripción
 			if ($this->request->data['Pase']['nota_tutor'] == true) {
-			   $estado = "COMPLETA";	
+			   $estado = "COMPLETA";
 			} else {
 			   $estado = "PENDIENTE";
 			}
@@ -145,7 +166,7 @@ class PasesController extends AppController {
 			$this->data = $this->Inscripcion->read(null, $id);
 		}
 	}
-    
+
     public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Id no valida para pase.', 'default', array('class' => 'alert alert-warning'));
