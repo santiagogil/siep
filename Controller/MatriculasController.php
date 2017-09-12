@@ -24,18 +24,28 @@ class MatriculasController extends AppController {
 
 		$this->loadModel('Curso');
 		$this->Curso->contain();
-		$result = $this->Curso->find('all');
-
-		$this->autoRender = false;
-		$this->response->type('json');
+		
+		$userCentroId = $this->getUserCentroId();
+		$userRole = $this->Auth->user('role');
+		if ($userRole === 'admin') {
+			$result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $userCentroId)));
+		} else if ($userRole === 'usuario') {
+			$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
+			$result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $nivelCentroId)));
+		} else if ($userRole === 'superadmin') {
+			$result = $this->Curso->Centro->find('all');
+		}	
 
 		$result = [
 			"data" => $result
 		];
 
+		$this->autoRender = false;
+		$this->response->type('json');
+
 		$json = json_encode($result);
 		$this->response->body($json);
 	}
-
 }
 ?>

@@ -15,7 +15,7 @@ class CentrosController extends AppController {
         if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
-	        $this->Auth->allow('index', 'view');
+	        $this->Auth->allow('index', 'view', 'autocompleteCentro');
 	    }
     }
 
@@ -199,21 +199,17 @@ class CentrosController extends AppController {
 			$terminos = explode(' ', trim($term));
 			$terminos = array_diff($terminos,array(''));
 			$conditions = array();
-
 			foreach($terminos as $termino) {
 				$conditions[] = array('sigla LIKE' => '%' . $termino . '%');
-			}
-
-			$centro = $this->Centro->find('all', array(
-					'recursive'	=> -1,
-					'conditions' => $conditions,
-					'fields' 	=> array('id', 'sigla '))
+		}
+		$centro = $this->Centro->find('all', array(
+			'recursive'	=> -1,
+			'conditions' => $conditions,
+			'fields' 	=> array('id', 'sigla '))
 			);
 		}
-
 		echo json_encode($centro);
 		$this->autoRender = false;
 	}
-
 }
 ?>

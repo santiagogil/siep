@@ -113,14 +113,4 @@ class AppController extends Controller {
 	    $centroNivel = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$centroId)));
 	    return $centroNivel;
 	}	
-
-	/**
-	* Devuelve los alumnos inscriptos en el ciclo actual.
-	*/
-	function getLastCicloInscripcionAlumnoId($cicloIdActual)
-	{
-	    $this->loadModel('Inscripcion');
-		$CicloInscripcionAlumnoId = $this->Inscripcion->find('list', array('fields'=>array('Inscripcion.persona_id'), 'conditions'=>array('Inscripcion.ciclo_id'=>$cicloIdActual)));
-	    return $CicloInscripcionAlumnoId;
-	}
 }

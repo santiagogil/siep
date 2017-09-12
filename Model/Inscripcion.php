@@ -127,10 +127,11 @@ class Inscripcion extends AppModel {
                    ),
 
 				   'cursa' => array(
-                           'required' => array(
-						   'allowEmpty' => false,
-						   'message' => 'Indicar una opción.'
-						 ),
+                           'valid' => array(
+								'rule' => array('inList', array('Cursa algun espacio curricular', 'Sólo se inscribe a rendir final', 'Cursa espacio curricular y rinde final')),
+								'allowEmpty' => false,
+								'message' => 'Indicar una opción'
+						),
 						 'alphaBet' => array(
 					 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
 					 )
@@ -142,7 +143,7 @@ class Inscripcion extends AppModel {
 								'message' => 'Indicar una opción'
 						),
 						'alphaBet' => array(
-					 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+					 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{2,}$/i',
 					 )
                    ),
                    'fecha_baja' => array(

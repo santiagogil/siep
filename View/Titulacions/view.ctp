@@ -108,7 +108,7 @@
         <div class="unit">
           <?php echo ' <b>CUE N°:</b> '.$centro['cue']; ?><br/>
           <?php echo ' <b>Nombre:</b> '.$centro['sigla']; ?><br/>
-          <?php echo ' <b>Ciudad:</b> '.$centro['ciudad']; ?><br/>
+          <?php echo ' <b>Ciudad:</b> '.$ciudades[$centro['ciudad_id']]; ?><br/>
           <?php echo ' <b>Teléfono:</b> '.$centro['telefono']; ?><br/>
           <hr>
             <div class="text-right">

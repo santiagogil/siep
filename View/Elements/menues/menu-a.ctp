@@ -17,15 +17,15 @@
         <ul class="nav navbar-nav">
           <li><?php echo $this->Html->link(__('Alta de Personas'),'/personas'); ?></li>
         </ul>
-        <li class="dropdown">
+        <!--<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CUEs <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
-            <!--<li><?php echo $this->Html->link(__('Establecimientos'),'/'); ?></li>-->
-            <!--<li><?php echo $this->Html->link(__('Infraestructura'),'/'); ?></li>-->
-            <!--<li><?php echo $this->Html->link(__('Inventario'),'/'); ?></li>-->
+            <li><?php echo $this->Html->link(__('Establecimientos'),'/'); ?></li>
+            <li><?php echo $this->Html->link(__('Infraestructura'),'/'); ?></li>
+            <li><?php echo $this->Html->link(__('Inventario'),'/'); ?></li>
           </ul>
-        </li>
+        </li>-->
         <!--<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Normativas <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -36,10 +36,8 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ofertas <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <?php if($current_user['role'] == 'admin'): ?>
             <li><?php echo $this->Html->link(__('Titulaciones'),'/titulacions'); ?></li>
             <li><?php echo $this->Html->link(__('Diseños Curriculares'), '/disenocurriculars'); ?></li>
-            <?php endif; ?>
             <li><?php echo $this->Html->link(__('Secciones'), '/cursos'); ?></li>
             <li><?php echo $this->Html->link(__('Unidades Curriculares'),'/materias'); ?></li>
           </ul>
@@ -49,6 +47,8 @@
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
             <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
+            <li><?php echo $this->Html->link(__('Pre-Inscripciones'), '/pre-inscripcions'); ?></li>
+            <li><?php echo $this->Html->link(__('Pases'), '/pases'); ?></li>
             <!--<li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Calificaciones'), '/notas'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Mesa de Exámenes'), '/mesaexamens'); ?></li>-->
@@ -66,13 +66,15 @@
           </ul>
         </li>-->
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver... <span class="caret"></span></a>
           <ul class="dropdown-menu">
+            <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
             <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
-            <li><?php echo $this->Html->link(__('Alumnos por Unidad'), '/inscripcions_materias');?></li>
+            <li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>
+            <li><?php echo $this->Html->link(__('Tabla de Matriculas'), '/matriculas');?></li>
+            <li><?php echo $this->Html->link(__('Gráficos Estadísticos'), '/graficos'); ?></li>
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
             <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
-            <!--<li><?php echo $this->Html->link(__('Gráficos'), '/graficos'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>--> 
           </ul>
         </li>
