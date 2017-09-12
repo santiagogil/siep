@@ -30,7 +30,7 @@
             "url": "<?php echo $this->Html->url('/matriculas/requestDatatable'); ?>"
           },
           "columns" : [
-            { "data" : "Curso.centro_id" },
+            { "data" : "Centro.sigla" },
             { "data" : "Curso.anio" },
             { "data" : "Curso.division" },
             { "data" : "Curso.turno" },
