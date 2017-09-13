@@ -27,7 +27,7 @@ class FamiliarsController extends AppController {
         $personaCuilCuit = $this->Persona->find('list', array('fields'=>array('id', 'cuil_cuit')));
         $personaOcupacion = $this->Persona->find('list', array('fields'=>array('id', 'ocupacion')));
         $personaLugarTrabaja = $this->Persona->find('list', array('fields'=>array('id', 'lugar_de_trabajo')));
-        $personaCiudad = $this->Persona->find('list', array('fields'=>array('id', 'ciudad')));
+        $personaCiudad = $this->Persona->find('list', array('fields'=>array('id', 'ciudad_id')));
         $personaCalleNombre = $this->Persona->find('list', array('fields'=>array('id', 'calle_nombre')));
         $personaCalleNumero = $this->Persona->find('list', array('fields'=>array('id', 'calle_nro')));
         $personaTelefono = $this->Persona->find('list', array('fields'=>array('id', 'telefono_nro')));
@@ -51,10 +51,11 @@ class FamiliarsController extends AppController {
 				$this->Session->setFlash('El familiar no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$alumnoId = $this->Familiar->Alumno->find('list', array('fields'=>array('id', 'persona_id')));
+		$centroId = $this->getUserCentroId();
+		$alumnoId = $this->Familiar->Alumno->find('list', array('fields'=>array('id', 'persona_id'), 'conditions'=>array('centro_id'=>$centroId)));
         $this->loadModel('Persona');
         $alumnos = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
-        $personas = $this->Familiar->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+        $personas = $this->Familiar->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('familiar'=>1)));
         $this->set(compact('alumnos', 'personas'));
     }
 

@@ -25,11 +25,11 @@
  <div class="unit">
         <div class="subtitulo">Opciones</div>
         <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index')); ?></div>
-      <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['Alumno']['id'])); ?></div>
+       <?php if($current_user['role'] == 'superadmin'): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['Alumno']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['Alumno']['persona_id'])); ?></div>
         <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>-->
-        <div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add')); ?></div>
+        <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add')); ?></div>-->
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Calificación'), array('controller' => 'notas', 'action' => 'add')); ?></div>
@@ -40,7 +40,7 @@
 </div> 
 <!-- end main -->
 <!-- Familiares Relacionados -->
-<div id="click_01" class="titulo_acordeon">Familiares Relacionadas <span class="caret"></span></div>
+<div id="click_01" class="titulo_acordeon">Familiares Relacionados <span class="caret"></span></div>
 <div id="acordeon_01">
 	<div class="row">
 	<?php if (!empty($alumno['Familiar'])):?>
@@ -117,10 +117,10 @@
 				<?php foreach ($alumno['Pase'] as $pase):	?>
 			<div class="col-md-4">
 				<div class="unit">
-					<?php echo '<b>Ciclo:</b> '.($this->Html->link($pase['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $pase['ciclo_id'])));?><br>
-					<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id'])));?><br>
+					<?php echo '<b>Ciclo:</b> '.($this->Html->link($cicloNombre[$pase['ciclo_id']], array('controller' => 'ciclos', 'action' => 'view', $pase['ciclo_id'])));?><br>
+					<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_destino'])));?><br>
 					<!--<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>-->
-					<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$pase['alumno_id']], array('controller' => 'alumnos', 'action' => 'view', $pase['alumno_id'])));?><br>
+					<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$personaId[$pase['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['alumno_id'])));?><br>
 		            <b>Estado:</b> <?php if($pase['estado'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $pase['estado']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $pase['estado']; ?></span><?php } ?></br>
 		            <hr>
 		            <div class="text-right">

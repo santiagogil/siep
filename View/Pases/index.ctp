@@ -27,7 +27,7 @@
   	          <div class="unit">
   			      <div class="subtitulo">Búsqueda</div>
 			      <br>
-			      <?php echo $this->element('formsSearch/formSearch_pase'); ?>
+			      <?php //echo $this->element('formsSearch/formSearch_pase'); ?>
   	          </div>
 	      </div>
      </div>

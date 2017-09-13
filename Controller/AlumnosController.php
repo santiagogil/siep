@@ -71,21 +71,22 @@ class AlumnosController extends AppController {
 		);
 		$this->set('alumno', $this->Alumno->read(null, $id));
         //Genera nombres en el view.
-		//Datos personales del Alumno
+		$this->loadModel('Ciclo');
+		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre')));
+        //Datos personales del Alumno
 		$alumnoId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
         $this->loadModel('Persona');
         $alumnoNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
         $alumnoDocumentoTipo = $this->Persona->find('list', array('fields'=>array('documento_tipo'), 'conditions' => array('id' => $alumnoId)));
         $alumnoDocumentoNumero = $this->Persona->find('list', array('fields'=>array('documento_nro'), 'conditions' => array('id' => $alumnoId)));
         $alumnoEdad = $this->Persona->find('list', array('fields'=>array('edad'), 'conditions' => array('id' => $alumnoId)));
-    	/*
-        $notaCicloId = $this->Alumno->Nota->find('list', array('fields'=>array('ciclo_id')));
-		$this->loadModel('Ciclo');
-		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions'=>array('id'=>$notaCicloId)));
-        */
-		$centroId = $this->Alumno->find('list', array('fields'=>array('centro_id'), 'conditions'=>array('id'=>$id)));
+    	// Datos relacionados.
+    	$centroId = $this->Alumno->find('list', array('fields'=>array('centro_id'), 'conditions'=>array('id'=>$id)));
 		$this->loadModel('Centro');
-		$centroNombre = $this->Centro->find('list', array('fields'=>array('nombre'), 'conditions'=>array('id'=>$centroId)));
+		$centroNombre = $this->Centro->find('list', array('fields'=>array('nombre')));
+        $personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
+		$this->loadModel('Persona');
+		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
         /*
 		$notaMateriaId = $this->Alumno->Nota->find('list', array('fields'=>array('materia_id')));
 		$this->loadModel('Materia');
@@ -100,12 +101,12 @@ class AlumnosController extends AppController {
         $familiarTelefono = $this->Persona->find('list', array('fields' => array('telefono_nro')));
         $familiarEmail = $this->Persona->find('list', array('fields' => array('email')));
 		*/
-		$this->set(compact('alumnos', 'alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', '$familiarCuilCuit', '$familiarTelefono', '$familiarEmail'));
+		$this->set(compact( 'familiar', 'alumnos', 'alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', '$familiarCuilCuit', '$familiarTelefono', '$familiarEmail'));
     }
 
 	public function add() {
 		//abort if cancel button was pressed
-  	if(isset($this->params['data']['cancel'])){
+  		if(isset($this->params['data']['cancel'])){
 			$this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
   		$this->redirect( array( 'action' => 'index' ));
 		}
@@ -129,28 +130,25 @@ class AlumnosController extends AppController {
 		}
         $personas = $this->Alumno->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
         $this->set(compact('alumnos', 'personas'));
-	}
+    }
 
 	public function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Alumno no valido', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
-
 		if (!empty($this->data)) {
-		  //abort if cancel button was pressed
-      if(isset($this->params['data']['cancel'])){
+	    //abort if cancel button was pressed
+	      if(isset($this->params['data']['cancel'])){
             $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect( array( 'action' => 'index' ));
 		  }
-
-			// Si no esta definido la persona_id, no se crea el alumno
+		// Si no esta definido la persona_id, no se crea el alumno
 			if(empty($this->request->data['Alumno']['persona_id'])){
-						$this->Session->setFlash('No se edito al alumno, la persona no existe!.', 'default', array('class' => 'alert alert-warning'));
-						$this->redirect( array( 'action' => 'index' ));
+				$this->Session->setFlash('No se edito al alumno, la persona no existe!.', 'default', array('class' => 'alert alert-warning'));
+				$this->redirect( array( 'action' => 'index' ));
 			}
-
-	    if ($this->Alumno->save($this->data)) {
+		    if ($this->Alumno->save($this->data)) {
 				$this->Session->setFlash('El alumno ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Alumno->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
@@ -158,11 +156,9 @@ class AlumnosController extends AppController {
 				$this->Session->setFlash('El alumno no ha sido grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-
 		if (empty($this->data)) {
 			$this->data = $this->Alumno->read(null, $id);
 		}
-
 		$personas = $this->Alumno->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
 		$this->set(compact('alumnos', 'personas'));
 	}
@@ -180,22 +176,9 @@ class AlumnosController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
-
-	/*
-	$userCentroId = $this->getUserCentroId();
-		$userRole = $this->Auth->user('role');
-		if ($this->Auth->user('role') === 'admin') {
-		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
-		} else if ($userRole === 'usuario') {
-			$this->loadModel('Centro');
-			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $nivelCentroId);
-		}
+	/* AUTOCOMPLETE PARA EL FORMULARIO DE AGREGACIÓN (INICIO).
+	*  Sólo muestra las personas con perfíl de alumno.
 	*/
-
-
-
 	public function autocompleteNombrePersona() {
 		$term = null;
 		if(!empty($this->request->query('term'))) {
@@ -206,9 +189,13 @@ class AlumnosController extends AppController {
 			foreach($terminos as $termino) {
 				$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
 			}
+			// Obtiene el id de persona de los alumnos del centro correspondiente.
+			$this->loadModel('Persona');
+        	$personaId = $this->Persona->find('list', array('fields'=>array('id'), 'conditions'=>array('alumno'=>1)));
 			$personas = $this->Alumno->Persona->find('all', array(
 				'recursive'	=> -1,
-				'conditions' => $conditions,
+				// Condiciona la búsqueda también por id de persona con perfil de alumno.
+				'conditions' => array($conditions, 'id' => $personaId),
 				'fields' 	=> array('id', 'nombre_completo_persona'))
 			);
 			echo json_encode($personas);

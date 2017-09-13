@@ -6,48 +6,63 @@ class PersonasController extends AppController {
 	var $name = 'Personas';
 	var $paginate = array('Persona' => array('limit' => 3, 'order' => 'Persona.id DESC'));
 
-
 	function beforeFilter(){
         parent::beforeFilter();
-	    //Si el usuario tiene un rol de superadmin le damos acceso a todo.
-        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+	    /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *  Si el usuario tiene un rol de superadmin le damos acceso a todo. 
+        *  Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        */
         if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
 	        $this->Auth->allow();
 	    } elseif ($this->Auth->user('role') === 'usuario') {
 	        $this->Auth->allow('index', 'view');
 	    }
+	    /* FIN */
     }
 
 	public function index() {
 		$this->Persona->recursive = 0;
 		$this->paginate['Persona']['limit'] = 4;
 		$this->paginate['Persona']['order'] = array('Persona.id' => 'ASC');
+		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
+		*  Sí es "admin" muestra alumnos y familiares del centro. 
+		*/
+		$userCentroId = $this->getUserCentroId();
+		$userRole = $this->Auth->user('role');
+		if ($userRole === 'admin') {
+		$personaAlumnoId = $this->Persona->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+		$AlumnoFamiliarId = $this->Persona->Alumno->AlumnosFamiliar->find('list', array('fields'=>array('familiar_id'), 'conditions'=>array('id'=>$personaAlumnoId)));	
+		$personaFamiliarId = $this->Persona->Familiar->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$AlumnoFamiliarId)));
+		$this->paginate['Persona']['conditions'] = array('Persona.id' => $personaAlumnoId, 'Persona.id' => $personaFamiliarId);
+		}
+		/* FIN */
+		/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
+		*Pagina según búsquedas simultáneas ya sea por NOMBRE COMPLETO y/o DNI.
+		*/
 		$this->redirectToNamed();
 		$conditions = array();
-
 		if(!empty($this->params['named']['nombre_completo_persona']))
 		{
 			$conditions['Persona.nombre_completo_persona ='] = $this->params['named']['nombre_completo_persona'];
 		}
-
 		if(!empty($this->params['named']['documento_nro']))
 		{
 			$conditions['Persona.documento_nro ='] = $this->params['named']['documento_nro'];
 		}
-        //Evalúa si existe foto.
+        $personas = $this->paginate('Persona', $conditions);
+        /* Evalúa si existe foto (INICIO). */
 		if(empty($this->params['named']['foto'])){
 			$foto = 0;
 		} else {
 			$foto = 1;
 		}
-		$personas = $this->paginate('Persona', $conditions);
-		$this->set(compact('personas', 'foto'));
-
+		/* FIN */
+		/* SETS DE DATOS PARA COMBOBOXS DEL FORM SEARCH (INICIO).*/
 		$this->loadModel('Ciudad');
-        	$ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
-        	$this->set('ciudades', $ciudades);
-
-		}
+        $ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+		/* FIN */
+		$this->set(compact('personas', 'foto', 'ciudades'));
+	}
 
 	public function view($id = null) {
 		if (!$id) {

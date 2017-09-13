@@ -82,10 +82,10 @@ class CursosInscripcionsController extends AppController {
         $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
 		$inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro')));
-        $alumnoId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('alumno_id')));
-        $this->loadModel('Alumno');
-        $alumnoNombre = $this->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
+        $personaId = $this->CursosInscripcion->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
+		$this->loadModel('Persona');
+		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
 		/* FIN */
-		$this->set(compact('cursosInscripcions', 'cicloActual', 'cursos', 'inscripcions', 'ciclos', 'alumnoNombre', 'centros', 'materias'));
+		$this->set(compact('cursosInscripcions', 'cicloActual', 'cursos', 'inscripcions', 'ciclos', 'personaId', 'personaNombre', 'centros', 'materias'));
    }
 }
