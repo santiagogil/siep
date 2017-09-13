@@ -66,6 +66,7 @@ class InscripcionsController extends AppController {
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
 		/* FIN */
 		/* SETS DE DATOS PARA COMBOBOX (INICIO). */
+		$personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
 		$this->loadModel('Persona');
 		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
 		$this->loadModel('Centro');
@@ -78,7 +79,7 @@ class InscripcionsController extends AppController {
 		}
 		$ciclos = $this->Inscripcion->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
 		/* FIN */
-		$this->set(compact('inscripcions', 'personaNombre', 'centros', 'ciclos'));
+		$this->set(compact('inscripcions', 'personaId', 'personaNombre', 'centros', 'ciclos'));
 	}
     
 	public function view($id = null) {
@@ -87,11 +88,10 @@ class InscripcionsController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('inscripcion', $this->Inscripcion->read(null, $id));
-        
-		$personaId = $this->Inscripcion->find('list', array('fields'=>array('alumno_id'), 'conditions'=>array('id'=>$id)));
+    	$personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
 		$this->loadModel('Persona');
-        $personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
-        $this->set(compact('inscripcions', 'personaNombre'));
+		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
+        $this->set(compact('inscripcions', 'personaId', 'personaNombre'));
 	}
         
 	public function add() {

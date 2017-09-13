@@ -94,7 +94,10 @@ class CursosController extends AppController {
 		*/		
 		$userCentroNivel = $this->getUserCentroNivel();
 		/* FIN */
-		$this->set(compact('personaNombre', 'cicloNombre', 'matriculados', 'userCentroNivel', 'vacantes', 'cursoPlazasString'));
+		$personaId = $this->Curso->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
+		$this->loadModel('Persona');
+		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
+		$this->set(compact('personaId', 'personaNombre', 'cicloNombre', 'matriculados', 'userCentroNivel', 'vacantes', 'cursoPlazasString'));
 	}
 
 	function add() {

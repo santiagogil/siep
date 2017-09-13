@@ -14,7 +14,7 @@
                         <b><?php echo __('Institución:'); ?></b>
                         <?php echo($this->Html->link($inscripcion['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $inscripcion['Inscripcion']['centro_id']))); ?></p>
                         <b><?php echo __('Alumno:'); ?></b>
-                        <?php echo ($this->Html->link($personaNombre[$inscripcion['Inscripcion']['alumno_id']], array('controller' => 'personas', 'action' => 'view', $inscripcion['Inscripcion']['alumno_id']))); ?></p>                     
+                        <?php echo ($this->Html->link($personaNombre[$personaId[$inscripcion['Inscripcion']['alumno_id']]], array('controller' => 'personas', 'action' => 'view', $inscripcion['Inscripcion']['alumno_id']))); ?></p>                     
                         <b><?php echo __('Estado:'); ?></b>
                         <?php if($inscripcion['Inscripcion']['estado'] == "COMPLETA"){; ?>
                         <span class="label label-success"><?php echo $inscripcion['Inscripcion']['estado']; ?></span>

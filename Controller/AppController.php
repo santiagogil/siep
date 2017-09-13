@@ -25,8 +25,6 @@ class AppController extends Controller {
 					    'loginError' => 'Nombre de usuario o contraseña incorrectos, inténtelo nuevamente.',
 						'authorize' => array('Controller'),
 			),
-			'Session',
-			'RequestHandler'
 	);
 
 	public $helpers = array('Form', 'Time', 'Js');
