@@ -39,7 +39,11 @@ class InscripcionsController extends AppController {
 		if ($this->Auth->user('role') === 'admin') {
 		//$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
 		$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId);	
-		} else if ($userRole === 'usuario') {
+		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+			$this->loadModel('Centro');
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId);
+		}else if ($userRole === 'usuario') {
 			$this->loadModel('Centro');
 			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
@@ -72,8 +76,11 @@ class InscripcionsController extends AppController {
 		$this->loadModel('Centro');
 		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
 		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-		if (($userRole == 'superadmin') || ($userRole == 'usuario')) {
+		if ($userRole == 'superadmin') {
 			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla')));
+		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+			$nivelCentroId = $this->Inscripcion->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
 		} else if ($userRole == 'admin') {
 			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla'), 'conditions'=>array('id'=>$nivelCentroId)));	
 		}
