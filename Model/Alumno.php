@@ -185,15 +185,11 @@ class Alumno extends AppModel {
 	            ),
             ),
             'legajo_fisico_nro' => array(
-                'required' => array(
-	   			'rule' => 'notBlank',
-                'required' => 'create',
-	   		    'message' => 'Indicar un número de legajo.'
-				),
-				'numeric' => array(
-	            'rule' => 'naturalNumber',
-	            'message' => 'Indicar número sin puntos ni comas ni espacios.'
-	            )
+								'numeric' => array(
+			            'rule' => 'naturalNumber',
+			            'message' => 'Indicar número sin puntos ni comas ni espacios.',
+									'allowEmpty' => true
+		            )
             )
 	    );
 
