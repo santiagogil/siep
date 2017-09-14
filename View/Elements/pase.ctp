@@ -11,7 +11,7 @@
         <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Ciclo:</b> <?php echo $this->Html->link($ciclosNombre[$pase['Pase']['ciclo_id']], array('controller' => 'ciclos', 'action' => 'view', $pase['Pase']['ciclo_id'])); ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Centro Destino:</b> <?php echo $this->Html->link($centrosNombre[$pase['Pase']['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_destino'])); ?></span><br/>
         <!--<span class="name"><span class="glyphicon glyphicon-user"></span> <b>Código:</b> <?php echo $inscripcion['Inscripcion']['legajo_nro']; ?></span><br/>-->
-        <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b>                            <?php echo ($this->Html->link($personaNombre[$alumnosId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id']))); ?></p>
+        <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b><?php echo ($this->Html->link($personaNombre[$alumnosId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id']))); ?></p>
         <div class="text-right">
             <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'pases', 'action' => 'view', $pase['Pase']['id']), array('class' => 'btn btn-success','escape' => false)); ?></span>
           <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
