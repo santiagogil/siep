@@ -88,7 +88,7 @@ class PersonasController extends AppController {
 
 		$this->loadModel('Asentamiento');
 		$AsentamientoNombre = $this->Asentamiento->find('list', array('fields'=>array('nombre')));
-	  $this->set(compact('foto', 'AsentamientoNombre'));
+	  	$this->set(compact('foto', 'AsentamientoNombre'));
 
 		$this->loadModel('Ciudad');
 		$ciudadNombre = $this->Ciudad->find('list', array('fields' => array('nombre')));
@@ -243,13 +243,11 @@ class PersonasController extends AppController {
 
 public function autocompletePersonas() {
 		$term = null;
-
 		if(!empty($this->request->query('term'))) {
 			$term = $this->request->query('term');
 			$terminos = explode(' ', trim($term));
 			$terminos = array_diff($terminos,array(''));
 			$conditions = array();
-
 			foreach($terminos as $termino) {
 				$conditions[] = array(
 						'OR' => array(
@@ -258,14 +256,12 @@ public function autocompletePersonas() {
 						)
 				);
 			}
-
 			$personas = $this->Persona->find('all', array(
 					'recursive'	=> -1,
 					'conditions' => $conditions,
 					'fields' 	=> array('id', 'nombres','apellidos'))
 			);
 		}
-
 		echo json_encode($personas);
 		$this->autoRender = false;
 	}
