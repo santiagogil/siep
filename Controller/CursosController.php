@@ -29,11 +29,14 @@ class CursosController extends AppController {
 		*  Sino sí es "usuario" externo muestra los cursos del nivel.
 		*/ 
 		$userCentroId = $this->getUserCentroId();
+		$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 		$userRole = $this->Auth->user('role');
 		if ($userRole === 'admin') {
 			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId);
+		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId);
 		} else if ($userRole === 'usuario') {
-			$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
 			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId);
 		}
@@ -65,6 +68,9 @@ class CursosController extends AppController {
 		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		if ($userRole === 'superadmin') {
 			$centros= $this->Curso->Centro->find('list', array('fields'=>array('sigla')));
+		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+			$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
 		} else if ($userRole === 'usuario') {
 			$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
 		}

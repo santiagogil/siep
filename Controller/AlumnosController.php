@@ -30,6 +30,10 @@ class AlumnosController extends AppController {
 		$userRole = $this->Auth->user('role');
 		if ($userRole === 'admin') {
 		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
+		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+			$this->loadModel('Centro');
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $nivelCentroId);
 		} else if ($userRole === 'usuario') {
 			$this->loadModel('Centro');
 			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
@@ -225,6 +229,18 @@ class AlumnosController extends AppController {
 			if ($userRole === 'admin') {
 				// Obtiene el id de persona de los alumnos del centro correspondiente.
 				$personasId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+				// Consulta por esos id de personas.
+				$personas = $this->Alumno->Persona->find('all', array(
+					'recursive'	=> -1,
+					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
+					'conditions' => array($conditions, 'id' => $personasId),
+					'fields' 	=> array('id', 'nombre_completo_persona')
+					)
+				);
+			} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+				$this->loadModel('Centro');
+				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+				$personasId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
 				// Consulta por esos id de personas.
 				$personas = $this->Alumno->Persona->find('all', array(
 					'recursive'	=> -1,

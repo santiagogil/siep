@@ -58,9 +58,8 @@ class PasesController extends AppController {
 		$centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla')));
 		$this->loadModel('Persona');
 		$personasId = $this->Persona->find('list', array('fields' => array('id')));
-    $personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personasId)));
-  	$this->set(compact('pases', 'ciclosNombre', 'personaNombre', 'centrosNombre'));
-
+    	$personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personasId)));
+  		$this->set(compact('pases', 'ciclosNombre', 'personaNombre', 'centrosNombre'));
 		$this->loadModel('Alumno');
 		$alumnosId = $this->Alumno->find('list', array('fields' => array('persona_id')));
 		$this->set('alumnosId', $alumnosId);

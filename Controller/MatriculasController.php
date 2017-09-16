@@ -22,27 +22,14 @@ class MatriculasController extends AppController
     }
 
     public function index() {
-      /*
-      $this->loadModel('Curso');
-      $this->Curso->contain();
-
-      $userCentroId = $this->getUserCentroId();
-      $userRole = $this->Auth->user('role');
-      $nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-      $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-      $resultArray = $this->Curso->findById($nivelCentroId, 'id');
-      $resultString = $resultArray['Curso'];
-      print_r($resultString);
-      */
+        
   	}
 
     public function requestDatatable()
     {
         $this->loadModel('Curso');
-
         $userCentroId = $this->getUserCentroId();
         $userRole = $this->Auth->user('role');
-
         // Modifique las rutas de ROLES al formato SWITCH que es mas llevadero que los IF
 				switch ($userRole) {
 					case 'admin':
@@ -52,22 +39,18 @@ class MatriculasController extends AppController
 						));
 					break;
 					case 'usuario':
-
-						$nivelCentro = $this->Curso->Centro->find('list', array(
-							'fields'=>array('nivel_servicio'),
-							'conditions'=>array('id'=>$userCentroId)
-						));
-
-						$nivelCentroId = $this->Curso->Centro->find('list', array(
-							'fields'=>array('id'),
-							'conditions'=>array('nivel_servicio'=>$nivelCentro)
-						));
-
-						$result = $this->Curso->find('all', array(
-							'conditions'=>array('Curso.centro_id' => $nivelCentroId)
-						));
-
-					break;
+    				$userCentroId = $this->getUserCentroId();
+            $this->loadModel('Curso');
+            $nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
+            $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
+            if ($nivelCentroString === 'Común - Inicial - Primario') {
+                $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));     
+                $result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $nivelCentroId)));
+            } else  {
+                $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+                $result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $nivelCentroId)));
+            }
+          break;
 					case 'superadmin':
 						// Al definir contain solo relaciona el modelo solicitado en el array y no todas las dependencias definidas en el modelo
 						$result = $this->Curso->find('all', array(
@@ -75,14 +58,11 @@ class MatriculasController extends AppController
 						));
 					break;
 				}
-
         $result = [
         	"data" => $result
         ];
-
         $this->autoRender = false;
         $this->response->type('json');
-
         $json = json_encode($result);
         $this->response->body($json);
     }

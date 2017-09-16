@@ -88,7 +88,7 @@ class PersonasController extends AppController {
 
 		$this->loadModel('Asentamiento');
 		$AsentamientoNombre = $this->Asentamiento->find('list', array('fields'=>array('nombre')));
-	  $this->set(compact('foto', 'AsentamientoNombre'));
+	  	$this->set(compact('foto', 'AsentamientoNombre'));
 
 		$this->loadModel('Ciudad');
 		$ciudadNombre = $this->Ciudad->find('list', array('fields' => array('nombre')));
@@ -268,14 +268,12 @@ public function autocompletePersonas() {
 					);
 				}
 			}
-
 			$personas = $this->Persona->find('all', array(
 					'recursive'	=> -1,
 					'conditions' => $conditions,
 					'fields' 	=> array('id', 'nombres','apellidos','documento_nro'))
 			);
 		}
-
 		echo json_encode($personas);
 		$this->autoRender = false;
 	}

@@ -32,7 +32,10 @@
                 } elseif ($userRole == 'admin') {
                     $userPuesto = $current_user['puesto'];
                     switch ($userPuesto) {
-                        case 'Dirección Jardín/Escuela':
+                        case 'Dirección Jardín':
+                            echo $this->element('menues/menu-aip');
+                            break;
+                        case 'Dirección Escuela Primaria':
                             echo $this->element('menues/menu-aip');
                             break;
                         case 'Dirección Colegio Secundario':
