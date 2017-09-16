@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
                     <!--<h3>Datos previos</h3>-->
-                    <div id="click_03" class="titulo_acordeon_datos">Datos previos <span class="caret"</span></div>
+                    <!--<div id="click_03" class="titulo_acordeon_datos">Datos previos <span class="caret"</span></div>
                         <div id="acordeon_03">
                              <div class="unit">
                                 <b><?php echo __('Cursa:'); ?></b>
@@ -61,7 +61,7 @@
                                   </ul>
                             </div>
                         </div>
-                        <div id="click_05" class="titulo_acordeon_datos">Baja <span class="caret"</span></div>
+                        <div id="click_05" class="titulo_acordeon_datos">Datos de Baja <span class="caret"</span></div>
                         <div id="acordeon_05">
                             <div class="unit">
                                 <b><?php echo __('Tipo:'); ?></b>
@@ -91,7 +91,7 @@
                                     <?php echo $inscripcion['Inscripcion']['titulo_nro']; ?></p>
                                 </div>
                             </div>
-                    <!--<h3>Datos de la titulación</h3>-->
+                    <!--<h3>Datos de la titulación</h3>
                     <div id="click_07" class="titulo_acordeon_datos">Titulación <span class="caret"</span></div>
                         <div id="acordeon_07">
                            <div class="unit">
@@ -163,12 +163,12 @@
 	  </div>
 </div>
 <!-- end Cursos Relacionados -->
-<!-- Materias Relacionados --> 
+<!-- Materias Relacionados  
 <div id="click_02" class="titulo_acordeon">Unidades Curriculares Relacionadas <span class="caret"</span></div>
 <div id="acordeon_02">
 		<div class="row">
 	        <?php if (!empty($inscripcion['Materia'])):?>
-  	  	    <!-- Swiper -->
+  	  	    <!-- Swiper 
             <div class="swiper-container" style="height: 200px;">
                 <div class="swiper-wrapper" >
 	                <?php foreach ($inscripcion['Materia'] as $materia): ?>

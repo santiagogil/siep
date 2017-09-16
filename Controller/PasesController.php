@@ -12,10 +12,10 @@ class PasesController extends AppController {
         * Si el usuario tiene un rol de superadmin le damos acceso a todo.
         * Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */
-        if (($this->Auth->user('role') === 'superadmin') || ($this->Auth->user('role') === 'admin')) {
+        if ($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'usuario') {
-	        $this->Auth->allow('index', 'view');
+	    } elseif (($this->Auth->user('role') === 'usuario') || ($this->Auth->user('role') === 'admin')) {
+	        $this->Auth->allow('index', 'add', 'view');
 	    }
 			if ($this->ifActionIs(array('add', 'edit'))) {
 				$this->__lists();
@@ -31,11 +31,15 @@ class PasesController extends AppController {
 		$userRole = $this->Auth->user('role');
 		if ($userRole === 'admin') {
 		$this->paginate['Pase']['conditions'] = array('Pase.centro_id_origen' => $userCentroId);
+		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+			$this->loadModel('Centro');
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+			$this->paginate['Pase']['conditions'] = array('Pase.centro_id_origen' => $nivelCentroId);
 		} else if ($userRole === 'usuario') {
 			$this->loadModel('Centro');
 			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-			$this->paginate['Pase']['conditions'] = array('Pase.centro_id' => $nivelCentroId);
+			$this->paginate['Pase']['conditions'] = array('Pase.centro_id_origen' => $nivelCentroId);
 		}
 		$this->redirectToNamed();
 		$conditions = array();
