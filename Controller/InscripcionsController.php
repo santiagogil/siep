@@ -11,10 +11,10 @@ class InscripcionsController extends AppController {
 		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */
-        if (($this->Auth->user('role') === 'superadmin') || ($this->Auth->user('role') === 'admin')) {
+        if ($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'usuario') {
-	        $this->Auth->allow('index', 'view');
+	    } elseif (($this->Auth->user('role') === 'usuario') || ($this->Auth->user('role') === 'admin')) {
+	        $this->Auth->allow('index', 'add', 'view', 'edit');
 	    }
 	    /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
@@ -43,7 +43,7 @@ class InscripcionsController extends AppController {
 			$this->loadModel('Centro');
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
 			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId);
-		}else if ($userRole === 'usuario') {
+		} else if ($userRole === 'usuario') {
 			$this->loadModel('Centro');
 			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
