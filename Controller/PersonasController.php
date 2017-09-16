@@ -9,7 +9,7 @@ class PersonasController extends AppController {
 	function beforeFilter(){
         parent::beforeFilter();
 	    /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
-        *  Si el usuario tiene un rol de superadmin le damos acceso a todo. 
+        *  Si el usuario tiene un rol de superadmin le damos acceso a todo.
         *  Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */
         if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
@@ -25,13 +25,13 @@ class PersonasController extends AppController {
 		$this->paginate['Persona']['limit'] = 4;
 		$this->paginate['Persona']['order'] = array('Persona.id' => 'ASC');
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
-		*  Sí es "admin" muestra alumnos y familiares del centro. 
+		*  Sí es "admin" muestra alumnos y familiares del centro.
 		*/
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
 		if ($userRole === 'admin') {
 		$personaAlumnoId = $this->Persona->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
-		$AlumnoFamiliarId = $this->Persona->Alumno->AlumnosFamiliar->find('list', array('fields'=>array('familiar_id'), 'conditions'=>array('id'=>$personaAlumnoId)));	
+		$AlumnoFamiliarId = $this->Persona->Alumno->AlumnosFamiliar->find('list', array('fields'=>array('familiar_id'), 'conditions'=>array('id'=>$personaAlumnoId)));
 		$personaFamiliarId = $this->Persona->Familiar->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$AlumnoFamiliarId)));
 		$this->paginate['Persona']['conditions'] = array('Persona.id' => $personaAlumnoId, 'Persona.id' => $personaFamiliarId);
 		}
@@ -242,24 +242,36 @@ class PersonasController extends AppController {
 
 
 public function autocompletePersonas() {
-		$term = null;
-		if(!empty($this->request->query('term'))) {
-			$term = $this->request->query('term');
-			$terminos = explode(' ', trim($term));
-			$terminos = array_diff($terminos,array(''));
-			$conditions = array();
-			foreach($terminos as $termino) {
+		$conditions = array();
+		$term = $this->request->query('term');
+
+		if(!empty($term)) {
+
+			// Si se busca un numero de documento.. se raliza el siguiente filtro
+			if(is_numeric($term)) {
 				$conditions[] = array(
 						'OR' => array(
-							array('nombres LIKE' => '%' . $termino . '%'),
-							array('apellidos LIKE' => '%' . $termino . '%')
+							array('documento_nro LIKE' => $term . '%')
 						)
 				);
+			} else {
+				// Se esta buscando por nombre y/o apellidos
+				$terminos = explode(' ', trim($term));
+				$terminos = array_diff($terminos,array(''));
+
+				foreach($terminos as $termino) {
+					$conditions[] = array(
+							'OR' => array(
+								array('nombres LIKE' => '%' . $termino . '%'),
+								array('apellidos LIKE' => '%' . $termino . '%')
+							)
+					);
+				}
 			}
 			$personas = $this->Persona->find('all', array(
 					'recursive'	=> -1,
 					'conditions' => $conditions,
-					'fields' 	=> array('id', 'nombres','apellidos'))
+					'fields' 	=> array('id', 'nombres','apellidos','documento_nro'))
 			);
 		}
 		echo json_encode($personas);

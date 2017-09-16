@@ -10,8 +10,65 @@
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
+
+
+
+
+      <!-- Autocomplete para nombre de Personas -->
+      <div>
+        <label for="PersonaNombreCompleto">Nombres y Apellidos*: </label>
+        <br>
+        <input id="PersonaNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
+        <input id="PersonaId" name="data[Persona][persona_id]" type="text" style="display:none;">
+        <div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+            La persona no fue localizada.
+          <?php echo $this->Html->link("Crear persona",array('controller'=>'personas','action'=>'add'));?>
+        </div>
+      </div>
+      <script>
+          $( function() {
+              $( "#PersonaNombreCompleto" ).autocomplete({
+                  source: "<?php echo $this->Html->url(array('controller'=>'Personas','action'=>'autocompletePersonas'));?>",
+                  minLength: 2,
+                  // Evento: se ejecuta al seleccionar el resultado
+                  select: function( event, ui ) {
+                    // Elimina ID de persona previo a establecer la seleccion
+                    $("#PersonaId").val("");
+
+                    if(ui.item != undefined) {
+                      var nombre_completo = ui.item.Persona.nombres +" "+ui.item.Persona.apellidos;
+                      $("#PersonaNombreCompleto").val(nombre_completo);
+                      $("#PersonaId").val(ui.item.Persona.id);
+                      return false;
+                    }
+                  },
+                  response: function(event, ui) {
+                      // Elimina ID de persona al obtener respuesta
+                      $("#PersonaId").val("");
+                      if (ui.content.length === 0) {
+                          $("#AutocompleteError").show();
+                          $("#PersonaId").val("");
+                      } else {
+                          $("#AutocompleteError").hide();
+                      }
+                  }
+              }).autocomplete("instance")._renderItem = function( ul, item ) {
+                // Renderiza el resultado de la respuesta
+                  var nombre_completo = item.Persona.nombres +" "+item.Persona.apellidos + " - "+item.Persona.documento_nro;
+                  return $( "<li>" )
+                      .append( "<div>" +nombre_completo+ "</div>" )
+                      .appendTo( ul );
+              };
+          });
+      </script>
+      <!-- End Autocomplete -->
+
+
+
+
       <?php
-          echo $this->Form->input('alumno_id', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'options'=>$personaNombre, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
           echo $this->Form->input('Curso', array('multiple' => true, 'label'=>'Sección*', 'empty' => 'Ingrese una sección...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
           /*
           if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior') || ($current_user['puesto'] == 'Supervisión Secundaria')) {

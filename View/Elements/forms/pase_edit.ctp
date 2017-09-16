@@ -8,9 +8,10 @@
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
-      <?php
-          echo $this->Form->input('alumno_id', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'options'=>$PersonaAlumnoId, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-      ?><br>
+      <b><?php echo __('Alumno: '); ?></b>
+      <span class="input-group-addon">
+        <p>  <?php echo ($personaNombres[$alumnosId[$pase['Pase']['alumno_id']]]); ?></p>
+      </span>  
       <?php
           echo $this->Form->input('centro_id_destino', array('label'=>'Institución Destino*', 'empty' => 'Ingrese una institución...', 'options'=>$listacentros, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>

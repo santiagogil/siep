@@ -17,6 +17,9 @@ class PasesController extends AppController {
 	    } elseif ($this->Auth->user('role') === 'usuario') {
 	        $this->Auth->allow('index', 'view');
 	    }
+			if ($this->ifActionIs(array('add', 'edit'))) {
+				$this->__lists();
+			}
 	    /* FIN */
     }
 
@@ -108,8 +111,13 @@ class PasesController extends AppController {
 			// Genera el centro id y se deja en los datos que se intentarán guardar.
 			$userCentroId = $this->getUserCentroId();
 			$this->request->data['Pase']['centro_id_origen'] = $userCentroId;
- 		    //Antes de guardar genera el estado de la inscripción
-			if ($this->request->data['Inscripcion']['tutor_nota'] == true) {
+			$persona_id = $this->request->data['Pase']['alumno_id'];
+			$alumno_id = $this->Alumno->findByPersonaId($persona_id,'id');
+			$alumno= $alumno_id['Alumno']['id'];
+			$this->request->data['Pase']['alumno_id'] = $alumno;
+
+			  //Antes de guardar genera el estado del pase
+			if ($this->request->data['Pase']['nota_tutor'] == true) {
 			    	$estado = "COMPLETA";
 			    }else{
 			        $estado = "PENDIENTE";
@@ -127,11 +135,7 @@ class PasesController extends AppController {
 				$this->Session->setFlash('El pase no fue grabado. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		$this->loadModel('Persona');
-		$personasNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-		$this->loadModel('Centro');
-		$centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla')));
-		$this->set(compact('pases', 'ciclos', 'personasNombre', 'centrosNombre'));
+
 	}
 
 	public function edit($id = null) {
@@ -145,6 +149,7 @@ class PasesController extends AppController {
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
 		    }
+	
 			//Antes de guardar genera el estado de la inscripción
 			if ($this->request->data['Pase']['nota_tutor'] == true) {
 			   $estado = "COMPLETA";
@@ -162,8 +167,17 @@ class PasesController extends AppController {
 			}
 		}
 		if (empty($this->data)) {
-			$this->data = $this->Inscripcion->read(null, $id);
+			$this->data = $this->Pase->read(null, $id);
+			$this->set('pase', $this->Pase->read(null, $id));
 		}
+		$this->loadModel('Persona');
+		$personasid = $this->Persona->find('list', array('fields' => array('id')));
+    $personaNombres = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personasid)));
+    $this->set(compact('pases', 'personaNombres'));
+
+		$this->loadModel('Alumno');
+		$alumnosId = $this->Alumno->find('list', array('fields' => array('persona_id')));
+		$this->set('alumnosId', $alumnosId);
 	}
 
     public function delete($id = null) {
@@ -177,6 +191,31 @@ class PasesController extends AppController {
 		}
 		$this->Session->setFlash('El pase no fué borrado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
+	}
+
+	//Métodos privados
+	private function __lists(){
+		$this->loadModel('Persona');
+		$this->loadModel('User');
+		$this->loadModel('Alumno');
+		$this->loadModel('Centro');
+		$userRol = $this->Auth->user('role');
+		if($userRol == 'admin'){
+			$userCentroId = $this->getUserCentroId();
+			$centro= $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+			$listacentros= $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('nivel_servicio'=>$centro)));
+			$alumnos = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
+			$PersonaAlumnoId = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'),'conditions'=>array('id'=>$alumnos)));
+		}
+		else{  //SI es superUsuario
+
+			$listacentros= $this->Centro->find('list', array('fields'=>array('sigla'),));
+			$alumnos = $this->Alumno->find('list', array('fields'=>array('persona_id')));
+			$PersonaAlumnoId = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'),'conditions'=>array('id'=>$alumnos)));
+
+		}
+
+		$this->set(compact('listacentros', 'personasNombre', 'centrosNombre','PersonaAlumnoId'));
 	}
 }
 ?>
