@@ -13,3 +13,4 @@
 !.htaccess
 !app/.htaccess
 !app/webroot/.htaccess
+.idea/*
