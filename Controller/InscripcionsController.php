@@ -36,16 +36,16 @@ class InscripcionsController extends AppController {
 		//$cicloIdActual = $this->getLastCicloId();
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
+        $this->loadModel('Centro');
+        $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+
 		if ($this->Auth->user('role') === 'admin') {
 		//$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
 		$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId);	
 		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
-			$this->loadModel('Centro');
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
 			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId);
 		} else if ($userRole === 'usuario') {
-			$this->loadModel('Centro');
-			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId);
 		}
@@ -94,11 +94,15 @@ class InscripcionsController extends AppController {
 			$this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->set('inscripcion', $this->Inscripcion->read(null, $id));
-  	$personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
-		$this->loadModel('Persona');
-		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-    $this->set(compact('inscripcions', 'personaId', 'personaNombre'));
+        $this->set('inscripcion', $this->Inscripcion->read(null, $id));
+/*
+        //Obtenemos algunos datos de esa personaId
+        $this->loadModel('Persona');
+        $this->Persona->recursive = 0;
+        $persona = $this->Persona->findById($personaId,'id, documento_nro');
+        $personaDni = $persona['Persona']['documento_nro'];
+*/
+        $this->set(compact('inscripcions'));
 	}
 
 	public function add()
@@ -119,10 +123,25 @@ class InscripcionsController extends AppController {
 
             //Se genera el nombre del agente
             $this->request->data['Inscripcion']['empleado_id'] = $this->Auth->user('empleado_id');
+            //La fecha de alta se toma del servidor php al momento de ejecutar el controlador
+            $this->request->data['Inscripcion']['fecha_alta'] = date('Y-m-d');
 
-            //Genera el centro id del usuario y se deja en los datos que se intentaran guardar
             $userCentroId = $this->getUserCentroId();
-            $this->request->data['Inscripcion']['centro_id'] = $userCentroId;
+
+            //Se obtiene el rol del usuario
+            $userRole = $this->Auth->user('role');
+            switch($userRole) {
+                case 'superadmin':
+                case 'usuario':
+                    // Usa el centro especificado en el formulario
+                    $userCentroId = $this->request->data['Inscripcion']['centro_id'];
+                break;
+                case 'admin':
+                    // Usa el centro definido para el usuario
+                    $userCentroId = $this->getUserCentroId();
+                    $this->request->data['Inscripcion']['centro_id'] = $userCentroId ;
+                break;
+            }
 
             //Genera el ciclo id y se deja en los datos que se intentaran guardar
             $cicloId = $this->getLastCicloId();
@@ -211,7 +230,8 @@ class InscripcionsController extends AppController {
                  *  FIN VERIFICACION DE ALUMNO
                  */
 
-                if ($this->Inscripcion->save($this->data)) {
+                if ($this->Inscripcion->save($this->data))
+                {
                     $this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
                     /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
                       * Al registrarse una Inscripción, actualiza valores de matrícula y vacantes

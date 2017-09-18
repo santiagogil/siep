@@ -184,27 +184,41 @@ class AlumnosController extends AppController {
 	*  Sólo muestra las personas con perfíl de alumno.
 	*/
 	public function autocompleteNombrePersona() {
-		$term = null;
-		if(!empty($this->request->query('term'))) {
-			$term = $this->request->query('term');
-			$terminos = explode(' ', trim($term));
-			$terminos = array_diff($terminos,array(''));
-			$conditions = array();
-			foreach($terminos as $termino) {
-				$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
+
+		$conditions = array();
+		$term = $this->request->query('term');
+
+		if(!empty($term))
+		{
+			// Si se busca un numero de documento.. se raliza el siguiente filtro
+			if(is_numeric($term)) {
+				$conditions[] = array(
+					'OR' => array(
+						array('documento_nro LIKE' => $term . '%')
+					)
+				);
+			} else {
+				// Se esta buscando por nombre y/o apellidos
+				$terminos = explode(' ', trim($term));
+				$terminos = array_diff($terminos,array(''));
+
+				foreach($terminos as $termino) {
+					$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
+				}
 			}
-			// Obtiene el id de persona de los alumnos del centro correspondiente.
+
 			$this->loadModel('Persona');
-        	$personaId = $this->Persona->find('list', array('fields'=>array('id'), 'conditions'=>array('alumno'=>1)));
+			$personaId = $this->Persona->find('list', array('fields'=>array('id'), 'conditions'=>array('alumno'=>1)));
 			$personas = $this->Alumno->Persona->find('all', array(
-				'recursive'	=> -1,
-				// Condiciona la búsqueda también por id de persona con perfil de alumno.
-				'conditions' => array($conditions, 'id' => $personaId),
-				'fields' 	=> array('id', 'nombre_completo_persona'))
+					'recursive'	=> -1,
+					// Condiciona la búsqueda también por id de persona con perfil de alumno.
+					'conditions' => array($conditions, 'id' => $personaId),
+					'fields' 	=> array('id', 'nombre_completo_persona','documento_nro'))
 			);
+
 			echo json_encode($personas);
 		}
-		// No renderiza el layout
+
 		$this->autoRender = false;
 	}
 
