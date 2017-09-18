@@ -71,117 +71,115 @@ class Inscripcion extends AppModel {
 	);
 
 	//Validaciones
-                var $validate = array(
-                   'created' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar una fecha y hora.'
-                           )
-                   ),
+	var $validate = array(
+	   'created' => array(
+		   'allowEmpty' => true
+	   ),
 
-				   'alumno_id' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un alumno.'
-						 ),
-						 'numeric' => array(
-	 						'rule' => 'naturalNumber',
-	 						'message' => 'Indicar un alumno válido.'
-	 					)
-                   ),
+	   'alumno_id' => array(
+			   'required' => array(
+			   'rule' => 'notBlank',
+			   'required' => 'create',
+			   'message' => 'Indicar un alumno.'
+			 ),
+			 'numeric' => array(
+				'rule' => 'naturalNumber',
+				'message' => 'Indicar un alumno válido.'
+			)
+	   ),
 
-				   'legajo_nro' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un nº de legajo.'
-                           ),
-						   'isUnique' => array(
-	                       'rule' => 'isUnique',
-	                       'message' => 'Este nº de legajo de alumno esta siendo usado.'
-	                     )
-                   ),
-                   'tipo_alta' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar un tipo de alta.'
-						 ),
-						 'alphaBet' => array(
-		 				'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
-		 				)
-                   ),
+	   'legajo_nro' => array(
+			   'required' => array(
+			   'rule' => 'notBlank',
+			   'required' => 'create',
+			   'message' => 'Indicar un nº de legajo.'
+			   ),
+			   'isUnique' => array(
+			   'rule' => 'isUnique',
+			   'message' => 'Este nº de legajo de alumno esta siendo usado.'
+			 )
+	   ),
+	   'tipo_alta' => array(
+		   'allowEmpty' => true
+		   /*
+			   'required' => array(
+			   'rule' => 'notBlank',
+			   'required' => 'create',
+			   'message' => 'Indicar un tipo de alta.'
+			 ),
+			 'alphaBet' => array(
+			'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+			)*/
+	   ),
 
-                   'fecha_alta' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-                           'required' => 'create',
-						   'message' => 'Indicar una fecha de alta.'
-                           ),
-						   'date' => array(
-                           'rule' => 'date',
-                           'message' => 'Indicar fecha valida.'
-                           )
-                   ),
+		'fecha_alta' => array(
+			'required' => array(
+				'rule' => 'notBlank',
+				'required' => 'create',
+				'message' => 'Indicar una fecha de alta.'
+			),
+			'date' => array(
+				'rule' => 'date',
+				'message' => 'Indicar fecha valida.'
+			)
+		),
 
-				   'cursa' => array(
-                           'valid' => array(
-								'rule' => array('inList', array('Cursa algun espacio curricular', 'Sólo se inscribe a rendir final', 'Cursa espacio curricular y rinde final')),
-								'allowEmpty' => false,
-								'message' => 'Indicar una opción'
-						),
-						 'alphaBet' => array(
-					 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
-					 )
-                   ),
-				   'fines' => array(
-                           'valid' => array(
-								'rule' => array('inList', array('No', 'Sí línea deudores de materias.', 'Sí línea trayectos educativos.')),
-								'allowEmpty' => false,
-								'message' => 'Indicar una opción'
-						),
-						'alphaBet' => array(
-					 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{2,}$/i',
-					 )
-                   ),
-                   'fecha_baja' => array(
-                           'date' => array(
-                           'rule' => 'date',
-                           'allowEmpty' => true,
-                           'message' => 'Indicar una fecha válida.'
-                           )
-                   ),
-				   'tipo_baja' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength', 3),
-                           'allowEmpty' => true,
-                           'message' => 'Indicar una opción.'
-												 ),
-												 'alphaBet' => array(
-											 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
-											 )
-                   ),
-				   'motivo_baja' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength', 3),
-                           'allowEmpty' => true,
-                           'message' => 'Indicar una opción.'
-												 ),
-												 'alphaBet' => array(
- 											'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
- 											)
-                   ),
-				   'fecha_egreso' => array(
-                           'date' => array(
-                           'rule' => 'date',
-                           'allowEmpty' => true,
-                           'message' => 'Indicar una fecha válida.'
-                           )
-                   ),
-				   'acta_nro' => array(
-						 'minLength' => array(
+	   'cursa' => array(
+			   'valid' => array(
+					'rule' => array('inList', array('Cursa algun espacio curricular', 'Sólo se inscribe a rendir final', 'Cursa espacio curricular y rinde final')),
+					'allowEmpty' => false,
+					'message' => 'Indicar una opción'
+			),
+			 'alphaBet' => array(
+		 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
+		 )
+	   ),
+	   'fines' => array(
+			   'valid' => array(
+					'rule' => array('inList', array('No', 'Sí línea deudores de materias.', 'Sí línea trayectos educativos.')),
+					'allowEmpty' => false,
+					'message' => 'Indicar una opción'
+			),
+			'alphaBet' => array(
+		 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{2,}$/i',
+		 )
+	   ),
+	   'fecha_baja' => array(
+			   'date' => array(
+			   'rule' => 'date',
+			   'allowEmpty' => true,
+			   'message' => 'Indicar una fecha válida.'
+			   )
+	   ),
+	   'tipo_baja' => array(
+			   'minLength' => array(
+			   'rule' => array('minLength', 3),
+			   'allowEmpty' => true,
+			   'message' => 'Indicar una opción.'
+									 ),
+									 'alphaBet' => array(
+								 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
+								 )
+	   ),
+	   'motivo_baja' => array(
+			   'minLength' => array(
+			   'rule' => array('minLength', 3),
+			   'allowEmpty' => true,
+			   'message' => 'Indicar una opción.'
+									 ),
+									 'alphaBet' => array(
+								'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{3,}$/i',
+								)
+	   ),
+	   'fecha_egreso' => array(
+			   'date' => array(
+			   'rule' => 'date',
+			   'allowEmpty' => true,
+			   'message' => 'Indicar una fecha válida.'
+			   )
+	   ),
+	   'acta_nro' => array(
+			 'minLength' => array(
 				'rule' => array('minLength',4),
 				'allowEmpty' => true,
 				'message' => 'Indicar código postal.'
