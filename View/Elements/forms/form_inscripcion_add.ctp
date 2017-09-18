@@ -1,4 +1,5 @@
 <?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker')); ?>
+
 <div class="row">
   <div class="col-xs-6 col-sm-3">
       <?php echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar')); ?>
@@ -26,7 +27,7 @@
       <script>
           $( function() {
               $( "#PersonaNombreCompleto" ).autocomplete({
-                  source: "<?php echo $this->Html->url(array('controller'=>'Personas','action'=>'autocompletePersonas'));?>",
+                  source: "<?php echo $this->Html->url(array('controller'=>'Alumnos','action'=>'autocompleteNombrePersona'));?>",
                   minLength: 2,
                   // Evento: se ejecuta al seleccionar el resultado
                   select: function( event, ui ) {
@@ -34,7 +35,7 @@
                     $("#PersonaId").val("");
 
                     if(ui.item != undefined) {
-                      var nombre_completo = ui.item.Persona.nombres +" "+ui.item.Persona.apellidos;
+                      var nombre_completo = ui.item.Persona.nombre_completo_persona;
                       $("#PersonaNombreCompleto").val(nombre_completo);
                       $("#PersonaId").val(ui.item.Persona.id);
                       return false;
@@ -52,7 +53,7 @@
                   }
               }).autocomplete("instance")._renderItem = function( ul, item ) {
                 // Renderiza el resultado de la respuesta
-                  var nombre_completo = item.Persona.nombres +" "+item.Persona.apellidos + " - "+item.Persona.documento_nro;
+                  var nombre_completo = item.Persona.nombre_completo_persona + " - "+item.Persona.documento_nro;
                   return $( "<li>" )
                       .append( "<div>" +nombre_completo+ "</div>" )
                       .appendTo( ul );
@@ -62,14 +63,13 @@
       <!-- End Autocomplete -->
 
 
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/es.js"></script>
-
       <?php
        echo $this->Form->input('Curso', array('multiple' => true, 'label'=>'Sección*', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
 
+      <?php echo $this->Html->css(array('/js/select2/select2.min')); ?>
+      <?php echo $this->Html->script(array('/js/select2/select2.min')); ?>
+      <?php echo $this->Html->script(array('/js/select2/es')); ?>
       <script type="text/javascript">
           $('select').select2({
             language: "es"
