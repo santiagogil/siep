@@ -1,10 +1,10 @@
 <div class="col-md-6">
 	<div class="unit">
         <div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
-            <?php if($inscripcion['Inscripcion']['estado'] == "COMPLETA"): ?>
+            <?php if($inscripcion['Inscripcion']['estado_documentacion'] == "COMPLETA"): ?>
             <span class="checked"></span><?php echo $this->Html->image('../img/inscription_image.png', array('class' => 'img-thumbnail img-responsive')); ?>
             <?php endif; ?>
-            <?php if($inscripcion['Inscripcion']['estado'] == "PENDIENTE"): ?>
+            <?php if($inscripcion['Inscripcion']['estado_documentacion'] == "PENDIENTE"): ?>
             <span class="error"></span><?php echo $this->Html->image('../img/inscription_image.png', array('class' => 'img-thumbnail img-responsive')); ?>
                 <?php endif; ?>
         </div>

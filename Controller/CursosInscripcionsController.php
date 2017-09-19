@@ -37,7 +37,7 @@ class CursosInscripcionsController extends AppController {
 		$estado2 = array("COMPLETA", "PENDIENTE");
 		if ($this->Auth->user('role') === 'admin') {
 		//$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
-		$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);	
+		$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId);	
 		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
 			$this->loadModel('Centro');
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
@@ -75,12 +75,12 @@ class CursosInscripcionsController extends AppController {
 		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
 		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		if ($userRole == 'superadmin') {
-			$centros = $this->CursosInscripcion->Centro->find('list', array('fields'=>array('id', 'sigla')));
+			$centros = $this->Centro->find('list', array('fields'=>array('id', 'sigla')));
 		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
 			$centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
 		} else if ($userRole == 'admin') {
-			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla'), 'conditions'=>array('id'=>$nivelCentroId)));	
+			$centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));	
 		}
 		// Por sección...
         $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
@@ -112,7 +112,7 @@ class CursosInscripcionsController extends AppController {
            	$this->loadModel('Centro');
 			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-	        			$inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro'), 'conditions' => array('centro_id' => $nivelCentroId)));  
+			$inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro'), 'conditions' => array('centro_id' => $nivelCentroId)));  
         } else {
         	//Sí es "superadmin"
  	        $inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro')));
