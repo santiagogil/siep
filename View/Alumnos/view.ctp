@@ -88,7 +88,7 @@
 					<?php echo '<b>Tipo de baja:</b> '.$inscripcion['tipo_baja'];?><br>
 		            <?php echo '<b>Fecha de egreso:</b> '.$this->Html->formatTime($inscripcion['fecha_egreso']);?><br>
 		            <!--<?php echo '<b>Nota:</b> '.$inscripcion['nota'];?><br>-->
-		            <b>Estado:</b> <?php if($inscripcion['estado'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado']; ?></span><?php } ?></br>
+		            <b>Documentación presentada:</b> <?php if($inscripcion['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } ?></br>
 		            <hr>
 		            <div class="text-right">
 			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>

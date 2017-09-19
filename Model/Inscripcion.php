@@ -28,13 +28,6 @@ class Inscripcion extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Empleado' => array(
-			'className' => 'Empleado',
-			'foreignKey' => 'empleado_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
 	);
 
 	var $hasAndBelongsToMany = array(
@@ -72,10 +65,20 @@ class Inscripcion extends AppModel {
 
 	//Validaciones
 	var $validate = array(
-	   'created' => array(
-		   'allowEmpty' => true
-	   ),
-
+	    'created' => array(
+            'required' => array(
+	       	'rule' => 'notBlank',
+            'required' => 'create',
+		    'message' => 'Indicar una fecha y hora.'
+            )
+        ),
+	   'tipo_inscripcion' => array(
+            'valid' => array(
+				'rule' => array('inList', array('Común','Hermano de alumno regular','Pase','Hijo de docente de la institución')),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+			)
+        ),
 	   'alumno_id' => array(
 			   'required' => array(
 			   'rule' => 'notBlank',
@@ -87,7 +90,6 @@ class Inscripcion extends AppModel {
 				'message' => 'Indicar un alumno válido.'
 			)
 	   ),
-
 	   'legajo_nro' => array(
 			   'required' => array(
 			   'rule' => 'notBlank',
@@ -99,19 +101,17 @@ class Inscripcion extends AppModel {
 			   'message' => 'Este nº de legajo de alumno esta siendo usado.'
 			 )
 	   ),
-	   'tipo_alta' => array(
-		   'allowEmpty' => true
-		   /*
-			   'required' => array(
-			   'rule' => 'notBlank',
-			   'required' => 'create',
-			   'message' => 'Indicar un tipo de alta.'
-			 ),
-			 'alphaBet' => array(
-			'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{5,}$/i',
-			)*/
-	   ),
-
+        'tipo_alta' => array(
+            'valid' => array(
+				'rule' => array('inList', array('Regular', 'Equivalencia')),
+				'allowEmpty' => true,
+				'message' => 'Indicar una opción'
+			),
+			'alphaBet' => array(
+				'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{7,}$/i',
+			)
+        ),
+		/*
 		'fecha_alta' => array(
 			'required' => array(
 				'rule' => 'notBlank',
@@ -123,11 +123,10 @@ class Inscripcion extends AppModel {
 				'message' => 'Indicar fecha valida.'
 			)
 		),
-
-	   'cursa' => array(
+		'cursa' => array(
 			   'valid' => array(
 					'rule' => array('inList', array('Cursa algun espacio curricular', 'Sólo se inscribe a rendir final', 'Cursa espacio curricular y rinde final')),
-					'allowEmpty' => false,
+					'allowEmpty' => true,
 					'message' => 'Indicar una opción'
 			),
 			 'alphaBet' => array(
@@ -137,13 +136,14 @@ class Inscripcion extends AppModel {
 	   'fines' => array(
 			   'valid' => array(
 					'rule' => array('inList', array('No', 'Sí línea deudores de materias.', 'Sí línea trayectos educativos.')),
-					'allowEmpty' => false,
+					'allowEmpty' => true,
 					'message' => 'Indicar una opción'
 			),
 			'alphaBet' => array(
 		 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{2,}$/i',
 		 )
 	   ),
+	   */
 	   'fecha_baja' => array(
 			   'date' => array(
 			   'rule' => 'date',
@@ -178,6 +178,7 @@ class Inscripcion extends AppModel {
 			   'message' => 'Indicar una fecha válida.'
 			   )
 	   ),
+	   /*
 	   'acta_nro' => array(
 			 'minLength' => array(
 				'rule' => array('minLength',4),
@@ -232,6 +233,7 @@ class Inscripcion extends AppModel {
                            'message' => 'Indicar una fecha válida.'
                            )
                    ),
+        */           
                    'fotocopia_dni' => array(
                            'boolean' => array(
                            'rule' => array('boolean'),
@@ -252,7 +254,21 @@ class Inscripcion extends AppModel {
                            'allowEmpty' => true,
 					       'message' => 'Indicar una opción'
 				           )
-                   )
+                   ),
+                   'estado_inscripcion' => array(
+						'valid' => array(
+						'rule' => array('inList', array('CONFIRMADA','NO CONFIRMADA','BAJA','EGRESO')),
+						'message' => 'Indicar una opción',
+						'allowEmpty' => false
+							)
+					),
+                   'estado_documentacion' => array(
+						'valid' => array(
+						'rule' => array('inList', array('PENDIENTE','COMPLETA')),
+						'message' => 'Indicar una opción',
+					  	'allowEmpty' => false
+							)
+					),
          );
 }
 ?>

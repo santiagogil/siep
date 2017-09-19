@@ -89,45 +89,36 @@ class InscripcionsController extends AppController {
 		$this->set(compact('inscripcions', 'personaId', 'personaNombre', 'centros', 'ciclos'));
 	}
 
-	public function view($id = null) {
-		if (!$id) {
-			$this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
-			$this->redirect(array('action' => 'index'));
-		}
+	   public function view($id = null) {
+        if (!$id) {
+            $this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
+            $this->redirect(array('action' => 'index'));
+        }
         $this->set('inscripcion', $this->Inscripcion->read(null, $id));
-/*
-        //Obtenemos algunos datos de esa personaId
+        $personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
         $this->loadModel('Persona');
-        $this->Persona->recursive = 0;
-        $persona = $this->Persona->findById($personaId,'id, documento_nro');
-        $personaDni = $persona['Persona']['documento_nro'];
-*/
-        $this->set(compact('inscripcions'));
-	}
+        $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
+        $this->set(compact('inscripcions', 'personaId', 'personaNombre'));
+    }
 
-	public function add()
-    {
+	public function add() {
         /* BOTÓN CANCELAR (INICIO).
         *abort if cancel button was pressed.
         */
-        if(isset($this->params['data']['cancel'])){
+        if (isset($this->params['data']['cancel'])) {
             $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect( array( 'action' => 'index' ));
 		}
 	    /* FIN */
-
         //Al realizar SUBMIT
         if (!empty($this->data)) {
             //Iniciamos proceso de inscripcion
             $this->Inscripcion->create();
-
-            //Se genera el nombre del agente
-            $this->request->data['Inscripcion']['empleado_id'] = $this->Auth->user('empleado_id');
+            //Se genera el id del usuario
+            $this->request->data['Inscripcion']['usuario_id'] = $this->Auth->user('id');
             //La fecha de alta se toma del servidor php al momento de ejecutar el controlador
             $this->request->data['Inscripcion']['fecha_alta'] = date('Y-m-d');
-
             $userCentroId = $this->getUserCentroId();
-
             //Se obtiene el rol del usuario
             $userRole = $this->Auth->user('role');
             switch($userRole) {
@@ -142,15 +133,12 @@ class InscripcionsController extends AppController {
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId ;
                 break;
             }
-
             //Genera el ciclo id y se deja en los datos que se intentaran guardar
             $cicloId = $this->getLastCicloId();
             $this->request->data['Inscripcion']['ciclo_id'] = $cicloId;
-
             //Antes de guardar genera el número de legajo del Alumno.
             $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
             $ciclo = substr($ciclos['Ciclo']['nombre'], -2);
-
             /*
              *  VERIFICACION DE PERSONA
              */
@@ -167,10 +155,8 @@ class InscripcionsController extends AppController {
             $this->Persona->recursive = 0;
             $persona = $this->Persona->findById($personaId,'id, documento_nro');
             $personaDni = $persona['Persona']['documento_nro'];
-
             //Genera el nro de legajo y se deja en los datos que se intentaran guardar
             $codigoActual = $this->__getCodigo($ciclo, $personaDni);
-
             //Comprueba que ese legajo no exista directamente a la base de datos
             $personaInscripta = $this->Inscripcion->find('list', array(
                 'fields'=>array('legajo_nro'),
@@ -179,32 +165,26 @@ class InscripcionsController extends AppController {
             /*
              *  FIN VERIFICACION DE PERSONA
              */
-            if (count($personaInscripta))
-            {
+            if (count($personaInscripta)) {
                 $this->Session->setFlash('El alumno ya está inscripto en este ciclo.', 'default', array('class' => 'alert alert-danger'));
-            }else{
-
+            } else {
                 $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
-
                 //Antes de guardar genera el estado de la inscripción
-                if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true){
-                    $estado = "COMPLETA";
-                }else{
-                    $estado = "PENDIENTE";
+                if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true) {
+                    $estadoDocumentacion = "COMPLETA";
+                } else {
+                    $estadoDocumentacion = "PENDIENTE";
                 }
-
                 //Genera el estado y se deja en los datos que se intentaran guardar
-                $this->request->data['Inscripcion']['estado'] = $estado;
-
+                $this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
                 /*
                  *  VERIFICACION DE ALUMNO
                  */
                 //Antes de guardar hay que ver si la persona se encuentra inscripta como alumno
+                $this->loadModel('Alumno');
                 $this->Alumno->recursive = 0;
                 $alumno = $this->Alumno->findByPersonaId($personaId);
-
-                if (count($alumno) == 0)
-                {
+                if (count($alumno) == 0) {
                     // Si no existe el alumno, hay que crearlo
                     $this->Alumno->create();
                     $insert = array(
@@ -213,25 +193,17 @@ class InscripcionsController extends AppController {
                             'persona_id' => $personaId,
                             'centro_id' => $userCentroId
                         ));
-
                     $alumno = $this->Alumno->save($insert);
-
                     if (!$alumno['Alumno']['id']) {
                         print_r("Error al registrar a la persona como alumno");
                         die;
                     }
-                } else {
-                    //print_r("El alumno fue previamente guardado");
-                }
-
+                } 
                 $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
-
                 /*
                  *  FIN VERIFICACION DE ALUMNO
                  */
-
-                if ($this->Inscripcion->save($this->data))
-                {
+                if ($this->Inscripcion->save($this->data)) {
                     $this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
                     /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
                       * Al registrarse una Inscripción, actualiza valores de matrícula y vacantes
@@ -268,14 +240,18 @@ class InscripcionsController extends AppController {
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
 		    }
-			//Antes de guardar genera el estado de la inscripción
-			if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['certificado_laboral'] == true){
-			   $estado = "COMPLETA";
+			// Antes de guardar genera el id del alumno.
+            $personaId = $this->request->data['Persona']['persona_id'];
+            $alumno = $this->Alumno->findByPersonaId($personaId);
+            $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
+            //Antes de guardar genera el estado de la inscripción
+			if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true){
+			   $estadoDocumentacion = "COMPLETA";
 			}else{
-			   $estado = "PENDIENTE";
+			   $estadoDocumentacion = "PENDIENTE";
 			}
 			//Se genera el estado y se deja en los datos que se intentaran guardar
-			$this->request->data['Inscripcion']['estado'] = $estado;
+			$this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
 			if ($this->Inscripcion->save($this->data)) {
 				$this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Inscripcion->id;
@@ -308,8 +284,6 @@ class InscripcionsController extends AppController {
         $ciclos = $this->Inscripcion->Ciclo->find('list');
 		$cicloIdActual = $this->getLastCicloId();
 		$centros = $this->Inscripcion->Centro->find('list');
-		$this->loadModel('Empleado');
-		$empleados = $this->Inscripcion->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado'), 'conditions'=>array('id'== 'empleadoId')));
 		//Sí es "superadmin" o "usuario" ve combobox con todos los cursos. Sino ve los propios del centro.
 		$userRol = $this->Auth->user('role');
 		if (($userRol == 'superadmin') || ($userRol == 'usuario')) {
@@ -318,7 +292,7 @@ class InscripcionsController extends AppController {
 			$userCentroId = $this->getUserCentroId();
 			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId)));
 		}
-		$materias = $this->Inscripcion->Materia->find('list');
+		//$materias = $this->Inscripcion->Materia->find('list');
     	/* Sí es "superadmin" o "usuario" ve combobox con todos los alumnos.
     	*  Sino ve los propios del centro. (INICIO) */
 		$userCentroId = $this->getUserCentroId();
@@ -333,7 +307,8 @@ class InscripcionsController extends AppController {
 			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 			$personaId = $this->Inscripcion->find('list', array('fields'=>array('alumno_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
-			$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
+			$this->loadModel('Persona');
+            $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
 		} else {
 			//Sí es superadmin
 			$this->loadModel('Alumno');
