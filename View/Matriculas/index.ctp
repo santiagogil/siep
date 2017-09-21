@@ -1,9 +1,7 @@
 <!-- start main -->
 <?php echo $this->Html->script(array('/js/datatables/jquery.dataTables.min')); ?>
 <?php echo $this->Html->css(array('/js/datatables/jquery.dataTables.min')); ?>
-
-
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css"/>
+<?php echo $this->Html->css(array('/js/datatables/dataTables.bootstrap.min')); ?>
 
 <div class="TituloSec">Matriculas</div>
 <div id="ContenidoSec">
