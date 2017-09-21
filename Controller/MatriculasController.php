@@ -27,37 +27,76 @@ class MatriculasController extends AppController
 
     public function requestDatatable()
     {
+        $conditions = [];
+
+
+        $query = $this->request->data;
+
+        $columns = $query['columns'];
+        $order = $query['order'][0];
+
+        $orderColumn = $columns[$order['column']]['data'];
+        $orderColumnDir = $order['dir'];
+
+        $start = $query['start'];
+        if($start<=0) { $start = 1; }
+        $limite = $query['length'];
+        $search = $query['search'];
+
+        $this->paginate = array(
+            'contain' => array('Centro'),
+            'limit' => $limite,
+            'order' => array($orderColumn => $orderColumnDir )
+        );
+
+        foreach ($columns as $index => $item)
+        {
+            $columna = $item['data'];
+            $busqueda = $item['search']['value'];
+            if(!empty($busqueda))
+            {
+                switch($columna) {
+                    case 'Centro.sigla':
+                        $conditions[$columna.' LIKE'] = '%'.$busqueda.'%';
+                    break;
+                    default:
+                        $conditions[$columna] = $busqueda;
+                    break;
+                }
+            }
+        }
+
         $this->loadModel('Curso');
         $userCentroId = $this->getUserCentroId();
         $userRole = $this->Auth->user('role');
         // Modifique las rutas de ROLES al formato SWITCH que es mas llevadero que los IF
-				switch ($userRole) {
-					case 'admin':
-						$result = $this->Curso->find('all', array(
-							'contain' => array('Centro'),
-							'conditions'=>array('Curso.centro_id' => $userCentroId)
-						));
-					break;
-					case 'usuario':
-    				$userCentroId = $this->getUserCentroId();
-            $this->loadModel('Curso');
-            $nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
-            $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
-            if ($nivelCentroString === 'Común - Inicial - Primario') {
-                $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));     
-                $result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $nivelCentroId)));
-            } else  {
-                $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-                $result = $this->Curso->find('all', array('conditions'=>array('Curso.centro_id' => $nivelCentroId)));
-            }
+        switch ($userRole) {
+            case 'admin':
+                $conditions['Curso.centro_id'] = $userCentroId;
+                $result = $this->paginate('Curso',$conditions);
+            break;
+            case 'usuario':
+                $userCentroId = $this->getUserCentroId();
+                $this->loadModel('Curso');
+                $nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
+                $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
+                if ($nivelCentroString === 'Común - Inicial - Primario') {
+                    $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
+
+                    $conditions['Curso.centro_id'] = $nivelCentroId;
+                    $result = $this->paginate('Curso',$conditions);
+
+                } else  {
+                    $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+
+                    $conditions['Curso.centro_id'] = $nivelCentroId;
+                    $result = $this->paginate('Curso',$conditions);
+                }
           break;
-					case 'superadmin':
-						// Al definir contain solo relaciona el modelo solicitado en el array y no todas las dependencias definidas en el modelo
-						$result = $this->Curso->find('all', array(
-							'contain' => array('Centro')
-						));
-					break;
-				}
+            case 'superadmin':
+                $result = $this->paginate('Curso',$conditions);
+            break;
+        }
         $result = [
         	"data" => $result
         ];
