@@ -15,7 +15,7 @@ class PasesController extends AppController {
         if ($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif (($this->Auth->user('role') === 'usuario') || ($this->Auth->user('role') === 'admin')) {
-	        $this->Auth->allow('index', 'add', 'view');
+	        $this->Auth->allow('index', 'add', 'view', 'edit');
 	    }
 			if ($this->ifActionIs(array('add', 'edit'))) {
 				$this->__lists();
@@ -27,20 +27,29 @@ class PasesController extends AppController {
 		$this->Pase->recursive = -1;
 		$this->paginate['Pase']['limit'] = 4;
 		$this->paginate['Pase']['order'] = array('Pase.created' => 'DESC');
+		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
+		* Sí el usuario es "admin" muestra los pases emitidos y recibidos del establecimiento. 
+		* Sino sí es "usuario" externo muestra los pases del nivel.
+		*/
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
+		$conditionPagination = $this->Pase->find();
 		if ($userRole === 'admin') {
-		$this->paginate['Pase']['conditions'] = array('Pase.centro_id_origen' => $userCentroId);
+		$this->paginate['Pase']['conditions'] = array('or'=> array('Pase.centro_id_origen' => $userCentroId, 'Pase.centro_id_destino' => $userCentroId));
 		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
 			$this->loadModel('Centro');
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-			$this->paginate['Pase']['conditions'] = array('Pase.centro_id_origen' => $nivelCentroId);
+			$this->paginate['Pase']['conditions'] = array('or'=> array('Pase.centro_id_origen' => $userCentroId, 'Pase.centro_id_destino' => $userCentroId));
 		} else if ($userRole === 'usuario') {
 			$this->loadModel('Centro');
 			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-			$this->paginate['Pase']['conditions'] = array('Pase.centro_id_origen' => $nivelCentroId);
+			$this->paginate['Pase']['conditions'] = array('or'=> array('Pase.centro_id_origen' => $userCentroId, 'Pase.centro_id_destino' => $userCentroId));
 		}
+		/* FIN */
+    	/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
+		* Pagina según búsquedas simultáneas ya sea por CICLO y/o CENTRO y/o LEGAJO y/o ESTADO.
+		*/
 		$this->redirectToNamed();
 		$conditions = array();
 		if (!empty($this->params['named']['ciclo_id'])) {
@@ -49,24 +58,45 @@ class PasesController extends AppController {
 		if (!empty($this->params['named']['alumno_id'])) {
 			$conditions['Pase.alumno_id ='] = $this->params['named']['alumno_id'];
 		}
+		if (!empty($this->params['named']['centro_id_origen'])) {
+			$conditions['Pase.centro_id_origen ='] = $this->params['named']['centro_id_origen'];
+		}
 		if (!empty($this->params['named']['centro_id_destino'])) {
 			$conditions['Pase.centro_id_destino ='] = $this->params['named']['centro_id_destino'];
 		}
-		if(!empty($this->params['named']['tipo'])) {
-			$conditions['Pase.tipo ='] = $this->params['named']['tipo'];
+		if(!empty($this->params['named']['estado_documentación'])) {
+			$conditions['Pase.estado_documentación ='] = $this->params['named']['estado_documentacion'];
+		}
+		if(!empty($this->params['named']['estado_inscripcion'])) {
+			$conditions['Pase.estado_inscripcion ='] = $this->params['named']['estado_inscripcion'];
 		}
 		$pases = $this->paginate('Pase',$conditions);
-		$this->loadModel('Ciclo');
-		$ciclosNombre = $this->Ciclo->find('list', array('fields'=>array('nombre')));
+		/* FIN */
+		/* SETS DE DATOS PARA COMBOBOX (INICIO). */
+		/* Carga de Ciclos */
+		$ciclosNombre = $this->Pase->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
+		/* Carga de Centros
+		*  Sí es superadmin carga todos los centros.
+		*  Sino sí es un usario de Inicial/Primaria, carga los centros de ambos niveles.
+		*  Sino sí es un usuario del resto de los niveles, carga los centros del nivel correspondientes.     
+		*/
 		$this->loadModel('Centro');
-		$centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla')));
-		$this->loadModel('Persona');
-		$personasId = $this->Persona->find('list', array('fields' => array('id')));
-    	$personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personasId)));
-  		$this->set(compact('pases', 'ciclosNombre', 'personaNombre', 'centrosNombre'));
-		$this->loadModel('Alumno');
-		$alumnosId = $this->Alumno->find('list', array('fields' => array('persona_id')));
-		$this->set('alumnosId', $alumnosId);
+		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+		if ($userRole == 'superadmin') {
+			$centrosNombre = $this->Centro->find('list', array('fields'=>array('id', 'sigla')));
+		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
+			$centrosNombre = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
+		} else if ($userRole == 'admin') {
+			$centrosNombre = $this->Centro->find('list', array('fields'=>array('id', 'sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
+		}
+		 /* Carga de Alumnos */
+		$personaId = $this->Pase->Alumno->find('list', array('fields'=>array('persona_id')));
+        $this->loadModel('Persona');
+        $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
+		/* FIN */
+		$this->set(compact('pases', 'personaId', 'personaNombre', 'centrosNombre', 'ciclosNombre'));
 	}
 
 	public function view($id = null) {
@@ -75,27 +105,19 @@ class PasesController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('pase', $this->Pase->read(null, $id));
-
 		$this->loadModel('Persona');
 		$personasId = $this->Persona->find('list', array('fields' => array('id')));
-    $personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personasId)));
-    $this->set(compact('pases', 'personaNombre'));
-
+	    $personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personasId)));
+    	$this->set(compact('pases', 'personaNombre'));
 		$this->loadModel('Ciclo');
 		$ciclos = $this->Ciclo->find('list', array('fields' => array('nombre')));
 		$this->set('ciclos', $ciclos);
-
-
 		$this->loadModel('Centro');
 		$centros = $this->Centro->find('list', array('fields' => array('nombre')));
 		$this->set('centros', $centros);
-
 		$this->loadModel('Alumno');
 		$alumnosId = $this->Alumno->find('list', array('fields' => array('persona_id')));
 		$this->set('alumnosId', $alumnosId);
-
-
-
 	}
 
 	public function add() {
@@ -115,31 +137,60 @@ class PasesController extends AppController {
 			// Genera el centro id y se deja en los datos que se intentarán guardar.
 			$userCentroId = $this->getUserCentroId();
 			$this->request->data['Pase']['centro_id_origen'] = $userCentroId;
-			$persona_id = $this->request->data['Pase']['alumno_id'];
-			$alumno_id = $this->Alumno->findByPersonaId($persona_id,'id');
-			$alumno= $alumno_id['Alumno']['id'];
-			$this->request->data['Pase']['alumno_id'] = $alumno;
-
-			  //Antes de guardar genera el estado del pase
+			// Guarda el alumno_id 
+			$personaId = $this->request->data['Pase']['alumno_id'];
+			$alumnoIdArray = $this->Alumno->findByPersonaId($personaId,'id');
+			$alumnoIdString= $alumnoIdArray['Alumno']['id'];
+			$this->request->data['Pase']['alumno_id'] = $alumnoIdString;
+		  	// Antes de guardar genera el estado de la documentación
 			if ($this->request->data['Pase']['nota_tutor'] == true) {
-			    	$estado = "COMPLETA";
+			    	$estadoDocumentacion = "COMPLETA";
 			    }else{
-			        $estado = "PENDIENTE";
+			        $estadoDocumentacion = "PENDIENTE";
 			    }
-			// Genera el estado y se deja en los datos que se intentarán guardar.
-			$this->request->data['Pase']['estado'] = $estado;
+			// Deja el estado de la documentación en los datos que se intentarán guardar.
+			$this->request->data['Pase']['estado_documentacion'] = $estadoDocumentacion;
 			// Genera el usuario id y se deja en los datos que se intentarán guardar.
 			$userId = $this->Auth->user('id');
 			$this->request->data['Pase']['usuario_id'] = $userId;
+ 		    // Antes de guardar genera el estado del pase y lo deja en los datos que se intentarán guardar.
+			$estadoPase = 'NO CONFIRMADO';
+			$this->request->data['Pase']['estado_pase'] = $estadoPase;
  		    if ($this->Pase->save($this->data)) {
 				$this->Session->setFlash('El pase ha sido grabado.', 'default', array('class' => 'alert alert-success'));
+				/* ATUALIZA ESTADO DE INSCRIPCIÓN (INICIO).
+                *  Al registrarse un pase del alumno, modifica la última inscripción de ese alumno:
+                *  pone el estado de inscripción en 'BAJA' y modifica la matrícula del curso correspondiente. 
+                */
+                // Busca el id de la última inscripción del Alumno.
+                $lastInscripcionId = $this->getLastInscripcionId($alumnoIdString);
+                // Cambia a 'BAJA' el estado de esa inscripción.
+                $this->loadModel('Inscripcion');
+                $this->Inscripcion->id=$lastInscripcionId;
+                $this->Inscripcion->saveField("estado_inscripcion", 'BAJA');
+                // Modifica la matrícula de los cursos relacionados a esa inscripción.
+                // Identifica los cursos.
+                $cursosId = $this->Inscripcion->CursosInscripcion->find('list', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.inscripcion_id'=>$lastInscripcionId)));                
+                foreach ($cursosId as $curso) {
+                	// Para cada curso resta en 1 la matrícula y suma en 1 la vacante.
+                	$this->loadModel('Curso');
+                	$this->Curso->id=$curso;
+	                $matricula = $this->Curso->findById($curso,'id, matricula');
+		            $cursoMatricula = $matricula['Curso']['matricula'];
+	                $matriculaActual = $cursoMatricula - 1;
+	                $this->Curso->saveField("matricula", $matriculaActual);
+	                $vacantes = $this->Curso->findById($curso,'id, vacantes');
+		            $cursoVacantes = $vacantes['Curso']['vacantes'];
+	                $vacantesActual = $cursoVacantes + 1;
+	                $this->Curso->saveField("vacantes", $vacantesActual);
+                }
+                /* FIN */
 				$inserted_id = $this->Pase->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
 				$this->Session->setFlash('El pase no fue grabado. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-
 	}
 
 	public function edit($id = null) {
@@ -153,15 +204,32 @@ class PasesController extends AppController {
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
 		    }
-	
 			//Antes de guardar genera el estado de la inscripción
 			if ($this->request->data['Pase']['nota_tutor'] == true) {
-			   $estado = "COMPLETA";
+			   $estadoDocumentacion = "COMPLETA";
 			} else {
-			   $estado = "PENDIENTE";
+			   $estadoDocumentacion = "PENDIENTE";
 			}
 			//Se genera el estado y se deja en los datos que se intentaran guardar
-			$this->request->data['Pase']['estado'] = $estado;
+			$this->request->data['Pase']['estado_documentacion'] = $estadoDocumentacion;
+			// Sí se confirma el pase, se modifica el id del centro del alumno. 
+			$estadoPase = $this->request->data['Pase']['estado_pase'];
+			if ($estadoPase == 'CONFIRMADO') {
+				// Obtiene el id del pase.
+				$paseId = $this->request->data['Pase']['id'];
+				// Obtiene el id del alumno relacionado a ese pase.
+				$alumnoIdArray = $this->Pase->findById($paseId, 'alumno_id');
+				$alumnoIdString = $alumnoIdArray['Pase']['alumno_id'];
+				// Obtiene el id del centro destino del pase.
+				$centroIdDestinoArray = $this->Pase->findById($paseId ,'centro_id_destino');
+				$centroIdDestinoString = $centroIdDestinoArray['Pase']['centro_id_destino'];
+				// Carga el modelo Alumno. 
+				$this->loadModel('Alumno');
+				// Identifica el registro del alumno en el modelo.
+				$this->Alumno->id=$alumnoIdString;
+				// Modifica el id del centro del registro de ese alumno. 
+				$this->Alumno->saveField("centro_id", $centroIdDestinoString);
+			}
 			if ($this->Pase->save($this->data)) {
 				$this->Session->setFlash('El pase ha sido grabado.', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Pase->id;
@@ -172,16 +240,11 @@ class PasesController extends AppController {
 		}
 		if (empty($this->data)) {
 			$this->data = $this->Pase->read(null, $id);
-			$this->set('pase', $this->Pase->read(null, $id));
+			$this->set('pases', $this->Pase->read(null, $id));
 		}
 		$this->loadModel('Persona');
-		$personasid = $this->Persona->find('list', array('fields' => array('id')));
-    $personaNombres = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('id'=>$personasid)));
-    $this->set(compact('pases', 'personaNombres'));
-
-		$this->loadModel('Alumno');
-		$alumnosId = $this->Alumno->find('list', array('fields' => array('persona_id')));
-		$this->set('alumnosId', $alumnosId);
+    	$personaNombres = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
+    	$this->set(compact('pase', 'personaNombres'));
 	}
 
     public function delete($id = null) {

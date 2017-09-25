@@ -18,8 +18,10 @@
                             <?php echo ($pase['Pase']['tipo']); ?></p>
                         <b><?php echo __('Motivo: '); ?></b>
                             <?php echo ($pase['Pase']['motivo']); ?></p>
+                        <b><?php echo __('Documentación: '); ?></b>
+                            <?php echo ($pase['Pase']['estado_documentacion']); ?></p>
                         <b><?php echo __('Estado: '); ?></b>
-                            <?php echo ($pase['Pase']['estado']); ?></p>
+                            <?php echo ($pase['Pase']['estado_pase']); ?></p>
                     </div>
                 </div>
             </div>

@@ -92,7 +92,7 @@ class AppController extends Controller {
 	    return $MaxCicloId['Ciclo']['id'];
 	}
 
-  /**
+  	/**
 	* Devuelve el Id del Centro al que pertenece el usuario logueado.
 	*/
 	function getUserCentroId()
@@ -101,7 +101,7 @@ class AppController extends Controller {
 	    return $centroId;
 	}
 
-  /**
+  	/**
 	* Devuelve el nivel del Centro al que pertenece el usuario logueado.  
 	*/
 	function getUserCentroNivel()
@@ -110,5 +110,15 @@ class AppController extends Controller {
 	    $this->loadModel('Centro');
 	    $centroNivel = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$centroId)));
 	    return $centroNivel;
+	}
+
+	/**
+	* Devuelve el Id de la última Inscripción de un alumno determinado.
+	*/
+	function getLastInscripcionId($alumnoId)
+	{
+	    $this->loadModel('Inscripcion');
+		$MaxInscripcionId = $this->Inscripcion->find('first', array('order'=>'Inscripcion.id DESC', 'conditions'=>array('alumno_id'=>$alumnoId)));
+	    return $MaxInscripcionId['Inscripcion']['id'];
 	}	
 }

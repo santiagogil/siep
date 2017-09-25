@@ -3,17 +3,22 @@
   <div class="col-xs-6 col-sm-3">
     <?php echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
     ?>
-    </div>
+  </div>
+  <div class="col-xs-6 col-sm-3">
+        <?php
+            $estados = array('CONFIRMADO'=>'CONFIRMADO','NO CONFIRMADO'=>'NO CONFIRMADO','BAJA'=>'BAJA');
+            echo $this->Form->input('estado_pase', array('label' => 'Estado del Pase', 'empty' => 'Ingrese una opción...', 'options' => $estados, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+        ?>
+  </div>
 </div><hr />
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
-      <b><?php echo __('Alumno: '); ?></b>
-      <span class="input-group-addon">
-        <p>  <?php echo ($personaNombres[$alumnosId[$pase['Pase']['alumno_id']]]); ?></p>
-      </span>  
+       <?php 
+          echo $this->Form->input('alumno_id', array('label'=>'Alumno*', 'readonly' => true, 'between' => '<br>', 'class' => 'form-control'));
+      ?><br>
       <?php
-          echo $this->Form->input('centro_id_destino', array('label'=>'Institución Destino*', 'empty' => 'Ingrese una institución...', 'options'=>$listacentros, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+          echo $this->Form->input('centro_id_destino', array('label'=>'Institución Destino*', 'readonly' => true, 'empty' => 'Ingrese una institución...', 'options'=>$listacentros, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
     </div>
     <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
@@ -38,9 +43,8 @@
   </div>
 </div>
   <div class="row">
-    <div class="unit"><strong><h4>Observaciones</h4></strong>
-      <div class="col-md-12 col-sm-6 col-xs-12">
-        <?php echo $this->Form->input('observaciones', array('label'=>false, 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
+    <div class="col-md-12 col-sm-6 col-xs-12">
+        <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
       </div>
     </div>
   </div>

@@ -4,14 +4,15 @@
       <?php 
           echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
       ?>
+      
+  </div>
+  <div class="col-xs-6 col-sm-3">
       <?php
           $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA','BAJA'=>'BAJA','EGRESO'=>'EGRESO');
            echo $this->Form->input('estado_inscripcion', array('label'=>'Estado de la inscripción*', 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
-    </div>
-    <div class="col-xs-6 col-sm-3">
       <?php echo $this->Form->input('usuario_id', array('type' => 'hidden')); ?>
-    </div>
+  </div>
 </div><hr />
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">

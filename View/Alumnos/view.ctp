@@ -81,8 +81,9 @@
 					<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
 					<?php echo '<b>Centro:</b> '.($this->Html->link($centroNombre[$inscripcion['centro_id']], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?><br>
 					<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
-					<!--<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>-->
-					<?php echo '<b>Fecha de alta:</b> '.$this->Html->formatTime($inscripcion['fecha_alta']);?><br>
+					<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>
+					<?php echo '<b>Estado de la Inscripción:</b> '.$inscripcion['estado_inscripcion'];?><br>
+					<!--<?php echo '<b>Fecha de alta:</b> '.$this->Html->formatTime($inscripcion['fecha_alta']);?><br>-->
 					<!--<?php echo '<b>Cursa:</b> '.$inscripcion['cursa'];?><br>
 		            <?php echo '<b>Fecha de baja:</b> '.$this->Html->formatTime($inscripcion['fecha_baja']);?><br>
 					<?php echo '<b>Tipo de baja:</b> '.$inscripcion['tipo_baja'];?><br>
@@ -121,7 +122,8 @@
 					<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_destino'])));?><br>
 					<!--<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>-->
 					<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$personaId[$pase['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['alumno_id'])));?><br>
-		            <b>Estado:</b> <?php if($pase['estado'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $pase['estado']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $pase['estado']; ?></span><?php } ?></br>
+		            <b>Documentación:</b> <?php if($pase['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $pase['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $pase['estado']; ?></span><?php } ?></br>
+		            <?php echo '<b>Estado:</b> '.$pase['estado_pase'];?><br>
 		            <hr>
 		            <div class="text-right">
 			            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'pases', 'action' => 'view', $pase['id']), array('class' => 'btn btn-success','escape' => false)); ?>
