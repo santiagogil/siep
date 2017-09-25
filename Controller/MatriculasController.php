@@ -3,6 +3,8 @@ App::uses('AppController', 'Controller');
 
 class MatriculasController extends AppController
 {
+    public $helpers = array('Siep');
+
     public function beforeFilter()
     {
         parent::beforeFilter();
