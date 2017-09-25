@@ -15,6 +15,8 @@
                         <?php echo($this->Html->link($inscripcion['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $inscripcion['Inscripcion']['centro_id']))); ?></p>
                         <b><?php echo __('Tipo de inscripción:'); ?></b>
                         <?php echo $inscripcion['Inscripcion']['tipo_inscripcion']; ?></p>
+                        <b><?php echo __('Estado de la inscripción:'); ?></b>
+                        <?php echo $inscripcion['Inscripcion']['estado_inscripcion']; ?></p>
                         <b><?php echo __('Documentación presentada:'); ?></b>
                         <?php if($inscripcion['Inscripcion']['estado_documentacion'] == "COMPLETA"){; ?>
                         <span class="label label-success"><?php echo $inscripcion['Inscripcion']['estado_documentacion']; ?></span>

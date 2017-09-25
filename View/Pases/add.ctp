@@ -2,7 +2,7 @@
     <div id="ContenidoSec">
         <?php echo $this->Form->create('Pase', array('novalidate' => true));?>
         <div class="unit">
-             <?php echo $this->element('forms/form_pase'); ?><p>
+             <?php echo $this->element('forms/form_pase_add'); ?><p>
         </div>
         <div class="text-center">
              <div class="submit">                 

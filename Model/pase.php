@@ -13,6 +13,13 @@ class Pase extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Ciclo' => array(
+			'className' => 'Ciclo',
+			'foreignKey' => 'ciclo_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 
@@ -85,17 +92,20 @@ class Pase extends AppModel {
 					       'message' => 'Indicar una opción'
 				           )
                     ),
-                    'usuario_id' => array(
-                        'required' => array(
-						'rule' => 'notBlank',
-                        'required' => 'create',
-						'message' => 'Indicar un nº de legajo.'
-                        ),
-						'isUnique' => array(
-	                    'rule' => 'isUnique',
-	                    'message' => 'Indicar un usuario.'
-	                    )
-                    )				   
+                    'estado_pase' => array(
+						'valid' => array(
+						'rule' => array('inList', array('CONFIRMADO','NO CONFIRMADO','BAJA')),
+						'message' => 'Indicar una opción',
+						'allowEmpty' => false
+							)
+					),
+                   'estado_documentacion' => array(
+						'valid' => array(
+						'rule' => array('inList', array('PENDIENTE','COMPLETA')),
+						'message' => 'Indicar una opción',
+					  	'allowEmpty' => false
+							)
+					)				   
          );
 }
 ?>

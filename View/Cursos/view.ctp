@@ -19,7 +19,7 @@
 			            <b><?php echo __('Plazas: '); ?></b> 
 			            	<span class="badge"><?php echo ($cursoPlazasString); ?></span></button></b>
 						<b><?php echo __(' | Matriculados: '); ?></b>
-							<span class="badge"><?php echo ($matriculados); ?></span></button></b><br/><br/>
+							<span class="badge"><?php echo ($cursoMatriculaString); ?></span></button></b><br/><br/>
 						<button class="btn btn-primary" type="button">Vacantes: 
 							<span class="badge"><?php echo ($vacantes); ?></span></button>
                     </div>
@@ -168,9 +168,10 @@
 		<div class="unit">
 			<?php echo '<b>Inscripción:</b> '.($this->Html->link($inscripcion['legajo_nro'], array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id'])));?><br>
 			<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$personaId[$inscripcion['alumno_id']]], array('controller' => 'personas', 'action' => 'view', $inscripcion['alumno_id'])));?><br>
-            <?php echo '<b>Fecha_alta:</b> '.($this->Html->formatTime($inscripcion['fecha_alta']));?><br>
-			<!--<?php echo '<b>Fecha_baja:</b> '.($this->Html->formatTime($inscripcion['fecha_baja']));?><br>
-            <?php echo '<b>Fecha_egreso:</b> '.($this->Html->formatTime($inscripcion['fecha_egreso']));?><br>-->
+            <!--<?php echo '<b>Fecha_alta:</b> '.($this->Html->formatTime($inscripcion['fecha_alta']));?><br>-->
+			<!--<?php echo '<b>Fecha_baja:</b> '.($this->Html->formatTime($inscripcion['fecha_baja']));?><br>-->
+            <!--<?php echo '<b>Fecha_egreso:</b> '.($this->Html->formatTime($inscripcion['fecha_egreso']));?><br>-->
+            <?php echo '<b>Estado:</b> '.$inscripcion['estado_inscripcion'];?><br>
             <div class="text-right">
 	            <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
               <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>

@@ -2,7 +2,7 @@
   <div class="unit">
     <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Documento N°:</b> <?php echo $this->Html->link(($personaDocumento[$alumno['Alumno']['persona_id']]), array('controller' => 'personas', 'action' => 'view', $alumno['Alumno']['persona_id']));?></span><br/>
     <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Nombre completo:</b> <?php echo $this->Html->link(($personaNombre[$alumno['Alumno']['persona_id']]), array('controller' => 'personas', 'action' => 'view', $alumno['Alumno']['persona_id']));?></span><br/>
-    <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Legajo Físico N°:</b> <?php echo $this->Html->link(($alumno['Alumno']['legajo_fisico_nro']), array('controller' => 'alumnos', 'action' => 'view', $alumno['Alumno']['id']));?></span><br/>
+    <span class="name"><span class="glyphicon glyphicon-folder-open"></span> <b>Legajo Físico N°:</b> <?php echo $this->Html->link(($alumno['Alumno']['legajo_fisico_nro']), array('controller' => 'alumnos', 'action' => 'view', $alumno['Alumno']['id']));?></span><br/>
     <hr />
       <div class="text-right">
         <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-eye-open"></i>', array('controller' => 'alumnos', 'action' => 'view', $alumno['Alumno']['id']), array('class' => 'btn btn-success','escape' => false)); ?></span>

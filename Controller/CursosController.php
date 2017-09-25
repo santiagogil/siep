@@ -88,12 +88,15 @@ class CursosController extends AppController {
 		$this->loadModel('Persona');
 		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
 		/* FIN */
-		/* GENERA NÚMERO DE MATRICULADOS. (INICIO) */
+		/* OBTIENE NÚMERO DE MATRICULADOS. (INICIO) */
 		$cursoId = $this->Curso->id;
-		$matriculados = $this->Curso->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoId)));
-		$cursoPlazasArray = $this->Curso->findById($cursoId, 'plazas');
+        // Obtiene el valor de plazas
+        $cursoPlazasArray = $this->Curso->findById($cursoId, 'plazas');
 		$cursoPlazasString = $cursoPlazasArray['Curso']['plazas'];
-		$vacantes = $cursoPlazasString - $matriculados;
+        // Obtiene el valor de matrícula
+        $cursoMatriculaArray = $this->Curso->findById($cursoId, 'matricula');
+		$cursoMatriculaString = $cursoMatriculaArray['Curso']['matricula'];
+		$vacantes = $cursoPlazasString - $cursoMatriculaString;
 		/* FIN */
 		/* MUESTRA UNIDADES CURRICULARES RELACIONADAS DEPENDIENDO EL NIVEL (INICIO). 
 		* Sólo muestra materias para los niveles secundario y superior.
@@ -103,7 +106,7 @@ class CursosController extends AppController {
 		$personaId = $this->Curso->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
 		$this->loadModel('Persona');
 		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-		$this->set(compact('personaId', 'personaNombre', 'cicloNombre', 'matriculados', 'userCentroNivel', 'vacantes', 'cursoPlazasString'));
+		$this->set(compact('personaId', 'personaNombre', 'cicloNombre', 'userCentroNivel', 'vacantes', 'cursoPlazasString', 'cursoMatriculaString'));
 	}
 
 	function add() {

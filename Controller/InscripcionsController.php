@@ -41,13 +41,14 @@ class InscripcionsController extends AppController {
 
 		if ($this->Auth->user('role') === 'admin') {
 		//$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
-		$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId);	
-		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+		//$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId);	
+        $this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));    
+        } else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
-			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId);
+			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));
 		} else if ($userRole === 'usuario') {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId);
+			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));
 		}
 		/* FIN */
     	/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
@@ -64,16 +65,23 @@ class InscripcionsController extends AppController {
 		if (!empty($this->params['named']['legajo_nro'])) {
 			$conditions['Inscripcion.legajo_nro ='] = $this->params['named']['legajo_nro'];
 		}
-		if(!empty($this->params['named']['estado'])) {
-			$conditions['Inscripcion.estado ='] = $this->params['named']['estado'];
+		if(!empty($this->params['named']['estado_documentacion'])) {
+			$conditions['Inscripcion.estado_documentacion ='] = $this->params['named']['estado_documentacion'];
 		}
+        if(!empty($this->params['named']['estado_inscripcion'])) {
+            $conditions['Inscripcion.estado_inscripcion ='] = $this->params['named']['estado_inscripcion'];
+        }
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
 		/* FIN */
 		/* SETS DE DATOS PARA COMBOBOX (INICIO). */
-		$personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
-		$this->loadModel('Persona');
-		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-		$this->loadModel('Centro');
+		/* Carga de Ciclos */
+        $ciclos = $this->Inscripcion->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
+        /* Carga de Centros
+        *  Sí es superadmin carga todos los centros.
+        *  Sino sí es un usario de Inicial/Primaria, carga los centros de ambos niveles.
+        *  Sino sí es un usuario del resto de los niveles, carga los centros del nivel correspondientes.     
+        */
+        $this->loadModel('Centro');
 		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		if ($userRole == 'superadmin') {
@@ -84,8 +92,11 @@ class InscripcionsController extends AppController {
 		} else if ($userRole == 'admin') {
 			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
 		}
-		$ciclos = $this->Inscripcion->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
-		/* FIN */
+        /* Carga de Alumnos */
+		$personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
+        $this->loadModel('Persona');
+        $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
+        /* FIN */
 		$this->set(compact('inscripcions', 'personaId', 'personaNombre', 'centros', 'ciclos'));
 	}
 
@@ -206,9 +217,9 @@ class InscripcionsController extends AppController {
                 if ($this->Inscripcion->save($this->data)) {
                     $this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
                     /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
-                      * Al registrarse una Inscripción, actualiza valores de matrícula y vacantes
-                      * del curso correspondiente en el modelo Curso.
-                      */
+                    *  Al registrarse una Inscripción, actualiza valores de matrícula y vacantes
+                    *  del curso correspondiente en el modelo Curso.
+                    */
                     $this->loadModel('Curso');
                     $cursoIdArray = $this->request->data['Curso'];
                     $cursoIdString = $cursoIdArray['Curso'];
@@ -242,6 +253,7 @@ class InscripcionsController extends AppController {
 		    }
 			// Antes de guardar genera el id del alumno.
             $personaId = $this->request->data['Persona']['persona_id'];
+            $this->loadModel('Alumno');
             $alumno = $this->Alumno->findByPersonaId($personaId);
             $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
             //Antes de guardar genera el estado de la inscripción
@@ -252,7 +264,49 @@ class InscripcionsController extends AppController {
 			}
 			//Se genera el estado y se deja en los datos que se intentaran guardar
 			$this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
-			if ($this->Inscripcion->save($this->data)) {
+			// Se define el id del centro.
+            $userCentroId = $this->getUserCentroId();
+            //Se obtiene el rol del usuario
+            $userRole = $this->Auth->user('role');
+            switch($userRole) {
+                case 'superadmin':
+                case 'usuario':
+                    // Usa el centro especificado en el formulario
+                    $userCentroId = $this->request->data['Inscripcion']['centro_id'];
+                break;
+                case 'admin':
+                    // Usa el centro definido para el usuario
+                    $userCentroId = $this->getUserCentroId();
+                    $this->request->data['Inscripcion']['centro_id'] = $userCentroId ;
+                break;
+            }
+            /* Se trata de un pase sí se identifica un cambio en el id del centro.
+            *  Actualiza valores de matrícula y vacantes.
+            */
+            $alumnoId = $this->Inscripcion->alumno_id;
+            $centroIdAnterior = $this->Inscripcion->Alumno->find('list', array('fields'=>array('centro_id'), 'conditions'=>array('id'=>$alumnoId))); 
+            if ($centroIdAnterior != $userCentroId) {
+                /* Actualiza el id del centro del Alumno. */
+                $personaId = $this->request->data['Persona']['persona_id'];
+                $this->loadModel('Alumno');
+                $alumnoIdArray = $this->Alumno->findByPersonaId($personaId);
+                $alumnoIdString = $alumnoIdArray['Alumno'];
+                $this->Alumno->id=$alumnoIdString;
+                $this->Alumno->saveField("centro_id", $userCentroId);
+                /* ATUALIZA MATRÍCULA Y VACANTES (INICIO). */
+                $this->loadModel('Curso');
+                $cursoIdArray = $this->request->data['Curso'];
+                $cursoIdString = $cursoIdArray['Curso'];
+                $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdString)));
+                $this->Curso->id=$cursoIdString;
+                $this->Curso->saveField("matricula", $matriculaActual);
+                $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
+                $plazasString = $plazasArray['Curso']['plazas'];
+                $vacantesActual = $plazasString - $matriculaActual;
+                $this->Curso->saveField("vacantes", $vacantesActual);
+                /* FIN */
+            }
+            if ($this->Inscripcion->save($this->data)) {
 				$this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Inscripcion->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
