@@ -140,7 +140,6 @@ class UsersController extends AppController {
 	}
 
 	 public function delete($id = null) {
-		
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para el usuario', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
@@ -159,7 +158,6 @@ class UsersController extends AppController {
     }
 	
 	public function activate($id = null) {
-		
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para el usuario', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));

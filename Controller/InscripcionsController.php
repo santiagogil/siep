@@ -281,6 +281,7 @@ class InscripcionsController extends AppController {
                 break;
             }
             /* Se trata de un pase sí se identifica un cambio en el id del centro.
+            *  Actualiza el id del centro del Alumno.
             *  Actualiza valores de matrícula y vacantes.
             */
             $alumnoId = $this->Inscripcion->alumno_id;
@@ -304,6 +305,11 @@ class InscripcionsController extends AppController {
                 $plazasString = $plazasArray['Curso']['plazas'];
                 $vacantesActual = $plazasString - $matriculaActual;
                 $this->Curso->saveField("vacantes", $vacantesActual);
+                /* Modifica a "CONFIRMADO" el estado del pase. */
+                $alumnoIdString = $alumnoIdArray['Alumno'];
+                $this->loadModel('Pase');
+                $this->Pase->alumno_id=$alumnoIdString;
+                $this->Pase->saveField("estado_pase", 'CONFIRMADO');
                 /* FIN */
             }
             if ($this->Inscripcion->save($this->data)) {
