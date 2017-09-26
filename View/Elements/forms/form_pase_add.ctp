@@ -37,9 +37,8 @@
   </div>
 </div>
   <div class="row">
-    <div class="unit"><strong><h4>Observaciones</h4></strong>
       <div class="col-md-12 col-sm-6 col-xs-12">
-        <?php echo $this->Form->input('observaciones', array('label'=>false, 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
+        <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
       </div>
     </div>
   </div>

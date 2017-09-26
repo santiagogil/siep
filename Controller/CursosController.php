@@ -25,20 +25,20 @@ class CursosController extends AppController {
 		$this->paginate['Curso']['limit'] = 6;
 		$this->paginate['Curso']['order'] = array('Curso.anio' => 'ASC');
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
-		*  Sí el usuario es "admin" muestra los cursos del establecimiento. 
-		*  Sino sí es "usuario" externo muestra los cursos del nivel.
+		*  Sí el usuario es "admin" muestra los cursos activos del establecimiento. 
+		*  Sino sí es "usuario" externo muestra los cursos activos del nivel.
 		*/ 
 		$userCentroId = $this->getUserCentroId();
 		$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 		$userRole = $this->Auth->user('role');
 		if ($userRole === 'admin') {
-			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId);
+			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1);
 		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId);
+			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
 		} else if ($userRole === 'usuario') {
 			$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId);
+			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $nivelCentroId, 'Curso.status' => 1);
 		}
 		/* FIN */
 		/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
@@ -189,15 +189,38 @@ class CursosController extends AppController {
 
 	function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash('Id no valido para sección', 'default', array('class' => 'alert alert-warning'));
+			$this->Session->setFlash('Id no valido para el curso', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
 		}
-		if ($this->Curso->delete($id)) {
-			$this->Session->setFlash('La sección ha sido borrada', 'default', array('class' => 'alert alert-success'));
+        $this->Curso->id = $id;
+        if (!$this->Curso->exists()) {
+            $this->Session->setFlash('ID inválido');
 			$this->redirect(array('action'=>'index'));
-		}
-		$this->Session->setFlash('La sección no fue borrada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
-		$this->redirect(array('action' => 'index'));
+        }
+        if ($this->Curso->saveField('status', 0)) {
+ 			$this->Session->setFlash('El curso ha sido desactivado', 'default', array('class' => 'alert alert-success'));
+            $this->redirect(array('action' => 'index'));
+        }
+		$this->Session->setFlash('El curso no fue desactivado', 'default', array('class' => 'alert alert-danger'));
+        $this->redirect(array('action' => 'index'));
 	}
+
+	public function activate($id = null) {
+		if (!$id) {
+			$this->Session->setFlash('Id no valido para el curso', 'default', array('class' => 'alert alert-warning'));
+			$this->redirect(array('action'=>'index'));
+		}		
+        $this->Curso->id = $id;
+        if (!$this->Curso->exists()) {
+            $this->Session->setFlash('ID inválido');
+			$this->redirect(array('action'=>'index'));
+        }
+        if ($this->Curso->saveField('status', 1)) {
+			$this->Session->setFlash('El curso ha sido reactivado', 'default', array('class' => 'alert alert-success'));
+            $this->redirect(array('action' => 'index'));
+        }
+		$this->Session->setFlash('El curso no pudo ser reactivado', 'default', array('class' => 'alert alert-danger'));
+        $this->redirect(array('action' => 'index'));
+    }
 }
 ?>
