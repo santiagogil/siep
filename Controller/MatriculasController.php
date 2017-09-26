@@ -3,6 +3,7 @@ App::uses('AppController', 'Controller');
 
 class MatriculasController extends AppController
 {
+    // Permite agregar el Helper de Siep a las vistas
     public $helpers = array('Siep');
 
     public function beforeFilter()
@@ -12,6 +13,24 @@ class MatriculasController extends AppController
         /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */
+
+        // Importa el Helper de Siep al controlador es accesible mediante $this->Siep
+        App::import('Helper', 'Siep');
+        $this->Siep= new SiepHelper(new View());
+
+        /*
+        --------------------------------------------------------------
+                   Ejemplo de verificacion de rol con el Helper
+        --------------------------------------------------------------
+        if($this->Siep->isAdmin() || $this->Siep->isSuperAdmin()) {
+            $this->Auth->allow();
+        }
+
+        if($this->Siep->isUsuario()) {
+            $this->Auth->allow('index', 'view', 'requestDatatable');
+        }
+       */
+
         switch ($this->Auth->user('role')) {
             case 'superadmin':
             case 'admin':
@@ -24,7 +43,25 @@ class MatriculasController extends AppController
     }
 
     public function index() {
-        
+        //$this->User->recursive = 0;
+
+        $this->loadModel('Curso');
+
+        $this->paginate = array(
+            'limit' => 10,
+            'order' => array('Curso.centro_id' => 'asc' )
+        );
+
+        $this->redirectToNamed();
+        $conditions = array();
+
+        if(!empty($this->params['named']['centro_id']))
+        {
+            $conditions['Centro.id = '] = $this->params['named']['centro_id'];
+        }
+
+        $matriculas = $this->paginate('Curso', $conditions);
+        $this->set(compact('matriculas'));
   	}
 
     public function requestDatatable()
