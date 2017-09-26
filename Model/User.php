@@ -125,6 +125,8 @@ class User extends AppModel {
    * @param array $options
    * @return boolean
    *
+   */
+   /*
     function isUniqueUsername($check) {
          $username = $this->find(
             'first',
@@ -173,6 +175,8 @@ class User extends AppModel {
      * @param array $options
      * @return boolean
      *
+     */
+	/*
     function isUniqueEmail($check) {
        $email = $this->find(
             'first',
