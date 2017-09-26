@@ -144,10 +144,16 @@ class InscripcionsController extends AppController {
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId ;
                 break;
             }
+            /*
             //Genera el ciclo id y se deja en los datos que se intentaran guardar
             $cicloId = $this->getLastCicloId();
             $this->request->data['Inscripcion']['ciclo_id'] = $cicloId;
             //Antes de guardar genera el número de legajo del Alumno.
+            $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
+            $ciclo = substr($ciclos['Ciclo']['nombre'], -2);
+            */
+            // Luego de seleccionar el ciclo, se deja en los datos que se intentarán guardar.
+            $cicloId = $this->request->data['Inscripcion']['ciclo_id'];
             $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
             $ciclo = substr($ciclos['Ciclo']['nombre'], -2);
             /*

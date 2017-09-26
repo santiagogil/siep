@@ -57,6 +57,9 @@ class CursosInscripcionsController extends AppController {
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
 		}
+		if(!empty($this->params['named']['ciclo_id'])) {
+			$conditions['Inscripcion.ciclo_id ='] = $this->params['named']['ciclo_id'];
+		}
 		if(!empty($this->params['named']['curso_id'])) {
 			$conditions['CursosInscripcion.curso_id ='] = $this->params['named']['curso_id'];
 		}
@@ -70,6 +73,11 @@ class CursosInscripcionsController extends AppController {
         $ciclosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('ciclo_id')));
         $this->loadModel('Ciclo');
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
+        
+        $hoyArray = getdate();
+        $hoyAñoString = $hoyArray['year']; 
+        $this->loadModel('Ciclo');
+        $cicloIdActual = $this->Ciclo->find('list', array('fields'=>array('id'), 'conditions' => array('nombre' => $hoyAñoString)));
         // Por centro...
         $this->loadModel('Centro');
 		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
@@ -121,6 +129,6 @@ class CursosInscripcionsController extends AppController {
 		$this->loadModel('Persona');
 		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
 		/* FIN */
-		$this->set(compact('cursosInscripcions', 'cicloActual', 'cursos', 'inscripcions', 'ciclos', 'personaId', 'personaNombre', 'centros', 'materias'));
+		$this->set(compact('cursosInscripcions', 'cicloIdActual', 'cursos', 'inscripcions', 'ciclos', 'personaId', 'personaNombre', 'centros', 'materias'));
    }
 }
