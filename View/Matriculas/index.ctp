@@ -1,15 +1,80 @@
-<!-- start main -->
-<?php echo $this->Html->script(array('/js/datatables/jquery.dataTables.min')); ?>
-<?php echo $this->Html->css(array('/js/datatables/jquery.dataTables.min')); ?>
-<?php echo $this->Html->css(array('/js/datatables/dataTables.bootstrap.min')); ?>
 
 <div class="TituloSec">Matriculas</div>
 <div id="ContenidoSec">
-  <div id="main">
-    <table id="matriculasDatatableAjax" class="table table-striped table-bordered" width="100%" cellspacing="0">
+    <div class="table-responsive">
+      <table id="tablaPieBuscador" class="table table-bordered table-hover table-condensed">
       <thead>
         <tr>
-          <th>Centro</th>
+          <th><?php echo $this->Paginator->sort('Centro.sigla', 'Centro');?>  </th>
+          <th><?php echo $this->Paginator->sort('anio','Año');?></th>
+          <th><?php echo $this->Paginator->sort('division', 'Division');?></th>
+          <th><?php echo $this->Paginator->sort('turno', 'Turno');?></th>
+          <th><?php echo $this->Paginator->sort('plazas', 'Plazas');?></th>
+          <th><?php echo $this->Paginator->sort('matricula', 'Matriculas');?></th>
+          <th><?php echo $this->Paginator->sort('vacantes', 'Vacantes');?></th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php $count=0; ?>
+        <?php foreach($matriculas as $matricula): ?>
+            <?php $count ++;?>
+            <?php if($count % 2): echo '<tr>'; else: echo '<tr style="background-color: #ececec">' ?>
+            <?php endif; ?>
+            <td>
+              <?php echo $matricula['Centro']['sigla']; ?>
+            </td>
+            <td>
+              <?php echo $matricula['Curso']['anio']; ?>
+            </td>
+            <td>
+              <?php echo $matricula['Curso']['division']; ?>
+            </td>
+            <td>
+              <?php echo $matricula['Curso']['turno']; ?>
+            </td>
+            <td>
+              <?php echo $matricula['Curso']['plazas']; ?>
+            </td>
+            <td>
+              <?php echo $matricula['Curso']['matricula']; ?>
+            </td>
+            <td>
+              <?php echo $matricula['Curso']['vacantes']; ?>
+            </td>
+            <td >
+              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Centros', 'action'=> 'view', $matricula['Centro']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>
+            <!-- Autocomplete -->
+              <input id="AutocompleteForm" class="form-control" placeholder="Buscar institucion por nombre" type="text">
+
+            <script>
+              $( function() {
+                $( "#AutocompleteForm" ).autocomplete({
+                  source: "<?php echo $this->Html->url(array('controller'=>'Centros','action'=>'autocompleteCentro'));?>",
+                  minLength: 2,
+                  select: function( event, ui ) {
+                    $("#AutocompleteForm").val( ui.item.Centro.sigla );
+
+                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'matriculas'));?>/index/centro_id:"+ui.item.Centro.id;
+                    return false;
+                  }
+                }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+                  return $( "<li>" )
+                      .append( "<div>" +item.Centro.sigla + "</div>" )
+                      .appendTo( ul );
+                };
+              });
+            </script>
+            <!-- End Autocomplete -->
+
+          </th>
           <th>Año</th>
           <th>Division</th>
           <th>Turno</th>
@@ -17,75 +82,30 @@
           <th>Matricula</th>
           <th>Vacantes</th>
         </tr>
-      </thead>
-      <tbody>
-      </tbody>
-      <tfoot>
-      <tr>
-        <th>Centro</th>
-        <th>Año</th>
-        <th>Division</th>
-        <th>Turno</th>
-        <th>Plazas</th>
-        <th>Matricula</th>
-        <th>Vacantes</th>
-      </tr>
       </tfoot>
     </table>
 
-    <script>
+      <script>
+        $(function(){
 
-      // definir unidad
-      var ALERTA_POCAS_VACANTES = 23;
+          $('#tablaPieBuscador_DESACTIVADO tfoot th').each( function (i) {
+            var title = $(this).text();
+            var inputFind = $(this).html( '<input type="text" data-column="'+ i +'" class="form-control" placeholder="Buscar '+title+'" />' );
 
-      $(function(){
+            inputFind.find('input').on( 'keypress', function (e) {
+              if(e.which == 13) {
+                var i = $(this).attr('data-column');
+                var find =$(this).val();
 
-        $('#matriculasDatatableAjax tfoot th').each( function (i) {
-          var title = $(this).text();
-          var inputFind = $(this).html( '<input type="text" data-column="'+ i +'" class="form-control" placeholder="Buscar '+title+'" />' );
-
-          inputFind.find('input').on( 'keypress', function (e) {
-            if(e.which == 13) {
-              var i = $(this).attr('data-column');
-              var find =$(this).val();
-
-              matriculasTable.columns(i).search(find).draw();
-            }
+                matriculasTable.columns(i).search(find).draw();
+              }
+            });
           });
         });
+      </script>
+    </div>
 
-        var matriculasTable = $('#matriculasDatatableAjax').DataTable({
-          createdRow: function( row, data, dataIndex){
-            if( data.Curso.vacantes <=  0){
-              $(row).addClass('danger');
-            }
-
-            if( data.Curso.vacantes <=  ALERTA_POCAS_VACANTES){
-              $(row).addClass('warning');
-            }
-          },
-          "processing": true,
-          "serverSide": true,
-          "language": {
-               "url": "/js/datatables/Spanish.json"
-           },
-          "ajax": {
-            "url": "<?php echo $this->Html->url('/matriculas/requestDatatable'); ?>",
-            "method" : "POST"
-          },
-          "columns" : [
-            { "data" : "Centro.sigla" },
-            { "data" : "Curso.anio" },
-            { "data" : "Curso.division" },
-            { "data" : "Curso.turno" },
-            { "data" : "Curso.plazas" },
-            { "data" : "Curso.matricula" },
-            { "data" : "Curso.vacantes" }
-          ]
-        });
-      });
-    </script>
-
+  <div class="unit text-center">
+    <?php echo $this->element('pagination'); ?>
   </div>
 </div>
-<!-- end main -->
