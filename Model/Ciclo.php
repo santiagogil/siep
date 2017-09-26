@@ -123,6 +123,7 @@ class Ciclo extends AppModel {
     //Validaciones
 
                    var $validate = array(
+				   /*
 				   'created' => array(
                          'required' => array(
 						 'rule' => 'notBlank',
@@ -130,6 +131,7 @@ class Ciclo extends AppModel {
 						 'message' => 'Indicar una fecha y hora.'
                          )
                    ),
+                   */
 				   'nombre' => array(
                          'required' => array(
 						 'rule' => 'notBlank',
