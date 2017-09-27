@@ -9,7 +9,7 @@ class MatriculasController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-
+        
         /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */

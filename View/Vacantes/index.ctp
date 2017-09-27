@@ -2,7 +2,7 @@
 <div class="TituloSec">Vacantes por seccion</div>
 <div id="ContenidoSec">
     <div class="table-responsive">
-      <table id="tablaPieBuscador" class="table table-bordered table-hover table-condensed">
+      <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
       <thead>
         <tr>
           <th><?php echo $this->Paginator->sort('Centro.sigla', 'Centro');?>  </th>
@@ -14,9 +14,6 @@
       <tbody>
         <?php $count=0; ?>
         <?php foreach($matriculas as $matricula): ?>
-            <?php $count ++;?>
-            <?php if($count % 2): echo '<tr>'; else: echo '<tr style="background-color: #ececec">' ?>
-            <?php endif; ?>
             <td>
               <?php echo $matricula['Centro']['sigla']; ?>
             </td>
