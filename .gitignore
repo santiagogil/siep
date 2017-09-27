@@ -14,3 +14,4 @@
 !app/.htaccess
 !app/webroot/.htaccess
 .idea/*
+\.docker-compose\.yml\.swp
