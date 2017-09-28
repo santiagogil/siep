@@ -30,7 +30,7 @@ class AlumnosController extends AppController {
 		$userRole = $this->Auth->user('role');
 		if ($userRole === 'admin') {
 		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
-		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
 			$this->loadModel('Centro');
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
 			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $nivelCentroId);

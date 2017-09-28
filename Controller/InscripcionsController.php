@@ -38,12 +38,11 @@ class InscripcionsController extends AppController {
 		$userRole = $this->Auth->user('role');
         $this->loadModel('Centro');
         $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-
 		if ($this->Auth->user('role') === 'admin') {
 		//$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
 		//$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId);	
         $this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));    
-        } else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+        } else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
 			$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));
 		} else if ($userRole === 'usuario') {
@@ -65,7 +64,10 @@ class InscripcionsController extends AppController {
 		if (!empty($this->params['named']['legajo_nro'])) {
 			$conditions['Inscripcion.legajo_nro ='] = $this->params['named']['legajo_nro'];
 		}
-		if(!empty($this->params['named']['estado_documentacion'])) {
+		if(!empty($this->params['named']['tipo_inscripcion'])) {
+            $conditions['Inscripcion.tipo_inscripcion ='] = $this->params['named']['tipo_inscripcion'];
+        }
+        if(!empty($this->params['named']['estado_documentacion'])) {
 			$conditions['Inscripcion.estado_documentacion ='] = $this->params['named']['estado_documentacion'];
 		}
         if(!empty($this->params['named']['estado_inscripcion'])) {
@@ -371,13 +373,13 @@ class InscripcionsController extends AppController {
 		    $this->loadModel('Persona');
 			$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
 		} else if ($userRole === 'usuario') {
-			$this->loadModel('Centro');
-			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-			$personaId = $this->Inscripcion->find('list', array('fields'=>array('alumno_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
-			$this->loadModel('Persona');
+            $this->loadModel('Centro');
+            $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+            $nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+            $personaId = $this->Inscripcion->find('list', array('fields'=>array('alumno_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+            $this->loadModel('Persona');
             $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
-		} else {
+        } else {
 			//Sí es superadmin
 			$this->loadModel('Alumno');
 			$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
