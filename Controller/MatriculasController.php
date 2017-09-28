@@ -48,6 +48,7 @@ class MatriculasController extends AppController
         $this->loadModel('Curso');
 
         $this->paginate = array(
+            'contain' => array('Centro'),
             'limit' => 10,
             'order' => array('Curso.centro_id' => 'asc' )
         );
@@ -55,16 +56,55 @@ class MatriculasController extends AppController
         $this->redirectToNamed();
         $conditions = array();
 
-        if(!empty($this->params['named']['centro_id']))
+        if(!empty($this->params['named']['centro_id'])) 
         {
             $conditions['Centro.id = '] = $this->params['named']['centro_id'];
         }
 
-        $matriculas = $this->paginate('Curso', $conditions);
+        $userCentroId = $this->getUserCentroId();
+
+        if($this->Siep->isAdmin()) 
+        {
+            $conditions['Curso.centro_id'] = $userCentroId;
+            $matriculas = $this->paginate('Curso',$conditions);
+        }
+
+        if($this->Siep->isUsuario())
+        {
+            $nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
+            $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
+
+            if ($nivelCentroString === 'Común - Inicial - Primario') {
+                $nivelCentroId = $this->Curso->Centro->find('list', array(
+                    'fields' => array('id'),
+                    'conditions' => array(
+                        'nivel_servicio' => array('Común - Inicial', 'Común - Primario')
+                    )
+                ));
+
+                $conditions['Curso.centro_id'] = $nivelCentroId;
+                $matriculas = $this->paginate('Curso', $conditions);
+
+            } else {
+                $nivelCentroId = $this->Curso->Centro->find('list', array(
+                    'fields' => array('id'),
+                    'conditions' => array('nivel_servicio' => $nivelCentroString)
+                ));
+
+                $conditions['Curso.centro_id'] = $nivelCentroId;
+                $matriculas = $this->paginate('Curso', $conditions);
+            }
+        }
+
+        if($this->Siep->isSuperAdmin())
+        {
+            $matriculas = $this->paginate('Curso',$conditions);
+        }
+
         $this->set(compact('matriculas'));
   	}
 
-    public function requestDatatable()
+/*    public function requestDatatable()
     {
         $conditions = [];
 
@@ -107,7 +147,6 @@ class MatriculasController extends AppController
 
         $this->loadModel('Curso');
         $userCentroId = $this->getUserCentroId();
-        print_r($userCentroId);
         $userRole = $this->Auth->user('role');
         // Modifique las rutas de ROLES al formato SWITCH que es mas llevadero que los IF
         switch ($userRole) {
@@ -143,5 +182,5 @@ class MatriculasController extends AppController
         $this->response->type('json');
         $json = json_encode($result);
         $this->response->body($json);
-    }
+    }*/
 }
