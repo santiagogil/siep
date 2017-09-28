@@ -120,5 +120,31 @@ class AppController extends Controller {
 	    $this->loadModel('Inscripcion');
 		$MaxInscripcionId = $this->Inscripcion->find('first', array('order'=>'Inscripcion.id DESC', 'conditions'=>array('alumno_id'=>$alumnoId)));
 	    return $MaxInscripcionId['Inscripcion']['id'];
+	}
+
+	/**
+	* Devuelve el nivel el id del Ciclo actual.  
+	*/
+	function getActualCicloId()
+	{
+		$hoyArray = getdate();
+        $hoyAñoString = $hoyArray['year']; 
+        $this->loadModel('Ciclo');
+        $cicloIdActual = $this->Ciclo->find('list', array('fields'=>array('id'), 'conditions' => array('nombre' => $hoyAñoString)));	
+		return $cicloIdActual;
+	}
+
+	/**
+	* Devuelve el ciclo actual y el posterior sí lo hubiera.
+	*/
+	function getTwoLastCicloNombres($cicloIdActual, $cicloIdUltimo)
+	{
+	    if ($cicloIdActual != $cicloIdUltimo) {
+			$this->loadModel('Ciclo');
+	        $cicloNombresDosUltimos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => array($cicloIdActual, $cicloIdUltimo))));
+	        return $cicloNombresDosUltimos;
+		} else {
+			return $cicloNombreActual;			
+		}
 	}	
 }

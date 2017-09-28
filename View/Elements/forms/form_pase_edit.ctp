@@ -1,7 +1,7 @@
 <?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker')); ?>
 <div class="row">
   <div class="col-xs-6 col-sm-3">
-    <?php echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
+    <?php echo $this->Form->input('created', array('label' => 'Creado*', 'readonly' => true, 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
     ?>
   </div>
   <div class="col-xs-6 col-sm-3">

@@ -144,14 +144,6 @@ class InscripcionsController extends AppController {
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId ;
                 break;
             }
-            /*
-            //Genera el ciclo id y se deja en los datos que se intentaran guardar
-            $cicloId = $this->getLastCicloId();
-            $this->request->data['Inscripcion']['ciclo_id'] = $cicloId;
-            //Antes de guardar genera el número de legajo del Alumno.
-            $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
-            $ciclo = substr($ciclos['Ciclo']['nombre'], -2);
-            */
             // Luego de seleccionar el ciclo, se deja en los datos que se intentarán guardar.
             $cicloId = $this->request->data['Inscripcion']['ciclo_id'];
             $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
@@ -221,23 +213,26 @@ class InscripcionsController extends AppController {
                  *  FIN VERIFICACION DE ALUMNO
                  */
                 if ($this->Inscripcion->save($this->data)) {
-                    $this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
                     /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
-                    *  Al registrarse una Inscripción, actualiza valores de matrícula y vacantes
-                    *  del curso correspondiente en el modelo Curso.
+                    *  Al registrarse una Inscripción sí es para el ciclo actual, actualiza valores de matrícula
+                    *  y vacantes del curso correspondiente en el modelo Curso.
                     */
-                    $this->loadModel('Curso');
-                    $cursoIdArray = $this->request->data['Curso'];
-                    $cursoIdString = $cursoIdArray['Curso'];
-                    $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdString)));
-                    $this->Curso->id=$cursoIdString;
-                    $this->Curso->saveField("matricula", $matriculaActual);
-                    $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
-                    $plazasString = $plazasArray['Curso']['plazas'];
-                    $vacantesActual = $plazasString - $matriculaActual;
-                    $this->Curso->saveField("vacantes", $vacantesActual);
+                    $cicloIdActual = $this->getActualCicloId();
+                    if ($cicloId == $cicloIdActual) {
+                        $this->loadModel('Curso');
+                        $cursoIdArray = $this->request->data['Curso'];
+                        $cursoIdString = $cursoIdArray['Curso'];
+                        $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdString)));
+                        $this->Curso->id=$cursoIdString;
+                        $this->Curso->saveField("matricula", $matriculaActual);
+                        $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
+                        $plazasString = $plazasArray['Curso']['plazas'];
+                        $vacantesActual = $plazasString - $matriculaActual;
+                        $this->Curso->saveField("vacantes", $vacantesActual);
+                    }
                     /* FIN */
                     $inserted_id = $this->Inscripcion->id;
+                    $this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
                     $this->redirect(array('action' => 'view', $inserted_id));
                 } else {
                     $this->Session->setFlash('La inscripcion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
@@ -347,9 +342,16 @@ class InscripcionsController extends AppController {
 	//Métodos privados
 	private function __lists(){
 	    $this->loadModel('User');
-        $ciclos = $this->Inscripcion->Ciclo->find('list');
-		$cicloIdActual = $this->getLastCicloId();
-		$centros = $this->Inscripcion->Centro->find('list');
+        // Carga en el combobox el Ciclo actual y uno posterior sí lo hubiera.        
+        $this->loadModel('Ciclo');
+        $cicloIdActual = $this->getActualCicloId();
+        $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
+        $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
+        $cicloIdUltimo = $this->getLastCicloId();
+        $cicloIdUltimoArray = $this->Ciclo->findById($cicloIdUltimo, 'id');
+        $cicloIdUltimoString = $cicloIdUltimoArray['Ciclo']['id'];
+        $ciclos = $this->getTwoLastCicloNombres($cicloIdActualString, $cicloIdUltimoString);
+        $centros = $this->Inscripcion->Centro->find('list');
 		//Sí es "superadmin" o "usuario" ve combobox con todos los cursos. Sino ve los propios del centro.
 		$userRol = $this->Auth->user('role');
 		if (($userRol == 'superadmin') || ($userRol == 'usuario')) {

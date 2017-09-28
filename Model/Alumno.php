@@ -157,13 +157,6 @@ class Alumno extends AppModel {
 //Validaciones
 
         var $validate = array(
-            'created' => array(
-                'required' => array(
-	    	   	'rule' => 'notBlank',
-                'required' => 'create',
-			    'message' => 'Indicar una fecha y hora.'
-                )
-            ),
 			'persona_id' => array(
 			    'required' => array(
 				'rule' => 'notBlank',

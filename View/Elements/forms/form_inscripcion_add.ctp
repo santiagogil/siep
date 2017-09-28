@@ -1,11 +1,6 @@
 <?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker')); ?>
 <div class="row">
   <div class="col-xs-6 col-sm-3">
-      <?php 
-          echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar'));
-      ?>
-  </div>
-  <div class="col-xs-6 col-sm-3">
       <?php
           echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'empty' => 'Ingrese un ciclo lectivo...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
