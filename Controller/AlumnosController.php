@@ -16,18 +16,29 @@ class AlumnosController extends AppController {
 	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
 	        $this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');
 	    }
-	    /* FIN */
     }
 
     public function index() {
-		$this->Alumno->recursive = -1;
-		$this->paginate['Alumno']['limit'] = 4;
-		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
+
+		// Esta paginacion incluye al modelo Persona relacionado al Alumno Id
+		$this->paginate = array(
+			'limit' => 10,
+			'order' => array('Alumno.id' => 'ASC' ),
+			'recursive' => 0,
+			'contain' => [
+				'Persona'
+			]
+		);
+
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
 		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
 		*/
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
+
+		$this->loadModel('Centro');
+		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+
 		if ($userRole === 'admin') {
 		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
 		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
@@ -35,8 +46,6 @@ class AlumnosController extends AppController {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
 			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $nivelCentroId);
 		} else if ($userRole === 'usuario') {
-			$this->loadModel('Centro');
-			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $nivelCentroId);
 		}
@@ -49,18 +58,14 @@ class AlumnosController extends AppController {
         if (!empty($this->params['named']['legajo_fisico_nro'])) {
 			$conditions['Alumno.legajo_fisico_nro ='] = $this->params['named']['legajo_fisico_nro'];
 		}
+		/*
 		if (!empty($this->params['named']['persona_id'])) {
 			$conditions['Alumno.persona_id ='] = $this->params['named']['persona_id'];
 		}
+		*/
 		$alumnos = $this->paginate('Alumno', $conditions);
-	    /* FIN */
-	    /* SETS DE DATOS PARA COMBOBOX (INICIO). */
-	    $personasId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
-        $this->loadModel('Persona');
-        $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $personasId)));
-        $personaDocumento = $this->Persona->find('list', array('fields'=>array('documento_nro'), 'conditions' => array('id' => $personasId)));
-	    /* FIN */
-	    $this->set(compact('alumnos', 'personaNombre', 'personaDocumento'));
+
+	    $this->set(compact('alumnos'));
 	}
 
 	public function view($id = null) {
@@ -192,16 +197,13 @@ class AlumnosController extends AppController {
 		{
 			// Si se busca un numero de documento.. se raliza el siguiente filtro
 			if(is_numeric($term)) {
-				$conditions[] = array(
-					'OR' => array(
-						array('documento_nro LIKE' => $term . '%')
-					)
-				);
+				$conditions[] = array('Persona.documento_nro LIKE' => $term . '%');
 			} else {
 				// Se esta buscando por nombre y/o apellidos
 				$terminos = explode(' ', trim($term));
 				$terminos = array_diff($terminos,array(''));
 
+				// Esto es posible porque nombre_completo_persona esta definido en el modelo como virtual
 				foreach($terminos as $termino) {
 					$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
 				}
@@ -228,61 +230,73 @@ class AlumnosController extends AppController {
 	*  Sino sí es "superadmin" muestra todos los alumnos.
 	*/
 	public function autocompleteNombreAlumno() {
-		$term = null;
-		// Inicia el Autocomplete.
-		if(!empty($this->request->query('term'))) {
-			$term = $this->request->query('term');
-			$terminos = explode(' ', trim($term));
-			$terminos = array_diff($terminos,array(''));
-			$conditions = array();
-			foreach($terminos as $termino) {
-				$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
+		$conditions = array();
+		$term = $this->request->query('term');
+
+		// Primero obtiene el termino a buscar
+		if(!empty($term))
+		{
+			// Si se busca un numero de documento.. se raliza el siguiente filtro
+			if(is_numeric($term)) {
+				$conditions[] = array('Persona.documento_nro LIKE' => $term . '%');
+			} else {
+				// Se esta buscando por nombre y/o apellidos
+				$terminos = explode(' ', trim($term));
+				$terminos = array_diff($terminos,array(''));
+
+				foreach($terminos as $termino) {
+					$conditions[] = array(
+						'OR' => array(
+							array('Persona.apellidos LIKE' => $term . '%'),
+							array('Persona.nombres LIKE' => $term . '%')
+						)
+					);
+				}
 			}
+
 			$userRole = $this->Auth->user('role');
 			$userCentroId = $this->getUserCentroId();
+			$this->loadModel('Centro');
+			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+
 			if ($userRole === 'admin') {
-				// Obtiene el id de persona de los alumnos del centro correspondiente.
-				$personasId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$userCentroId)));
-				// Consulta por esos id de personas.
-				$personas = $this->Alumno->Persona->find('all', array(
-					'recursive'	=> -1,
-					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
-					'conditions' => array($conditions, 'id' => $personasId),
-					'fields' 	=> array('id', 'nombre_completo_persona')
+				$personas = $this->Alumno->find('all', array(
+						'recursive'	=> 0,
+						'contain' => 'Persona',
+						// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
+						'conditions' => array($conditions, 'centro_id'=>$userCentroId),
+						'fields' 	=> array('Alumno.id', 'Persona.nombres', 'Persona.apellidos', 'Persona.documento_nro')
 					)
 				);
 			} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
-				$this->loadModel('Centro');
-				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-				$personasId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
-				// Consulta por esos id de personas.
-				$personas = $this->Alumno->Persona->find('all', array(
-					'recursive'	=> -1,
-					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
-					'conditions' => array($conditions, 'id' => $personasId),
-					'fields' 	=> array('id', 'nombre_completo_persona')
+				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
+
+				$personas = $this->Alumno->find('all', array(
+						'recursive'	=> 0,
+						'contain' => 'Persona',
+						// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
+						'conditions' => array($conditions, 'centro_id'=>$nivelCentroId),
+						'fields' 	=> array('Alumno.id', 'Persona.nombres', 'Persona.apellidos', 'Persona.documento_nro')
 					)
 				);
 			} else if ($userRole === 'usuario') {
 				// Obtiene el id de persona del nivel del centro correspondiente.
-				$this->loadModel('Centro');
-				$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-				$personasId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
-				// Consulta por esos id de personas.
-				$personas = $this->Alumno->Persona->find('all', array(
-					'recursive'	=> -1,
-					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
-					'conditions' => array($conditions, 'id' => $personasId),
-					'fields' 	=> array('id', 'nombre_completo_persona')
+				$personas = $this->Alumno->find('all', array(
+						'recursive'	=> 0,
+						'contain' => 'Persona',
+						// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
+						'conditions' => array($conditions, 'centro_id'=>$nivelCentroId),
+						'fields' 	=> array('Alumno.id', 'Persona.nombres', 'Persona.apellidos', 'Persona.documento_nro')
 					)
 				);
 			} else if ($userRole === 'superadmin') {
-				$personas = $this->Alumno->Persona->find('all', array(
-					'recursive'	=> -1,
+				$personas = $this->Alumno->find('all', array(
+					'recursive'	=> 0,
+					'contain' => 'Persona',
 					// Condiciona la búsqueda también por id de persona de los alumnos del centro correspondiente.
-					'conditions' => $conditions,
-					'fields' 	=> array('id', 'nombre_completo_persona')
+					'conditions' => array($conditions),
+					'fields' 	=> array('Alumno.id', 'Persona.nombres', 'Persona.apellidos', 'Persona.documento_nro')
 					)
 				);
 			}
