@@ -107,6 +107,7 @@ class MatriculasController extends AppController
 
         $this->loadModel('Curso');
         $userCentroId = $this->getUserCentroId();
+        print_r($userCentroId);
         $userRole = $this->Auth->user('role');
         // Modifique las rutas de ROLES al formato SWITCH que es mas llevadero que los IF
         switch ($userRole) {
@@ -124,7 +125,6 @@ class MatriculasController extends AppController
 
                     $conditions['Curso.centro_id'] = $nivelCentroId;
                     $result = $this->paginate('Curso',$conditions);
-
                 } else  {
                     $nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 

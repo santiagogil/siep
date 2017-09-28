@@ -131,9 +131,9 @@ class PasesController extends AppController {
 		/* FIN */
 		if (!empty($this->data)) {
 			$this->Pase->create();
- 		    // Genera el ciclo id y se deja en los datos que se intentarán guardar.
-			$cicloId = $this->getLastCicloId();
-			$this->request->data['Pase']['ciclo_id'] = $cicloId;
+ 		    // Genera el id del ciclo actual y se deja en los datos que se intentarán guardar.
+			$cicloIdActual = $this->getActualCicloId();
+			$this->request->data['Pase']['ciclo_id'] = $cicloIdActual;
 			// Genera el centro id y se deja en los datos que se intentarán guardar.
 			$userCentroId = $this->getUserCentroId();
 			$this->request->data['Pase']['centro_id_origen'] = $userCentroId;

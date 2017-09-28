@@ -38,13 +38,6 @@ class Persona extends AppModel {
 
   //Validaciones
         var $validate = array(
-            'created' => array(
-                'required' => array(
-                'rule' => 'notBlank',
-                'required' => true,
-                'message' => 'Indicar una fecha y hora.'
-                )
-            ),
             'nombres' => array(
                 'required' => array(
                 'rule' => 'notBlank',

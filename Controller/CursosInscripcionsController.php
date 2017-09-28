@@ -73,12 +73,8 @@ class CursosInscripcionsController extends AppController {
         $ciclosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('ciclo_id')));
         $this->loadModel('Ciclo');
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
-        
-        $hoyArray = getdate();
-        $hoyAñoString = $hoyArray['year']; 
-        $this->loadModel('Ciclo');
-        $cicloIdActual = $this->Ciclo->find('list', array('fields'=>array('id'), 'conditions' => array('nombre' => $hoyAñoString)));
-        // Por centro...
+		$cicloIdActual = $this->getActualCicloId();
+		// Por centro...
         $this->loadModel('Centro');
 		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
 		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));

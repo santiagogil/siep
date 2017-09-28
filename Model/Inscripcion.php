@@ -65,13 +65,6 @@ class Inscripcion extends AppModel {
 
 	//Validaciones
 	var $validate = array(
-	    'created' => array(
-            'required' => array(
-	       	'rule' => 'notBlank',
-            'required' => 'create',
-		    'message' => 'Indicar una fecha y hora.'
-            )
-        ),
 	   'tipo_inscripcion' => array(
             'valid' => array(
 				'rule' => array('inList', array('Común','Hermano de alumno regular','Pase','Hijo de docente de la institución')),
