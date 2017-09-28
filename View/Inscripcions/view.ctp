@@ -13,6 +13,8 @@
                         <?php echo ($this->Html->link($inscripcion['Ciclo']['nombre'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['Inscripcion']['ciclo_id']))); ?></p>
                         <b><?php echo __('Institución:'); ?></b>
                         <?php echo($this->Html->link($inscripcion['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $inscripcion['Inscripcion']['centro_id']))); ?></p>
+                        <b><?php echo __('Alumno:'); ?></b>
+                        <?php echo ($this->Html->link($personaNombre[$personaId[$inscripcion['Alumno']['id']]], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['Inscripcion']['alumno_id']))); ?></p>
                         <b><?php echo __('Tipo de inscripción:'); ?></b>
                         <?php echo $inscripcion['Inscripcion']['tipo_inscripcion']; ?></p>
                         <b><?php echo __('Estado de la inscripción:'); ?></b>

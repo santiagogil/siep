@@ -40,9 +40,10 @@ class AlumnosController extends AppController {
 		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 
 		if ($userRole === 'admin') {
-			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
-		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
+		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
+		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
+			$this->loadModel('Centro');
+			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
 			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $nivelCentroId);
 		} else if ($userRole === 'usuario') {
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
