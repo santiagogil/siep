@@ -16,7 +16,10 @@ class AlumnosController extends AppController {
 	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
 	        $this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompleteNombrePersona', 'autocompleteNombreAlumno');
 	    }
-	    /* FIN */
+
+		// Esta linea activa el modo AdminLTE para la version 2 de Siep
+		// $this->layout = 'adminlte';
+		/* FIN */
     }
 
     public function index() {
