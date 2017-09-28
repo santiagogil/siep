@@ -4,7 +4,12 @@
 </div>
 <!-- Autocomplete -->
 <div>
-    <input id="AlumnoPersonaId" class="form-control" placeholder="Buscar por nombre y/o apellido">
+    <input id="AutocompelteAlumno" class="form-control" placeholder="Buscar alumno por DNI, nombre y/o apellido">
+    <div class="alert alert-danger" role="alert" id="AutocompleteAlumnoError" style="display:none;">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        No se encontraron resultados de busqueda
+    </div>
 </div>
 <hr />
 <div class="text-center">
@@ -14,17 +19,27 @@
 </div>
 <script>
     $( function() {
-        $( "#AlumnoPersonaId" ).autocomplete({
+        $( "#AutocompelteAlumno" ).autocomplete({
             source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombreAlumno'));?>",
             minLength: 2,
             select: function( event, ui ) {
-                $("#AlumnoPersonaId").val( ui.item.Persona.nombre_completo_persona );
-                window.location.href = "<?php echo $this->Html->url(array('controller'=>'alumnos','action'=>'view'));?>/"+ui.item.Persona.id;
+                var nombre_completo = ui.item.Persona.apellidos +" "+ ui.item.Persona.nombres +' - ' +ui.item.Persona.documento_nro;
+                $("#AutocompelteAlumno").val( nombre_completo );
+                window.location.href = "<?php echo $this->Html->url(array('controller'=>'alumnos','action'=>'view'));?>/"+ui.item.Alumno.id;
                 return false;
+            },
+            response: function(event, ui) {
+                if (ui.content.length === 0)
+                {
+                    $("#AutocompleteAlumnoError").show();
+                } else {
+                    $("#AutocompleteAlumnoError").hide();
+                }
             }
         }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+            var nombre_completo = item.Persona.apellidos +" "+ item.Persona.nombres +' - ' +item.Persona.documento_nro;
             return $( "<li>" )
-                .append( "<div>" +item.Persona.nombre_completo_persona+ "</div>" )
+                .append( "<div>" +nombre_completo+ "</div>" )
                 .appendTo( ul );
         };
     });
