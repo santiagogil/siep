@@ -18,4 +18,10 @@ class SiepHelper extends AppHelper
     {
         return (AuthComponent::user('role') == 'admin') ? true : false;
     }
+
+    public function verUltimaQuery($modelo)
+    {
+        $log = $modelo->getDataSource()->getLog(false, false);
+        debug($log);
+    }
 }
