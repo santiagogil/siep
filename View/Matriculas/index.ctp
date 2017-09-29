@@ -40,7 +40,7 @@
               <?php echo $matricula['Curso']['vacantes']; ?>
             </td>
             <td >
-              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Centros', 'action'=> 'view', $matricula['Centro']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
+              <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $matricula['Curso']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
           </tr>
         <?php endforeach; ?>

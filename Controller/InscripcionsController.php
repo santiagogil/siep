@@ -88,10 +88,13 @@ class InscripcionsController extends AppController {
 		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		if ($userRole == 'superadmin') {
 			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla')));
-		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
 			$nivelCentroId = $this->Inscripcion->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
 			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
-		} else if ($userRole == 'admin') {
+		} else if ($userRole === 'usuario') {
+            $nivelCentroId = $this->Inscripcion->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));       
+            $centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
+        } else if ($userRole == 'admin') {
 			$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
 		}
         /* Carga de Alumnos */
@@ -354,11 +357,22 @@ class InscripcionsController extends AppController {
         $cicloIdUltimoString = $cicloIdUltimoArray['Ciclo']['id'];
         $ciclos = $this->getTwoLastCicloNombres($cicloIdActualString, $cicloIdUltimoString);
         $centros = $this->Inscripcion->Centro->find('list');
-		//Sí es "superadmin" o "usuario" ve combobox con todos los cursos. Sino ve los propios del centro.
-		$userRol = $this->Auth->user('role');
-		if (($userRol == 'superadmin') || ($userRol == 'usuario')) {
+		/* Sí es "superadmin" ve combobox con todos los cursos, 
+        *  Sino sí es usuario de Inicial y Primaria, ve los propios de ambos niveles,
+        *  Sino sí es usuario de otro nivel ve los correspondiente.
+        */
+		$userCentroId = $this->getUserCentroId();
+        $nivelCentro = $this->Inscripcion->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+        $userRol = $this->Auth->user('role');
+		if ($userRol == 'superadmin') {
 			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
-		} else if ($userRol == 'admin') {
+		} else if (($userRol === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
+            $nivelCentroId = $this->Inscripcion->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
+            $cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+        } else if ($userRol === 'usuario') {
+            $nivelCentroId = $this->Inscripcion->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+            $cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+        } else if ($userRol == 'admin') {
 			$userCentroId = $this->getUserCentroId();
 			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId)));
 		}
