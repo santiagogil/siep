@@ -28,9 +28,12 @@ class CursosController extends AppController {
 		*  Sí el usuario es "admin" muestra los cursos activos del establecimiento. 
 		*  Sino sí es "usuario" externo muestra los cursos activos del nivel.
 		*/ 
-		$userCentroId = $this->getUserCentroId();
-		$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 		$userRole = $this->Auth->user('role');
+		$userCentroId = $this->getUserCentroId();
+		$nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
+		$this->loadModel('Centro');
+		$nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
+		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		if ($userRole === 'admin') {
 			$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId, 'Curso.status' => 1);
 		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
@@ -64,7 +67,9 @@ class CursosController extends AppController {
         *  Sí es 'superadmin' el combobox de centros trae todas las instituciones.
         *  Sino sí es 'usuario' trae sólo los centros correspondientes al nivel. 
 		*/
-		$nivelCentro = $this->Curso->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+		$nivelCentroArray = $this->Curso->Centro->findById($userCentroId, 'nivel_servicio');
+		$this->loadModel('Centro');
+		$nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
 		$nivelCentroId = $this->Curso->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		if ($userRole === 'superadmin') {
 			$centros= $this->Curso->Centro->find('list', array('fields'=>array('sigla')));
