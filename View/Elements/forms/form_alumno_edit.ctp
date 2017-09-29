@@ -15,10 +15,10 @@
 						<label for="AlumnoNombreCompleto">Nombres y Apellidos*: </label>
 						<br>
 						<input id="AlumnoNombreCompleto" value="<?php echo $this->data["Persona"]["nombre_completo_persona"]; ?>" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
-						<input id="AlumnoPersonaId" value="<?php echo $this->data["Persona"]["id"]; ?>" name="data[Alumno][persona_id]" type="text">
+						<input id="AlumnoPersonaId" value="<?php echo $this->data["Persona"]["id"]; ?>" name="data[Alumno][persona_id]" type="text" style="display:none;">
 
 						<div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
-							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" ></span>
 							<span class="sr-only">Error:</span>
 							No existe una persona con ese nombre:
 							<?php echo $this->Html->link("Crear persona",array('controller'=>'personas','action'=>'add'));?>
@@ -36,7 +36,8 @@
 											$("#AlumnoPersonaId").val("");
 
 											if(ui.item != undefined) {
-												$("#AlumnoNombreCompleto").val(ui.item.Persona.nombre_completo_persona);
+												var nombre_completo = ui.item.Persona.nombres + " "+ ui.item.Persona.apellidos;
+												$("#AlumnoNombreCompleto").val(nombre_completo);
 												$("#AlumnoPersonaId").val(ui.item.Persona.id);
 												return false;
 											}
@@ -52,9 +53,10 @@
 												}
 										}
 								}).autocomplete("instance")._renderItem = function( ul, item ) {
+										var nombre_completo = item.Persona.nombres + " "+ item.Persona.apellidos;
 										// Renderiza el resultado de la respuesta
 										return $( "<li>" )
-												.append( "<div>" +item.Persona.nombre_completo_persona+ "</div>" )
+												.append( "<div>" +nombre_completo+ "</div>" )
 												.appendTo( ul );
 								};
 						});
