@@ -33,7 +33,9 @@ class PasesController extends AppController {
 		*/
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
-		$conditionPagination = $this->Pase->find();
+		$this->loadModel('Centro');
+		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		if ($userRole === 'admin') {
 		$this->paginate['Pase']['conditions'] = array('or'=> array('Pase.centro_id_origen' => $userCentroId, 'Pase.centro_id_destino' => $userCentroId));
 		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
@@ -96,7 +98,7 @@ class PasesController extends AppController {
         $this->loadModel('Persona');
         $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
 		/* FIN */
-		$this->set(compact('pases', 'personaId', 'personaNombre', 'centrosNombre', 'ciclosNombre'));
+		$this->set(compact('pases', 'personaId', 'personaNombre', 'centrosNombre', 'ciclosNombre', 'nivelCentro'));
 	}
 
 	public function view($id = null) {
