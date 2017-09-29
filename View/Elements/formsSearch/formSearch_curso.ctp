@@ -21,9 +21,9 @@
     ?>
     <?php
 		if ($current_user['role'] == 'superadmin') {
-              $divisiones = array('ROJA' => 'ROJA', 'NARANJA' => 'NARANJA', 'AMARILLA' => 'AMARILLA', 'A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E', 'F' => 'F', 'G' => 'G', 'H' => 'H');
+              $divisiones = array('ROJA' => 'ROJA', 'CELESTE' => 'CELESTE', 'NARANJA' => 'NARANJA', 'AMARILLA' => 'AMARILLA', 'A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E', 'F' => 'F', 'G' => 'G', 'H' => 'H');
           } else if ($current_user['puesto'] == 'Dirección Jardín') {
-              $divisiones = array('ROJA' => 'ROJA', 'NARANJA' => 'NARANJA', 'AMARILLA' => 'AMARILLA');
+              $divisiones = array('ROJA' => 'ROJA', 'CELESTE' => 'CELESTE', 'NARANJA' => 'NARANJA', 'AMARILLA' => 'AMARILLA');
           } else {
             $divisiones = array('A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E', 'F' => 'F', 'G' => 'G', 'H' => 'H');       
           }

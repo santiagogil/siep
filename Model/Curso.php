@@ -92,43 +92,33 @@ class Curso extends AppModel {
 
         var $validate = array(
 				   'tipo' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-                           'message' => 'Indicar un tipo.'
-												 ),
-												 'alphaBet' => array(
-												 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{4,}$/i',
-												 'message' => 'Indicar una opción válida'
-                   )
-
-                   ),
-
+                        'valid' => array(
+							'rule' => array('inList', array('Independiente','Independiente de recuperación','Independiente semipresencial','Independiente presencial y semipresencial','Múltiple','Múltiple de recuperación','Múltiple semipresencial','Múltiple presencial y semipresencial','No Corresponde','Independiente presencial y semipresencial (violeta)','Mixta / Bimodal','Múltiple presencial y semipresencial (violeta)','Multinivel','Multiplan')),
+							'message' => 'Ingrese un tipo válido',
+							'allowEmpty' => false
+							)	
+                    ),
 				   'anio' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-                           'message' => 'Indicar un año.'
-                           )
-                   ),
+                        'valid' => array(
+							'rule' => array('inList', array('Sala de 3 años','Sala de 4 años','Sala de 5 años','1ero','2do','3ero','4to','5to','6to','7mo')),
+							'message' => 'Ingrese un año válido',
+							'allowEmpty' => false
+							)	
+                    ),
                    'division' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-                           'message' => 'Indicar una división.'
-                           )
-                   ),
-
+                        'valid' => array(
+							'rule' => array('inList', array('ROJA','NARANJA','AMARILLA','A','B','C','D','E','F','G','H')),
+							'message' => 'Ingrese una división válida',
+							'allowEmpty' => false
+							)	
+                    ),
                    'turno' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-                           'message' => 'Indicar un turno.'
-												 ),
-												 'alphaBet' => array(
-												 'rule' => '/^[ áÁéÉíÍóÓúÚa-zA-ZñÑ]{4,}$/i',
-												 'message' => 'Indicar un turno válido'
-                   )),
+                        'valid' => array(
+						'rule' => array('inList', array('Mañana','Tarde','Mañana Extendida','Tarde Extendida','Doble Extendida','Vespertino','Noche','Otro')),
+						'message' => 'Ingrese un turno válido',
+						'allowEmpty' => false
+						)	
+                    ),
                    'plazas' => array(
                    			'required' => array(
 						   	'rule' => 'notBlank',

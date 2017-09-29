@@ -21,7 +21,7 @@
 </div>
 <div class="form-group">
     <?php
-    $pase_estados = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA','BAJA'=>'BAJA');
+    $pase_estados = array('CONFIRMADO'=>'CONFIRMADO','NO CONFIRMADO'=>'NO CONFIRMADO','BAJA'=>'BAJA');
     echo $this->Form->input('estado_pase', array('label' => false, 'empty' => 'Ingrese un estado del pase...', 'options' => $pase_estados, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
     ?>
 </div>

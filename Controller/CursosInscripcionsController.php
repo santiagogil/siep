@@ -60,6 +60,9 @@ class CursosInscripcionsController extends AppController {
 		if(!empty($this->params['named']['ciclo_id'])) {
 			$conditions['Inscripcion.ciclo_id ='] = $this->params['named']['ciclo_id'];
 		}
+		if(!empty($this->params['named']['turno'])) {
+			$conditions['Curso.turno ='] = $this->params['named']['turno'];
+		}
 		if(!empty($this->params['named']['curso_id'])) {
 			$conditions['CursosInscripcion.curso_id ='] = $this->params['named']['curso_id'];
 		}
@@ -103,7 +106,6 @@ class CursosInscripcionsController extends AppController {
         	//Sí es "superadmin"
  	        $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso')));
         }
-        
         // Por código de inscripción...
         $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
         if ($userRole === 'admin') {
