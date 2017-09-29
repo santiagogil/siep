@@ -194,20 +194,32 @@ class CentrosController extends AppController {
 	public function autocompleteCentro() {
 		$term = null;
 
-		if(!empty($this->request->query('term'))) {
-			$term = $this->request->query('term');
-			$terminos = explode(' ', trim($term));
-			$terminos = array_diff($terminos,array(''));
-			$conditions = array();
-			foreach($terminos as $termino) {
-				$conditions[] = array('sigla LIKE' => '%' . $termino . '%');
+		$conditions = array();
+		$term = $this->request->query('term');
+
+		// Primero obtiene el termino a buscar
+		if(!empty($term))
+		{
+			// Si el termino es numerico, filtro por cue
+			if(is_numeric($term)) {
+				$conditions[] = array('cue LIKE ' => '%'.$term.'%');
+			} else {
+				// Se esta buscando por nombre del centro
+				$terminos = explode(' ', trim($term));
+				$terminos = array_diff($terminos,array(''));
+
+				foreach($terminos as $termino) {
+					$conditions[] = array('sigla LIKE' => '%' . $termino . '%');
+				}
+			}
 		}
+
 		$centro = $this->Centro->find('all', array(
 			'recursive'	=> -1,
 			'conditions' => $conditions,
-			'fields' 	=> array('id', 'sigla '))
+			'fields' 	=> array('id', 'sigla'))
 			);
-		}
+		
 		echo json_encode($centro);
 		$this->autoRender = false;
 	}

@@ -1,14 +1,7 @@
 <?php echo $this->Form->create('Centro',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
-<div class="form-group">
-   <?php echo $this->Form->input('cue', array('label' => false, 'class' => 'form-control', 'Placeholder' => 'Ingrese Nº de CUE...'));	?>
-</div>
 <!-- Autocomplete -->
 <div>
-   <input id="AutocompleteForm" class="form-control" placeholder="Buscar por institucion por nombre">
-</div>
-<hr />
-<div class="text-center">
-   <?php echo $this->Form->end(array('label' => 'BUSCAR', 'class' => 'btn btn-primary'));?>
+   <input id="AutocompleteForm" class="form-control" placeholder="Ingrese institucion por nombre o CUE">
 </div>
 <script>
    $( function() {
