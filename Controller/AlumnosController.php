@@ -33,16 +33,15 @@ class AlumnosController extends AppController {
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
 		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
 		*/
-		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
-
+		$userCentroId = $this->getUserCentroId();
 		$this->loadModel('Centro');
-		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-
+		$nivelCentroArray = $this->Centro->findById($userCentroId, 'nivel_servicio');
+		$nivelCentro = $nivelCentroArray['Centro']['nivel_servicio'];
+		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
 		if ($userRole === 'admin') {
 		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
 		} else if (($userRole === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
-			$this->loadModel('Centro');
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
 			$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $nivelCentroId);
 		} else if ($userRole === 'usuario') {
