@@ -73,22 +73,25 @@ class PasesController extends AppController {
 			$conditions['Pase.estado_pase ='] = $this->params['named']['estado_pase'];
 		}
 		$pases = $this->paginate('Pase',$conditions);
+
 		/* FIN */
 		/* SETS DE DATOS PARA COMBOBOX (INICIO). */
 		/* Carga de Ciclos */
-		$ciclosNombre = $this->Pase->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
+		$this->loadModel('Ciclo');
+		$ciclosNombre = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
 		/* Carga de Centros
 		*  Sí es superadmin carga todos los centros.
 		*  Sino sí es un usario de Inicial/Primaria, carga los centros de ambos niveles.
 		*  Sino sí es un usuario del resto de los niveles, carga los centros del nivel correspondientes.     
 		*/
+
 		$this->loadModel('Centro');
 		$nivelCentro = $this->Centro->find('list', array('fields'=>array('id','nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
 		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-		
+
 		$nivelCentroArray = $this->Centro->findById($nivelCentroId, 'nivel_servicio');
 		$nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
- 		
+
 		if ($userRole == 'superadmin') {
 			$centrosNombre = $this->Centro->find('list', array('fields'=>array('id', 'sigla')));
 		} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
@@ -97,9 +100,13 @@ class PasesController extends AppController {
 		} else if ($userRole == 'admin') {
 			$centrosNombre = $this->Centro->find('list', array('fields'=>array('id', 'sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
 		}
+
 		 /* Carga de Alumnos */
-		$personaId = $this->Pase->Alumno->find('list', array('fields'=>array('persona_id')));
-        $this->loadModel('Persona');
+
+		$this->loadModel('Alumno');
+		$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
+
+		$this->loadModel('Persona');
         $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
 		/* FIN */
 		$this->set(compact('pases', 'personaId', 'personaNombre', 'centrosNombre', 'ciclosNombre', 'nivelCentroString'));
