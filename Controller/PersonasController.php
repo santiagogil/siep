@@ -15,7 +15,7 @@ class PersonasController extends AppController {
         if ($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
-	        $this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompletePersonas');
+	        $this->Auth->allow('index', 'add' , 'view', 'edit', 'autocompletePersonas','listarBarrios','listarAsentamientos');
 	    }
 	    /* FIN */
     }
