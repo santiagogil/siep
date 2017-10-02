@@ -9,8 +9,13 @@
       <?php
           echo $this->Form->input('alumno_id', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'options'=>$PersonaAlumnoId, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?><br>
+      <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
+        <?php
+            echo $this->Form->input('centro_id_origen', array('label'=>'Institución Origen*', 'empty' => 'Ingrese una institución de origen...', 'options'=>$centrosNombre, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+        ?><br>
+      <?php endif; ?>
       <?php
-          echo $this->Form->input('centro_id_destino', array('label'=>'Institución Destino*', 'empty' => 'Ingrese una institución...', 'options'=>$listacentros, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+          echo $this->Form->input('centro_id_destino', array('label'=>'Institución Destino*', 'empty' => 'Ingrese una institución de destino...', 'options'=>$centrosNombre, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
     </div>
     <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>

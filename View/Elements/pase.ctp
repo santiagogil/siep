@@ -19,13 +19,16 @@
       <?php } ?>  
         <!--<span class="name"><span class="glyphicon glyphicon-user"></span> <b>Código:</b> <?php echo $inscripcion['Inscripcion']['legajo_nro']; ?></span><br/>-->
        <?php if ($current_user['role'] == 'admin') {
-        if ($pase['Pase']['estado_pase'] == 'NO CONFIRMADO') { ?>
+        if ($pase['Pase']['estado_pase'] == 'NO-CONFIRMADO') { ?>
             <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($personaNombre[$personaId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id'])); ?></span><br/>
         <?php } else if (($pase['Pase']['estado_pase'] == 'CONFIRMADO') && ($current_user['centro_id'] == $pase['Pase']['centro_id_destino'])) { ?>
             <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($personaNombre[$personaId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id'])); ?></span><br/>
         <?php } else { ?> 
             <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $personaNombre[$personaId[$pase['Pase']['alumno_id']]]; ?></span><br/> 
-       <?php }}; ?>
+       <?php }
+        } else if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) { ?> 
+            <span class="name"><span class="glyphicon glyphicon-user"></span> <b>Alumno:</b> <?php echo $this->Html->link($personaNombre[$personaId[$pase['Pase']['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['Pase']['alumno_id'])); ?></span><br/> 
+       <?php }; ?>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Documentación:</b><?php echo $pase['Pase']['estado_documentacion']; ?></span><br/>
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Estado:</b><?php echo $pase['Pase']['estado_pase']; ?></p>
         <div class="text-right">

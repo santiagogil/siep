@@ -1,11 +1,11 @@
 <?php echo $this->Form->create('Pase',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
 <div class="form-group">
-   <?php echo $this->Form->input('ciclo_id', array('label' => false, 'class' => 'form-control', 'empty' => 'Ingrese un ciclo...')); ?>
+   <?php echo $this->Form->input('ciclo_id', array('label' => false, 'options'=>$ciclosNombre, 'class' => 'form-control', 'empty' => 'Ingrese un ciclo...')); ?>
 </div><br>
 <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
     <div class="form-group">
        <?php echo $this->Form->input('centro_id_origen', array('label' => false, 'options'=>$centrosNombre, 'class' => 'form-control', 'empty' => 'Ingrese una institución de origen...')); ?>
-    </div>
+    </div><br>
 <?php endif; ?>
 <div class="form-group">
    <?php echo $this->Form->input('centro_id_destino', array('label' => false, 'options'=>$centrosNombre, 'class' => 'form-control', 'empty' => 'Ingrese una institución de destino...')); ?>
@@ -21,7 +21,7 @@
 </div>
 <div class="form-group">
     <?php
-    $pase_estados = array('CONFIRMADO'=>'CONFIRMADO','NO CONFIRMADO'=>'NO CONFIRMADO','BAJA'=>'BAJA');
+    $pase_estados = array('CONFIRMADO'=>'CONFIRMADO','NO-CONFIRMADO'=>'NO-CONFIRMADO','BAJA'=>'BAJA');
     echo $this->Form->input('estado_pase', array('label' => false, 'empty' => 'Ingrese un estado del pase...', 'options' => $pase_estados, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
     ?>
 </div>

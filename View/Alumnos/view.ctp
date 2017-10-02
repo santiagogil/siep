@@ -122,7 +122,7 @@
 					<?php echo '<b>Centro de Destino:</b> '.($this->Html->link($centroNombre[$pase['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['centro_id_origen'])));?><br>
 					<!--<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>-->
 					<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$personaId[$pase['alumno_id']]], array('controller' => 'alumnos', 'action' => 'view', $pase['alumno_id'])));?><br>
-		            <b>Documentación:</b> <?php if($pase['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $pase['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $pase['estado_pase']; ?></span><?php } ?></br>
+		            <b>Documentación:</b> <?php if($pase['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $pase['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $pase['estado_documentacion']; ?></span><?php } ?></br>
 		            <?php echo '<b>Estado:</b> '.$pase['estado_pase'];?><br>
 		            <hr>
 		            <div class="text-right">
