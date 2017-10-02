@@ -105,7 +105,7 @@ class InscripcionsController extends AppController {
 		$this->set(compact('inscripcions', 'personaId', 'personaNombre', 'centros', 'ciclos'));
 	}
 
-	   public function view($id = null) {
+    public function view($id = null) {
         if (!$id) {
             $this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect(array('action' => 'index'));
@@ -222,8 +222,14 @@ class InscripcionsController extends AppController {
                     *  Al registrarse una Inscripción sí es para el ciclo actual, actualiza valores de matrícula
                     *  y vacantes del curso correspondiente en el modelo Curso.
                     */
-                    $cicloIdActual = $this->getActualCicloId();
-                    if ($cicloId == $cicloIdActual) {
+                    // Obtiene el id del ciclo actual.
+                    $cicloIdActualArray = $this->getActualCicloId();
+                    $cicloIdString = $this->Inscripcion->Ciclo->findById($cicloIdActualArray, 'id');
+                    $cicloIdActual = $cicloIdString['Ciclo']['id'];
+                    // Obtiene el id del ciclo seleccionado.
+                    $cicloIdSeleccionado = $ciclos['Ciclo']['id'];      
+                    // Sí los id del ciclo Atual y el Seleccionado coinciden, actualiza matrícula.
+                    if ($cicloIdSeleccionado == $cicloIdActual) {
                         $this->loadModel('Curso');
                         $cursoIdArray = $this->request->data['Curso'];
                         $cursoIdString = $cursoIdArray['Curso'];
@@ -251,35 +257,25 @@ class InscripcionsController extends AppController {
 			$this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
-		if (!empty($this->data)) {
+    	if (!empty($this->data)) {
 		  //abort if cancel button was pressed
             if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
 		    }
-
             $this->loadModel('Inscripcions');
             $inscripcion = $this->Inscripcions->findById($id);
-
             $this->loadModel('Alumno');
-            $alumno = $this->Alumno->find('first',[
-                'recursive' => 0,
-                'contains' => 'Personas',
-                'conditions' => [
-                    'Alumno.id'=> $inscripcion['Inscripcions']['alumno_id']
-                ]
-            ]);
-            // En este punto tengo a al alumno y a la persona relacionada a la inscripcion id
+            $alumno = $this->Alumno->find('first',['recursive' => 0, 'contains' => 'Personas', 'conditions' => ['Alumno.id'=> $inscripcion['Inscripcions']['alumno_id']]]);
+            // En este punto tengo al alumno y a la persona relacionadas al id de inscripcion.
             $alumnoId = $alumno['Alumno']['id'];
             $personaId  = $alumno['Persona']['id'];
-
             //Antes de guardar genera el estado de la inscripción
 			if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true){
 			   $estadoDocumentacion = "COMPLETA";
 			}else{
 			   $estadoDocumentacion = "PENDIENTE";
 			}
-
             //Se genera el estado y se deja en los datos que se intentaran guardar
 			$this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
 			// Se define el id del centro.
@@ -298,9 +294,10 @@ class InscripcionsController extends AppController {
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId ;
                 break;
             }
-            /* Se trata de un pase sí se identifica un cambio en el id del centro.
+            /* Se trata de un pase, sí se identifica un cambio en el id del centro.
             *  Actualiza el id del centro del Alumno.
             *  Actualiza valores de matrícula y vacantes.
+            *  Actualiza a confirmado el estado del pase.
             */
             $centroIdAnteriorArray = $this->Inscripcion->Alumno->find('first', array(
                 'recursive'=>-1,
@@ -309,13 +306,19 @@ class InscripcionsController extends AppController {
                     'Alumno.id'=>$alumnoId)
             ));
             $centroIdAnterior = $centroIdAnteriorArray['Alumno']['centro_id'];
-
-            if ($centroIdAnterior != $userCentroId) {/* Actualiza el id del centro del Alumno. */
+            if ($centroIdAnterior != $userCentroId) {
+                /* Actualiza el id del centro del Alumno. */
                 $this->loadModel('Alumno');
                 $alumnoIdArray = $this->Alumno->findByPersonaId($personaId);
                 $alumnoIdString = $alumnoIdArray['Alumno'];
                 $this->Alumno->id=$alumnoIdString;
                 $this->Alumno->saveField("centro_id", $userCentroId);
+                /* Modifica a "CONFIRMADO" el estado del pase. */
+                $alumnoIdArray = $this->Inscripcion->findById($id, 'alumno_id');
+                $alumnoIdString = $alumnoIdArray['Inscripcion']['alumno_id'];
+                $this->loadModel('Pase');
+                $this->Pase->alumno_id=$alumnoIdString;
+                $this->Pase->saveField("estado_pase", 'CONFIRMADO');
                 /* ATUALIZA MATRÍCULA Y VACANTES (INICIO). */
                 $this->loadModel('Curso');
                 $cursoIdArray = $this->request->data['Curso'];
@@ -327,11 +330,6 @@ class InscripcionsController extends AppController {
                 $plazasString = $plazasArray['Curso']['plazas'];
                 $vacantesActual = $plazasString - $matriculaActual;
                 $this->Curso->saveField("vacantes", $vacantesActual);
-                /* Modifica a "CONFIRMADO" el estado del pase. */
-                $alumnoIdString = $alumnoIdArray['Alumno'];
-                $this->loadModel('Pase');
-                $this->Pase->alumno_id=$alumnoIdString;
-                $this->Pase->saveField("estado_pase", 'CONFIRMADO');
                 /* FIN */
             }
             if ($this->Inscripcion->save($this->data)) {
@@ -343,16 +341,12 @@ class InscripcionsController extends AppController {
 			}
 		}
 		if (empty($this->data)) {
-
             $this->loadModel('Alumno');
-
             $editar = $this->Alumno->find('first', array(
                 'recursive' => 0,
                 'contains' => array('personas')
             ));
-
             $this->set(compact('editar'));
-
             $this->data = $this->Inscripcion->read(null, $id);
 		}
 	}
