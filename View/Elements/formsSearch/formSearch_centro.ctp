@@ -1,4 +1,4 @@
-<?php echo $this->Form->create('Centro',array('id'=>'formularioBusqueda','type'=>'get', 'action'=>'view', 'novalidate' => true));?>
+<?php echo $this->Form->create('Centro',array('id'=>'formularioBusqueda','type'=>'get', 'url'=>'view', 'novalidate' => true));?>
 <!-- Autocomplete -->
 <div>
    <input id="AutocompleteForm" class="form-control" placeholder="Ingrese institucion por nombre o CUE">

@@ -124,21 +124,26 @@ class CursosController extends AppController {
 		}
 		if (!empty($this->data)) {
 			$this->Curso->create();
-			
+			/*
 			//Antes de guardar obtiene el ciclo actual.
 			$this->request->data['Curso']['ciclo_id'] = $this->getLastCicloId();
 			//Antes de guardar obtiene el centro del que pertenece el empleado.
 			$centroId = $this->Auth->user('centro_id');
 			$this->request->data['Curso']['centro_id'] = $centroId;
+			*/
 			//Antes de guardar sí el nivel_servicio del centro es INICIAL o PRIMARIO, obtiene la titulación.
+            $centroId = $this->request->data['Curso']['centro_id'];
             $this->loadModel('Centro');
             $centroNivel = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$centroId)));
 			if ($centroNivel == 'INICIAL') {
 				$this->request->data['Curso']['titulacion_id'] = 9;
 			} else if ($centroNivel == 'PRIMARIA') {
 				$this->request->data['Curso']['titulacion_id'] = 10;
-
 			}
+			// Antes de guardar obtiene los valores de matrícula y vacantes.
+			$plazas = $this->request->data['Curso']['plazas'];
+			$vacantes = $plazas;
+			$this->request->data['Curso']['vacantes'] = $vacantes;
 			if ($this->Curso->save($this->data)) {
 				$this->Session->setFlash('La sección ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
@@ -151,8 +156,9 @@ class CursosController extends AppController {
 		$titulacions = $this->Curso->Titulacion->find('list');
 		$materias = $this->Curso->Materia->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
+		$centros = $this->Curso->Centro->find('list');
 		$inscripcions = $this->Inscripcion->find('list');
-		$this->set(compact('titulacions', 'materias', 'ciclos', 'inscripcions', $inscripcions));
+		$this->set(compact('titulacions', 'materias', 'ciclos', 'inscripcions', $inscripcions, 'centros'));
 	}
 
 	function edit($id = null) {

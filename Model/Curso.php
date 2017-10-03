@@ -100,7 +100,7 @@ class Curso extends AppModel {
                     ),
 				   'anio' => array(
                         'valid' => array(
-							'rule' => array('inList', array('Sala de 3 años','Sala de 4 años','Sala de 5 años','1ero','2do','3ero','4to','5to','6to','7mo')),
+							'rule' => array('inList', array('Sala de 3 años','Sala de 4 años','Sala de 5 años','1ro','2do','3ro','4to','5to','6to','7mo')),
 							'message' => 'Ingrese un año válido',
 							'allowEmpty' => false
 							)	
@@ -123,7 +123,7 @@ class Curso extends AppModel {
                    			'required' => array(
 						   	'rule' => 'notBlank',
 						   	'required' => 'create',
-                           	'message' => 'Indicar una matrícula.'
+                           	'message' => 'Indicar la cantidad de plazas.'
                            	),
 							'numeric' => array(
 							'rule' => 'naturalNumber',
@@ -131,18 +131,22 @@ class Curso extends AppModel {
 							)
                    ),
                    'matricula' => array(
-		                'numeric' => array(
-		                'rule' => 'naturalNumber',
-		                'required' => true,
-		                'message' => 'Indicar número sin puntos ni comas ni espacios.'
-		                )
+			            	'numeric' => array(
+			                'rule' => 'naturalNumber',
+			                'allowEmpty' => true,
+			                'message' => 'Indicar número sin puntos ni comas ni espacios.'
+			                )
 		            ),
                    	'vacantes' => array(
-		                'numeric' => array(
-		                'rule' => 'naturalNumber',
-		                'required' => true,
-		                'message' => 'Indicar número sin puntos ni comas ni espacios.'
-		                )
+		                	'required' => array(
+						   	'rule' => 'notBlank',
+						   	'required' => 'create',
+                           	'message' => 'Indicar la cantidad de vacantes.'
+                           	),
+			                'numeric' => array(
+			                'rule' => 'naturalNumber',
+			                'message' => 'Indicar número sin puntos ni comas ni espacios.'
+			                )
 		            ),
 				   'aula_nro' => array(
                            'required' => array(
@@ -150,12 +154,11 @@ class Curso extends AppModel {
 						   'required' => 'create',
                            'message' => 'Indicar un aula.'
                            ),
-													 'numeric' => array(
-								 						'rule' => 'naturalNumber',
-								 						'message' => 'Indicar número sin puntos ni comas ni espacios.'
-								 					)
+						    'numeric' => array(
+							'rule' => 'naturalNumber',
+							'message' => 'Indicar número sin puntos ni comas ni espacios.'
+							)
                    ),
-
                    'ciclo_id' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
