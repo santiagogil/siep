@@ -87,7 +87,7 @@ class Pase extends AppModel {
                     ),
                     'estado_pase' => array(
 						'valid' => array(
-						'rule' => array('inList', array('CONFIRMADO','NO CONFIRMADO','BAJA')),
+						'rule' => array('inList', array('CONFIRMADO','NO-CONFIRMADO','BAJA')),
 						'message' => 'Indicar una opción',
 						'allowEmpty' => false
 							)
