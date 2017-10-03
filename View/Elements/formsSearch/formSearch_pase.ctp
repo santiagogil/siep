@@ -1,17 +1,17 @@
 <?php echo $this->Form->create('Pase',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
 <div class="form-group">
-   <?php echo $this->Form->input('ciclo_id', array('label' => false, 'class' => 'form-control', 'empty' => 'Ingrese un ciclo...')); ?>
-</div><br>
+   <?php echo $this->Form->input('ciclo_id', array('label' => false, 'between' => '<br>', 'class' => 'form-control', 'empty' => 'Ingrese un ciclo...')); ?>
+</div>
 <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
     <div class="form-group">
-       <?php echo $this->Form->input('centro_id_origen', array('label' => false, 'options'=>$centrosNombre, 'class' => 'form-control', 'empty' => 'Ingrese una institución de origen...')); ?>
+       <?php echo $this->Form->input('centro_id_origen', array('label' => false, 'options'=>$centrosNombre, 'between' => '<br>', 'class' => 'form-control', 'empty' => 'Ingrese una institución de origen...')); ?>
     </div>
 <?php endif; ?>
 <div class="form-group">
-   <?php echo $this->Form->input('centro_id_destino', array('label' => false, 'options'=>$centrosNombre, 'class' => 'form-control', 'empty' => 'Ingrese una institución de destino...')); ?>
+   <?php echo $this->Form->input('centro_id_destino', array('label' => false, 'options'=>$centrosNombre, 'between' => '<br>', 'class' => 'form-control', 'empty' => 'Ingrese una institución de destino...')); ?>
 </div>
 <!--<div class="form-group">
-   <?php echo $this->Form->input('alumno_id', array('label' => false, 'class' => 'form-control', 'empty' => 'Ingrese un alumno...')); ?>
+   <?php echo $this->Form->input('alumno_id', array('label' => false, 'between' => '<br>', 'class' => 'form-control', 'empty' => 'Ingrese un alumno...')); ?>
 </div>-->
 <div class="form-group">
     <?php

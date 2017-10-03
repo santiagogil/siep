@@ -222,8 +222,11 @@ class InscripcionsController extends AppController {
                     *  Al registrarse una Inscripción sí es para el ciclo actual, actualiza valores de matrícula
                     *  y vacantes del curso correspondiente en el modelo Curso.
                     */
+                    $this->loadModel('Ciclo');
                     $cicloIdActual = $this->getActualCicloId();
-                    if ($cicloId == $cicloIdActual) {
+                    $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
+                    $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
+                    if ($cicloId == $cicloIdActualString) {
                         $this->loadModel('Curso');
                         $cursoIdArray = $this->request->data['Curso'];
                         $cursoIdString = $cursoIdArray['Curso'];
