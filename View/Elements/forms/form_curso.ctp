@@ -6,10 +6,9 @@
   <div class="col-md-6 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
   		<?php
-          echo $this->Form->input('ciclo_id', array('label' => 'Ciclo*', 'empty' => 'Ingrese un ciclo...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione opciones de la lista'));
           echo $this->Form->input('centro_id', array('label' => 'Centro*', 'empty' => 'Ingrese un ciclo...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
           if ($current_user['role'] == 'superadmin') {
-            $anios = array('Sala de 3 años'=>'Sala de 3 años','Sala de 4 años'=>'Sala de 4 años','Sala de 5 años'=>'Sala de 5 años','1ro '=>'1ro','2do'=>'2do','3ro'=>'3ro','4to'=>'4to','5to'=>'5to','6to'=>'6to','7mo'=>'7mo');
+            $anios = array('Sala de 3 años'=>'Sala de 3 años','Sala de 4 años'=>'Sala de 4 años','Sala de 5 años'=>'Sala de 5 años','1ro'=>'1ro','2do'=>'2do','3ro'=>'3ro','4to'=>'4to','5to'=>'5to','6to'=>'6to','7mo'=>'7mo');
           } else if (($current_user['puesto'] == 'Dirección Jardín/Escuela') || ($current_user['puesto'] == 'Supervisión Inicial/Primaria')) {
               $anios = array('Sala de 3 años' => 'Sala de 3 años','Sala de 4 años' => 'Sala de 4 años','Sala de 5 años' => 'Sala de 5 años');
           } else {

@@ -91,6 +91,12 @@ class CursosController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('curso', $this->Curso->read(null, $id));
+		/* OBTIENE EL CICLO ACTUAL */
+		$this->loadModel('Ciclo');
+        $cicloIdActual = $this->getActualCicloId();
+        $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
+        $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
+		/* FIN */
 		/* GENERA NOMBRES PARA DATOS RELACIONADOS. (INICIO) */
 		$this->loadModel('Persona');
 		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
@@ -113,7 +119,7 @@ class CursosController extends AppController {
 		$personaId = $this->Curso->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
 		$this->loadModel('Persona');
 		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-		$this->set(compact('personaId', 'personaNombre', 'cicloNombre', 'userCentroNivel', 'vacantes', 'cursoPlazasString', 'cursoMatriculaString'));
+		$this->set(compact('personaId', 'personaNombre', 'cicloNombre', 'userCentroNivel', 'vacantes', 'cursoPlazasString', 'cursoMatriculaString', 'cicloIdActualString'));
 	}
 
 	function add() {
@@ -155,7 +161,6 @@ class CursosController extends AppController {
 		}
 		$titulacions = $this->Curso->Titulacion->find('list');
 		$materias = $this->Curso->Materia->find('list');
-		$ciclos = $this->Curso->Ciclo->find('list');
 		$centros = $this->Curso->Centro->find('list');
 		$inscripcions = $this->Inscripcion->find('list');
 		$this->set(compact('titulacions', 'materias', 'ciclos', 'inscripcions', $inscripcions, 'centros'));

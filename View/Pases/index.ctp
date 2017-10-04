@@ -10,7 +10,7 @@
                         <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) { ?>
                                 <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-plus"></i> AGREGAR ', array('action' => 'add'), array('class' => 'btn btn-primary','escape' => false)); ?>
                                 </span>
-                              <?php } else if (($current_user['role'] == 'admin') && (($nivelCentro == 'Común - Inicial') || ($nivelCentro == 'Común - Primario'))) { ?>
+                              <?php } else if (($current_user['role'] == 'admin') && (($nivelCentroString == 'Común - Inicial') || ($nivelCentroString == 'Común - Primario'))) { ?>
                                  <span class="link"><?php echo $this->Html->link('<i class= "glyphicon glyphicon-plus"></i> AGREGAR ', array('action' => 'add'), array('class' => 'btn btn-primary','escape' => false)); ?>
                                  </span>
                            <?php } ?> 

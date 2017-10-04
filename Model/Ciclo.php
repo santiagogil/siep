@@ -102,22 +102,7 @@ class Ciclo extends AppModel {
 			'finderQuery' => '',
 			'deleteQuery' => '',
 			'insertQuery' => ''
-		),
-		'Curso' => array(
-			'className' => 'Curso',
-			'joinTable' => 'ciclos_cursos',
-			'foreignKey' => 'ciclo_id',
-			'associationForeignKey' => 'curso_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		),
+		)
 	);
 
     //Validaciones

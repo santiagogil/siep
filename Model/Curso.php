@@ -41,21 +41,6 @@ class Curso extends AppModel {
 	);
 
     var $hasAndBelongsToMany = array(
-		'Ciclo' => array(
-			'className' => 'Ciclo',
-			'joinTable' => 'ciclos_cursos',
-			'foreignKey' => 'curso_id',
-			'associationForeignKey' => 'ciclo_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		),
 		'Inscripcion' => array(
 			'className' => 'Inscripcion',
 			'joinTable' => 'cursos_inscripcions',
@@ -159,24 +144,12 @@ class Curso extends AppModel {
 							'message' => 'Indicar número sin puntos ni comas ni espacios.'
 							)
                    ),
-                   'ciclo_id' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-                           'message' => 'Indicar un ciclo.'
-												 ),
-												 'numeric' => array(
-							 						'rule' => 'naturalNumber',
-							 						'message' => 'Indicar número sin puntos ni comas ni espacios.'
-							 					)
-                   ),
-
-				   'titulacion_id' => array(
+                   'titulacion_id' => array(
                            'required' => array(
 						   'rule' => 'notBlank',
 						   'required' => 'create',
                            'message' => 'Indicar una titulación.'
-												 ),
+					  	   ),
 												 'numeric' => array(
 							 						'rule' => 'naturalNumber',
 							 						'message' => 'Indicar número sin puntos ni comas ni espacios.'
