@@ -163,8 +163,10 @@
     <div class="swiper-container" style="height: 200px;">
         <div class="swiper-wrapper" >
 	<?php foreach ($curso['Inscripcion'] as $inscripcion): ?>
+	<!-- Sólo visualiza las inscripciones relacionadas del ciclo actual -->
+	<?php if ($inscripcion['ciclo_id'] == $cicloIdActualString) { ?>
 	<div class="swiper-slide">
-	<div class="col-md-6">
+	  <div class="col-md-6">
 		<div class="unit">
 			<?php echo '<b>Inscripción:</b> '.($this->Html->link($inscripcion['legajo_nro'], array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id'])));?><br>
 			<?php echo '<b>Alumno:</b> '.($this->Html->link($personaNombre[$personaId[$inscripcion['alumno_id']]], array('controller' => 'personas', 'action' => 'view', $inscripcion['alumno_id'])));?><br>
@@ -184,6 +186,7 @@
 		</div>
 	 </div>
   </div>		
+		<?php } ?>
 		<?php endforeach; ?>
   </div>
   <!-- Add Pagination -->

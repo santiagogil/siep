@@ -291,7 +291,7 @@ class InscripcionsController extends AppController {
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId ;
                 break;
             }
-            /* Se trata de un pase, sí se identifica un cambio en el id del centro.
+            /* Se trata de un pase externo, sí se identifica un cambio en el id del centro.
             *  Actualiza el id del centro del Alumno.
             *  Actualiza valores de matrícula y vacantes.
             *  Actualiza a confirmado el estado del pase.
@@ -328,6 +328,41 @@ class InscripcionsController extends AppController {
                 $vacantesActual = $plazasString - $matriculaActual;
                 $this->Curso->saveField("vacantes", $vacantesActual);
                 /* FIN */
+            } 
+            /* Sino sí cambia de sección, se trata de un pase interno.
+            *  Actualiza valores de matrícula y vacantes del curso origen.
+            *  Actualiza valores de matrícula y vacantes del curso destino.
+            */
+            // Obtiene el id del curso seleccionado.
+            $this->loadModel('Curso');
+            $cursoIdArraySeleccionado = $this->request->data['Curso'];
+            $cursoIdStringSeleccionado = $cursoIdArraySeleccionado['Curso'];
+            // Obtiene el id del curso asignado anteriormente.
+            $this->loadModel('CursosInscripcion');
+            $cursoInscripcionId = $this->CursosInscripcion->find('list', array('fields'=>array('id'), 'conditions'=>array('inscripcion_id'=>$id)));
+            $cursoIdArrayAnterior = $this->CursosInscripcion->findById($cursoInscripcionId, 'curso_id');                
+            $cursoIdStringAnterior = $cursoIdArrayAnterior['CursosInscripcion']['curso_id'];
+            // Sí los id de los cursos son diferentes, se trata de un cambio de sección. 
+            if ($cursoIdStringSeleccionado != $cursoIdStringAnterior) { 
+               // Actualiza los valores de matrícula y vacantes tanto de la sección origen como de la sección destino.
+               // Comienza por el curso anterior...
+               $matricula = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdStringAnterior)));
+               $matriculaActual = $matricula - 1;
+               $this->Curso->id=$cursoIdStringAnterior;
+               $this->Curso->saveField("matricula", $matriculaActual);
+               $plazasArray = $this->Curso->findById($cursoIdStringAnterior, 'plazas');
+               $plazasString = $plazasArray['Curso']['plazas'];
+               $vacantesActual = $plazasString - $matriculaActual;
+               $this->Curso->saveField("vacantes", $vacantesActual);
+               // Continúa por el curso actual...    
+               $matricula = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdStringSeleccionado)));
+               $matriculaActual = $matricula + 1;
+               $this->Curso->id=$cursoIdStringSeleccionado;
+               $this->Curso->saveField("matricula", $matriculaActual);
+               $plazasArray = $this->Curso->findById($cursoIdStringSeleccionado, 'plazas');
+               $plazasString = $plazasArray['Curso']['plazas'];
+               $vacantesActual = $plazasString - $matriculaActual;
+               $this->Curso->saveField("vacantes", $vacantesActual);  
             }
             if ($this->Inscripcion->save($this->data)) {
 				$this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
