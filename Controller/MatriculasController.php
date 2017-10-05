@@ -54,19 +54,42 @@ class MatriculasController extends AppController
         );
 
         $this->redirectToNamed();
+
         $conditions = array();
 
-        if(!empty($this->params['named']['centro_id'])) 
+        if (!empty($this->params['named']['anio'])) {
+            $conditions['Curso.anio ='] = $this->params['named']['anio'];
+        }
+        if (!empty($this->params['named']['division'])) {
+            $conditions['Curso.division ='] = $this->params['named']['division'];
+        }
+        if(!empty($this->params['named']['centro_id']))
         {
             $conditions['Centro.id = '] = $this->params['named']['centro_id'];
         }
 
         $userCentroId = $this->getUserCentroId();
 
+        // Cargo todos los cilos de la base de datos
+        $this->loadModel('Ciclo');
+        $comboCiclo = $this->Ciclo->find('list');
+
         if($this->Siep->isAdmin()) 
         {
             $conditions['Curso.centro_id'] = $userCentroId;
             $matriculas = $this->paginate('Curso',$conditions);
+
+            $comboAnio = $this->Curso->find('list', array(
+                'recursive'=> -1,
+                'fields'=> array('anio'),
+                'conditions'=>array('centro_id'=>$userCentroId)
+            ));
+
+            $comboDivision = $this->Curso->find('list', array(
+                'recursive'=> -1,
+                'fields'=> 'division',
+                'conditions'=>array('centro_id'=>$userCentroId)
+            ));
         }
 
         if($this->Siep->isUsuario())
@@ -94,14 +117,38 @@ class MatriculasController extends AppController
                 $conditions['Curso.centro_id'] = $nivelCentroId;
                 $matriculas = $this->paginate('Curso', $conditions);
             }
+
+            $comboAnio = $this->Curso->find('list', array(
+                'recursive'=> -1,
+                'fields'=> 'anio',
+                'conditions'=>array('centro_id'=>$nivelCentroId)
+            ));
+
+            $comboDivision = $this->Curso->find('list', array(
+                'recursive'=> -1,
+                'fields'=> 'division',
+                'conditions'=>array('centro_id'=>$nivelCentroId)
+            ));
+
         }
 
         if($this->Siep->isSuperAdmin())
         {
             $matriculas = $this->paginate('Curso',$conditions);
+
+            $comboAnio = $this->Curso->find('list', array(
+                'recursive'=> -1,
+                'fields'=> 'anio'
+            ));
+
+            $comboDivision = $this->Curso->find('list', array(
+                'recursive'=> -1,
+                'fields'=> 'division'
+            ));
+
         }
 
-        $this->set(compact('matriculas'));
+        $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo'));
   	}
 
 /*    public function requestDatatable()
