@@ -10,12 +10,12 @@
         </div>-->
         <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Ciclo:</b> <?php echo $this->Html->link($ciclosNombre[$pase['Pase']['ciclo_id']], array('controller' => 'ciclos', 'action' => 'view', $pase['Pase']['ciclo_id'])); ?></span><br/>
       <?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) { ?>
-          <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Centro Origen:</b> <?php echo $this->Html->link($centrosNombre[$pase['Pase']['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_origen'])); ?></span><br/>
+          <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Centro Origen:</b> <?php echo $this->Html->link($centrosNombreTarjetas[$pase['Pase']['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_origen'])); ?></span><br/>
       <?php } ?> 
       <?php if (($current_user['centro_id'] === $pase['Pase']['centro_id_destino'])) { ?>
-          <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Centro Origen:</b> <?php echo $this->Html->link($centrosNombre[$pase['Pase']['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_origen'])); ?></span><br/>
+          <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Centro Origen:</b> <?php echo $this->Html->link($centrosNombreTarjetas[$pase['Pase']['centro_id_origen']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_origen'])); ?></span><br/>
       <?php } else { ?>
-          <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Centro Destino:</b> <?php echo $this->Html->link($centrosNombre[$pase['Pase']['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_destino'])); ?></span><br/>      
+          <span class="name"><span class="glyphicon glyphicon-home"></span> <b>Centro Destino:</b> <?php echo $this->Html->link($centrosNombreTarjetas[$pase['Pase']['centro_id_destino']], array('controller' => 'centros', 'action' => 'view', $pase['Pase']['centro_id_destino'])); ?></span><br/>      
       <?php } ?>  
         <!--<span class="name"><span class="glyphicon glyphicon-user"></span> <b>Código:</b> <?php echo $inscripcion['Inscripcion']['legajo_nro']; ?></span><br/>-->
        <?php if ($current_user['role'] == 'admin') {

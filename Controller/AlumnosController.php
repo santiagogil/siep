@@ -256,8 +256,9 @@ class AlumnosController extends AppController {
 			$userRole = $this->Auth->user('role');
 			$userCentroId = $this->getUserCentroId();
 			$this->loadModel('Centro');
-			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-
+			//$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+			$nivelCentroArray = $this->Centro->findById($userCentroId, 'nivel_servicio');
+			$nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
 			if ($userRole === 'admin') {
 				$personas = $this->Alumno->find('all', array(
 						'recursive'	=> 0,
@@ -267,7 +268,7 @@ class AlumnosController extends AppController {
 						'fields' 	=> array('Alumno.id', 'Persona.nombres', 'Persona.apellidos', 'Persona.documento_nro')
 					)
 				);
-			} else if (($userRole === 'usuario') || ($nivelCentro === 'Común - Inicial - Primario')) {
+			} else if (($userRole === 'usuario') && ($nivelCentroString === 'Común - Inicial - Primario')) {
 				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
 
 				$personas = $this->Alumno->find('all', array(
@@ -280,7 +281,7 @@ class AlumnosController extends AppController {
 				);
 			} else if ($userRole === 'usuario') {
 				// Obtiene el id de persona del nivel del centro correspondiente.
-				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+				$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentroString)));
 				$personas = $this->Alumno->find('all', array(
 						'recursive'	=> 0,
 						'contain' => 'Persona',

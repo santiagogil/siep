@@ -104,8 +104,9 @@ class PasesController extends AppController {
 		$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
 		$this->loadModel('Persona');
         $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
+		$centrosNombreTarjetas = $this->Centro->find('list', array('fields'=>array('id', 'sigla')));		
 		/* FIN */
-		$this->set(compact('pases', 'personaId', 'personaNombre', 'centrosNombre', 'ciclosNombre', 'nivelCentroString'));
+		$this->set(compact('pases', 'personaId', 'personaNombre', 'centrosNombre', 'ciclosNombre', 'nivelCentroString', 'centrosNombreTarjetas'));
 	}
 
 	public function view($id = null) {

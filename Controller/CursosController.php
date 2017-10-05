@@ -150,6 +150,8 @@ class CursosController extends AppController {
 			$plazas = $this->request->data['Curso']['plazas'];
 			$vacantes = $plazas;
 			$this->request->data['Curso']['vacantes'] = $vacantes;
+			// Antes de guardar activa el curso creado.
+			$this->request->data['Curso']['status'] = 1;
 			if ($this->Curso->save($this->data)) {
 				$this->Session->setFlash('La sección ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
