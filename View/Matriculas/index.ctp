@@ -1,8 +1,107 @@
 
+
+<div class="TituloSec">Filtro</div>
+<div id="ContenidoSec">
+    <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
+
+    <div class="row">
+        <div class="col-xs-2">
+
+            <div class="input select">
+                <select name="ciclo" class="form-control" data-toggle="tooltip" data-placement="bottom">
+                    <option value="">Seleccione un ciclo...</option>
+                    <?php
+                    foreach($comboCiclo as $ciclo_id => $ciclo_value) :
+                    ?>
+                        <option value="<?php echo $ciclo_value;  ?>"><?php echo $ciclo_value; ?></option>
+                    <?php
+                    endforeach;
+                    ?>
+                </select>
+            </div>
+
+        </div>
+        <?php
+        // Si la persona que navega no es Admin, muestro autocomplete de todas las secciones
+        if(!$this->Siep->isAdmin()) :
+            ?>
+            <div class="col-xs-2">
+                <!-- Autocomplete -->
+                <input id="AutocompleteForm" class="form-control" placeholder="Buscar institucion por nombre" type="text">
+                <script>
+                    $( function() {
+                        $( "#AutocompleteForm" ).autocomplete({
+                            source: "<?php echo $this->Html->url(array('controller'=>'Centros','action'=>'autocompleteCentro'));?>",
+                            minLength: 2,
+                            select: function( event, ui ) {
+                                $("#AutocompleteForm").val( ui.item.Centro.sigla );
+
+                                window.location.href = "<?php echo $this->Html->url(array('controller'=>'matriculas'));?>/index/centro_id:"+ui.item.Centro.id;
+                                return false;
+                            }
+                        }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+                            return $( "<li>" )
+                                .append( "<div>" +item.Centro.sigla + "</div>" )
+                                .appendTo( ul );
+                        };
+                    });
+                </script>
+                <!-- End Autocomplete -->
+            </div>
+
+            <?php
+        endif;
+        ?>
+
+        <div class="col-xs-2">
+            <div class="input select">
+                <select name="anio" class="form-control" data-toggle="tooltip" data-placement="bottom">
+                    <option value="">Seleccione un año...</option>
+                    <?php
+                    foreach($comboAnio as $index => $valor) :
+                        ?>
+                        <option value="<?php echo $valor;  ?>"><?php echo $valor; ?></option>
+                        <?php
+                    endforeach;
+                    ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="input select">
+                <select name="division" class="form-control" data-toggle="tooltip" data-placement="bottom">
+                    <option value="">Seleccione una division...</option>
+                    <?php
+                    foreach($comboDivision as $index => $valor) :
+                        ?>
+                        <option value="<?php echo $valor;  ?>"><?php echo $valor; ?></option>
+                        <?php
+                    endforeach;
+                    ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="text-center">
+                <span class="link">
+                    <?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> Aplicar filtro', array('class' => 'submit', 'class' => 'btn btn-primary')); ?>
+                </span>
+            </div>
+    </div>
+
+        <?php echo $this->Form->end(); ?>
+    </div>
+</div>
+
+<br>
+
 <div class="TituloSec">Matriculas</div>
 <div id="ContenidoSec">
+
     <div class="table-responsive">
-      <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped table-condensed">
+    <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped table-condensed">
       <thead>
         <tr>
           <th><?php echo $this->Paginator->sort('Centro.sigla', 'Centro');?>  </th>
@@ -45,35 +144,6 @@
           </tr>
         <?php endforeach; ?>
       </tbody>
-      <tfoot>
-        <tr>
-          <th>
-            <!-- Autocomplete -->
-              <input id="AutocompleteForm" class="form-control" placeholder="Buscar institucion por nombre" type="text">
-
-            <script>
-              $( function() {
-                $( "#AutocompleteForm" ).autocomplete({
-                  source: "<?php echo $this->Html->url(array('controller'=>'Centros','action'=>'autocompleteCentro'));?>",
-                  minLength: 2,
-                  select: function( event, ui ) {
-                    $("#AutocompleteForm").val( ui.item.Centro.sigla );
-
-                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'matriculas'));?>/index/centro_id:"+ui.item.Centro.id;
-                    return false;
-                  }
-                }).autocomplete( "instance" )._renderItem = function( ul, item ) {
-                  return $( "<li>" )
-                      .append( "<div>" +item.Centro.sigla + "</div>" )
-                      .appendTo( ul );
-                };
-              });
-            </script>
-            <!-- End Autocomplete -->
-
-          </th>
-        </tr>
-      </tfoot>
     </table>
 
       <script>
@@ -95,8 +165,10 @@
         });
       </script>
     </div>
+</div>
 
-  <div class="unit text-center">
+
+    <div class="unit text-center">
     <?php echo $this->element('pagination'); ?>
   </div>
 </div>
