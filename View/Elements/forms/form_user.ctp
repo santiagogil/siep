@@ -16,7 +16,6 @@
           echo $this->Form->input('empleado_id', array('label' => 'Agente*', 'empty' => 'Ingrese un agente...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una opción.'));
           $puestos = array('Sistemas' => 'Sistemas', 'Subsecretaría Provincial' => 'Subsecretaría Provincial', 'Dirección Provincial de Modalidades' => 'Dirección Provincial de Modalidades', 'Supervisión Inicial/Primaria' => 'Supervisión Inicial/Primaria', 'Supervisión Secundaria' => 'Supervisión Secundaria', 'Dirección Jardín' => 'Dirección Jardín', 'Dirección Escuela Primaria' => 'Dirección Escuela Primaria', 'Dirección Colegio Secundario' => 'Dirección Colegio Secundario', 'Dirección Instituto Superior' => 'Dirección Intituto Superior');
           echo $this->Form->input('puesto', array('label' => 'Puesto de trabajo*', 'empty' => 'Ingrese un puesto de trabajo...', 'options' => $puestos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese una opción.'));
-          echo $this->Form->input('creado', array('label' => 'Fecha creación*', 'between' => '<br>','class' => 'datepicker form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese la fecha de creación del registro', 'placeholder' => 'Ingrese una fecha con formato AAAA-MM-DD'));
       ?>
   </div>
 </div>
