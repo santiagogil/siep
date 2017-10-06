@@ -21,4 +21,4 @@ COPY Model/ ./Model/
 COPY Plugin/ ./Plugin/
 COPY View/ ./View/
 COPY webroot/ ./webroot/
-RUN mkdir tmp && chmod -R 777 tmp
+RUN mkdir -p tmp/cache && chmod -R 777 tmp
