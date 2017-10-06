@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: siep-mysql
-  name: siep-mysql
+  name: {{ .Release.Name }}-siep-mysql
 spec:
   accessModes:
   - ReadWriteOnce

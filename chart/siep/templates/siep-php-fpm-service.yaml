@@ -7,7 +7,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: siep-php-fpm
-  name: siep-php-fpm
+  name: {{ .Release.Name }}-siep-php-fpm
 spec:
   clusterIP: None
   ports:

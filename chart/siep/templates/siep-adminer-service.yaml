@@ -8,7 +8,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: siep-adminer
-  name: siep-adminer
+  name: {{ .Release.Name }}-siep-adminer
 spec:
   ports:
   - name: "8080"

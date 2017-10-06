@@ -8,7 +8,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: siep-nginx
-  name: siep-nginx
+  name: {{ .Release.Name }}-siep-nginx
 spec:
   ports:
   - name: "80"

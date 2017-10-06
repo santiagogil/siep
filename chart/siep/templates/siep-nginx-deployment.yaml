@@ -8,7 +8,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: siep-nginx
-  name: siep-nginx
+  name: {{ .Release.Name }}-siep-nginx
 spec:
   replicas: 1
   strategy: {}
@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - image: decyt/siep-nginx
-        name: siep-nginx
+        name: {{ .Release.Name }}-siep-nginx
         ports:
         - containerPort: 80
         resources: {}
