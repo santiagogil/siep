@@ -1,7 +1,11 @@
 <?php echo $this->Form->create('Empleado',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
 <div class="form-group">
     <?php echo $this->Form->input('documento_nro' , array('label' => false, 'class' => 'form-control', 'Placeholder' => 'Ingrese Nº de documento...'));	?>
+</div><br>
+<div>
+    <input id="AutocompleteForm" class="form-control" placeholder="Buscar agente por nombre y/o apellido">
 </div>
+<hr />
 <div class="text-center">
     <span class="link"><?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> BUSCAR', array('class' => 'submit', 'class' => 'btn btn-primary')); ?>
     </span>
@@ -9,9 +13,6 @@
 </div>
 
 <!-- Autocomplete -->
-<div>
-    <input id="AutocompleteForm" class="form-control" placeholder="Buscar agente por nombre y/o apellido">
-</div>
 <script>
     $( function() {
         $( "#AutocompleteForm" ).autocomplete({

@@ -62,6 +62,12 @@
                                     <li><span class="label label-danger"><?php echo 'Falta Certificado de Séptimo'; ?></span></li><?php endif; ?>
                                     <?php if(!$inscripcion['Inscripcion']['analitico'] == 1): ?>
                                     <li><span class="label label-danger"><?php echo 'Falta Analítico'; ?></span></li><?php endif; ?>
+                                    <?php if(!$inscripcion['Inscripcion']['partida_nacimiento_alumno'] == 1): ?>
+                                    <li><span class="label label-danger"><?php echo 'Falta Partida Alumno'; ?></span></li><?php endif; ?>
+                                    <?php if(!$inscripcion['Inscripcion']['partida_nacimiento_tutor'] == 1): ?>
+                                    <li><span class="label label-danger"><?php echo 'Falta Partida Tutor'; ?></span></li><?php endif; ?>
+                                    <?php if(!$inscripcion['Inscripcion']['libreta_sanitaria'] == 1): ?>
+                                    <li><span class="label label-danger"><?php echo 'Falta Libreta Sanitaria'; ?></span></li><?php endif; ?>
                                   </ul>
                             </div>
                         </div>
