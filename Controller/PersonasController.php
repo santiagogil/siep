@@ -60,8 +60,14 @@ class PersonasController extends AppController {
 		/* SETS DE DATOS PARA COMBOBOXS DEL FORM SEARCH (INICIO).*/
 		$this->loadModel('Ciudad');
         $ciudades = $this->Ciudad->find('list', array('fields' => array('nombre')));
+        // Obtiene el nivel del centro para que se muestre o no el botón "AGREGAR" persona.
+     	$this->loadModel('Centro');
+		$nivelCentro = $this->Centro->find('list', array('fields'=>array('id','nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+		$nivelCentroArray = $this->Centro->findById($nivelCentroId, 'nivel_servicio');
+		$nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
 		/* FIN */
-		$this->set(compact('personas', 'foto', 'ciudades'));
+		$this->set(compact('personas', 'foto', 'ciudades', 'nivelCentroString'));
 	}
 
 	public function view($id = null) {

@@ -4,14 +4,12 @@
    <input id="AutocompleteForm" class="form-control" placeholder="Ingrese institucion por nombre o CUE">
    <input id="centroId" type="hidden" name="Centro.id">
 </div>
-
 <hr />
 <div class="text-center">
     <span class="link"><?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> BUSCAR', array('class' => 'submit', 'class' => 'btn btn-primary')); ?>
     </span>
    <?php echo $this->Form->end(); ?>
 </div>
-
 <script>
    $( function() {
       $( "#AutocompleteForm" ).autocomplete({
