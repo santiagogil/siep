@@ -81,15 +81,24 @@ class MatriculasController extends AppController
 
             $comboAnio = $this->Curso->find('list', array(
                 'recursive'=> -1,
-                'fields'=> array('anio'),
+                'fields'=> array('Curso.anio','Curso.anio'),
                 'conditions'=>array('centro_id'=>$userCentroId)
             ));
 
             $comboDivision = $this->Curso->find('list', array(
                 'recursive'=> -1,
-                'fields'=> 'division',
+                'fields'=> array('Curso.division','Curso.division'),
                 'conditions'=>array('centro_id'=>$userCentroId)
             ));
+
+
+//            $comboDivision = $this->Curso->query("SELECT `Curso`.`division` FROM `siep`.`cursos` AS `Curso` WHERE `centro_id` = ".$userCentroId." GROUP BY division");
+
+//            $comboDivision = $this->Curso->find('list', array(
+//                'recursive'=> -1,
+//                'fields'=> 'division',
+//                'conditions'=>array('centro_id'=>$userCentroId)
+//            ));
         }
 
         if($this->Siep->isUsuario())

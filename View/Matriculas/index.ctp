@@ -58,9 +58,9 @@
                 <select name="anio" class="form-control" data-toggle="tooltip" data-placement="bottom">
                     <option value="">Seleccione un año...</option>
                     <?php
-                    foreach($comboAnio as $index => $valor) :
+                    foreach($comboAnio as $index => $item) :
                         ?>
-                        <option value="<?php echo $valor;  ?>"><?php echo $valor; ?></option>
+                        <option value="<?php echo $item; ?>"><?php echo $item; ?></option>
                         <?php
                     endforeach;
                     ?>
@@ -73,9 +73,9 @@
                 <select name="division" class="form-control" data-toggle="tooltip" data-placement="bottom">
                     <option value="">Seleccione una division...</option>
                     <?php
-                    foreach($comboDivision as $index => $valor) :
+                    foreach($comboDivision as $index => $item) :
                         ?>
-                        <option value="<?php echo $valor;  ?>"><?php echo $valor; ?></option>
+                        <option value="<?php echo $item; ?>"><?php echo $item; ?></option>
                         <?php
                     endforeach;
                     ?>
