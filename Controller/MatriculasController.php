@@ -160,6 +160,94 @@ class MatriculasController extends AppController
         $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo'));
   	}
 
+    /*
+     * Este metodo se encarga de listar todas las inscripciones realizadas, y las agrupa segun el siguiente filtro
+     *
+     * Inscripcion en -> ciclo_id, centro_id, curso.anio, curso.division, curso.turno
+     *
+     * El filtro obtiene la cantidad de matriculas y sus plazas, lo que permite obtener las vacantes.
+     *
+     * Esta consulta a su vez actualiza los datos en la tabla Cursos segun el Curso.id
+     *
+     */
+    public function recuento()
+    {
+        // Antes que nada devuelvo a cero todas las matriculas, y las vacantes son el total de plazas
+        $this->loadModel('Cursos');
+        $this->Cursos->updateAll(
+            array(
+                'Cursos.matricula' => 0,
+                'Cursos.vacantes' => 'Cursos.plazas'
+            )
+        );
+
+        // Mande la query de pecho, la verdad no me quise complicar con el ORM de cake.
+        $this->loadModel('Inscripcions');
+        $lista = $this->Inscripcions->query("
+            select 
+            
+            ins.ciclo_id,
+            ins.centro_id,            
+            curso.id,
+            curso.anio,
+            curso.division,
+            curso.turno,
+            curso.plazas,
+            COUNT(ins.id) as matriculas,
+            (
+              curso.plazas - COUNT(ins.id)
+            ) as vacantes
+            
+            
+            FROM inscripcions ins
+            
+            inner join ciclos ci on ci.id = ins.ciclo_id
+            inner join centros ce on ce.id = ins.centro_id
+            inner join cursos_inscripcions cui on cui.inscripcion_id = ins.id
+            inner join cursos curso on curso.id = cui.curso_id
+            
+            where
+            
+            -- ci.nombre = 2017
+            -- i.ciclo_id = 4
+            -- and
+            (ins.estado_inscripcion = 'CONFIRMADA' or ins.estado_inscripcion = 'NO CONFIRMADA')
+            
+            group by 
+
+            ins.ciclo_id,            
+            ins.centro_id,            
+            curso.id,
+            curso.anio,
+            curso.division,
+            curso.turno,
+            curso.plazas
+        ");
+
+        foreach($lista as $item)
+        {
+            $matriculas = $item[0]['matriculas'];
+            $vacantes = $item[0]['vacantes'];
+
+            $update = array(
+                'vacantes' => $vacantes,
+                'matricula' => $matriculas
+            );
+
+            $this->Cursos->id = $item['curso']['id'];
+            $this->Cursos->save($update);
+        }
+
+        $this->autoRender = false;
+        $this->redirect(array('action' => 'index'));
+
+//        $this->response->type('json');
+
+//        $json = json_encode($lista);
+//        $this->response->body($lista);
+
+    }
+
 /*    public function requestDatatable()
     {
         $conditions = [];
