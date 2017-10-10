@@ -1,5 +1,5 @@
 
-<div class="TituloSec">Vacantes por seccion</div>
+<div class="TituloSec">Vacantes por año</div>
 <div id="ContenidoSec">
     <div class="table-responsive">
       <table id="tablaPieBuscador" class="table table-bordered table-hover table-striped    table-condensed">
