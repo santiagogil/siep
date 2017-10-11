@@ -10,7 +10,6 @@
     </span>
     <?php echo $this->Form->end(); ?>
 </div>
-
 <?php echo $this->Form->end(); ?>
 <script>
     $( function() {
@@ -39,7 +38,6 @@
             var personaId = $('#personaId').val();
             window.location.href = "<?php echo $this->Html->url(array('controller'=>'personas','action'=>'view'));?>/"+personaId;
         });
-
     });
 </script>
 <!-- End Autocomplete -->

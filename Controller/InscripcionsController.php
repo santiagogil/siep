@@ -158,8 +158,7 @@ class InscripcionsController extends AppController {
              */
             //Antes que nada obtengo personaId
             $personaId = $this->request->data['Persona']['persona_id'];
-            if (empty($personaId))
-            {
+            if (empty($personaId)) {
                 //No esta definida? terminamos volvemos al formulario anterior
                 $this->Session->setFlash('No se definio la persona.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
@@ -184,7 +183,7 @@ class InscripcionsController extends AppController {
             } else {
                 $this->request->data['Inscripcion']['legajo_nro'] = $codigoActual;
                 //Antes de guardar genera el estado de la inscripción
-                if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true) {
+                if(($this->request->data['Inscripcion']['fotocopia_dni'] == true) && ($this->request->data['Inscripcion']['certificado_septimo'] == true) && ($this->request->data['Inscripcion']['analitico'] == true) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] == true) && ($this->request->data['Inscripcion']['partida_nacimiento_tutor'] == true) && ($this->request->data['Inscripcion']['libreta_sanitaria'] == true)) {
                     $estadoDocumentacion = "COMPLETA";
                 } else {
                     $estadoDocumentacion = "PENDIENTE";
@@ -268,11 +267,11 @@ class InscripcionsController extends AppController {
             $alumnoId = $alumno['Alumno']['id'];
             $personaId  = $alumno['Persona']['id'];
             //Antes de guardar genera el estado de la inscripción
-			if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['analitico'] == true){
-			   $estadoDocumentacion = "COMPLETA";
-			}else{
-			   $estadoDocumentacion = "PENDIENTE";
-			}
+            if(($this->request->data['Inscripcion']['fotocopia_dni'] == true) && ($this->request->data['Inscripcion']['certificado_septimo'] == true) && ($this->request->data['Inscripcion']['analitico'] == true) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] == true) && ($this->request->data['Inscripcion']['partida_nacimiento_tutor'] == true) && ($this->request->data['Inscripcion']['libreta_sanitaria'] == true)) {
+                $estadoDocumentacion = "COMPLETA";
+            } else {
+                $estadoDocumentacion = "PENDIENTE";
+            }
             //Se genera el estado y se deja en los datos que se intentaran guardar
 			$this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
 			// Se define el id del centro.
@@ -381,7 +380,20 @@ class InscripcionsController extends AppController {
             $this->set(compact('editar'));
             $this->data = $this->Inscripcion->read(null, $id);
 		}
-	}
+        /*
+        $alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id')));
+        $personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
+        $personasNombres = $this->Alumno->Persona->find('list', array('fields'=>array('apellidos')));
+        $this->set(compact('alumnos', 'personaId', 'personasNombres'));    
+	    */
+        $alumnos = $this->Inscripcion->find('list', array('fields'=>array('alumno_id')));
+        //$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$alumnos)));
+        $personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'),'conditions'=>array('id'=>$alumnos)));
+        print_r($personaId[38]);
+        $personasNombres = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'),'conditions'=>array('id'=>$personaId)));
+        print_r($personasNombres[27]);
+        $this->set(compact('alumnos', 'personaId', 'personasNombres'));
+    }
 
     public function delete($id = null) {
 		if (!$id) {

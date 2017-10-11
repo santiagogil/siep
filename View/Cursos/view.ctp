@@ -45,6 +45,7 @@
     </div>
 <!-- end main -->
 <?php if(($userCentroNivel == 'Común - Inicial') || ($userCentroNivel == 'Común - Primario')): ?>
+<?php /*
 <!-- Cargos Relacionados -->
 <!--<div class="related">
 	<h3><?php echo __('Cargos Relacionados');?></h3>
@@ -116,6 +117,8 @@
 	</div>
 </div>-->
 <!-- end Cargos Relacionados -->
+*/ ?>
+<?php /*
 <!-- Materias Relacionadas -->
 <div id="click_02" class="titulo_acordeon">Unidades Curriculares Relacionadas <span class="caret"></span></div>
 <div id="acordeon_02">
@@ -153,6 +156,7 @@
     </div>
 </div>
 <!-- end Materias Relacionadas -->
+*/ ?>
 <?php endif; ?>
 <!-- Inscripciones Relacionadas -->
 <div id="click_01" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
@@ -164,7 +168,7 @@
         <div class="swiper-wrapper" >
 	<?php foreach ($curso['Inscripcion'] as $inscripcion): ?>
 	<!-- Sólo visualiza las inscripciones relacionadas del ciclo actual -->
-	<?php if ($inscripcion['ciclo_id'] == $cicloIdActualString) { ?>
+	<?php if (($inscripcion['ciclo_id'] == $cicloIdActualString) || $curso['Curso']['division'] == '') { ?>
 	<div class="swiper-slide">
 	  <div class="col-md-6">
 		<div class="unit">
@@ -198,6 +202,7 @@
     </div>
 </div>
 <!-- end Inscripciones Relacionadas -->
+<?php /*
 <!-- Ciclos Relacionadas -->
 <!--<div class="related">
 	<h3><?php echo __('Ciclos Relacionados');?></h3>
@@ -246,7 +251,7 @@
 	</div>
 </div>-->
 <!-- end Ciclos Relacionadas -->
-
+*/ ?>
     <!-- Initialize Swiper -->
     <script>
     var swiper = new Swiper('.swiper-container', {

@@ -71,7 +71,8 @@
             <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
             <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
             <li><?php echo $this->Html->link(__('Tabla de Matriculas'), '/matriculas');?></li>
-            <li><?php echo $this->Html->link(__('Gráficos Estadísticos'), '/graficos'); ?></li>
+            <li><?php echo $this->Html->link(__('Vacantes por año'), '/vacantes');?></li>
+            <!--<li><?php echo $this->Html->link(__('Gráficos Estadísticos'), '/graficos'); ?></li>-->
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
             <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
             <!--<li><?php echo $this->Html->link(__('Calendario'),'/full_calendar');?></li>--> 

@@ -94,7 +94,7 @@ class Curso extends AppModel {
                         'valid' => array(
 							'rule' => array('inList', array('ROJA','NARANJA','AMARILLA','A','B','C','D','E','F','G','H')),
 							'message' => 'Ingrese una división válida',
-							'allowEmpty' => false
+							'allowEmpty' => true
 							)	
                     ),
                    'turno' => array(
@@ -134,13 +134,9 @@ class Curso extends AppModel {
 			                )
 		            ),
 				   'aula_nro' => array(
-                           'required' => array(
-						   'rule' => 'notBlank',
-						   'required' => 'create',
-                           'message' => 'Indicar un aula.'
-                           ),
-						    'numeric' => array(
+                            'numeric' => array(
 							'rule' => 'naturalNumber',
+							'allowEmpty' => true,
 							'message' => 'Indicar número sin puntos ni comas ni espacios.'
 							)
                    ),

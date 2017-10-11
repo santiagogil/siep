@@ -11,20 +11,15 @@
           $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA');
            echo $this->Form->input('estado_inscripcion', array('label'=>'Estado de la inscripción*', 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
-      <?php echo $this->Form->input('usuario_id', array('type' => 'hidden')); ?>
   </div>
 </div><hr />
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
-        <?php
-            $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Integración'=>'Integración','Situación social'=>'Situación social','Hijo de personal de la institución'=>'Hijo de personal de la institución');
-            echo $this->Form->input('tipo_inscripcion', array('label'=>'Tipo de inscripción*', 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-      ?><br>
         <!-- Autocomplete para nombre de Personas -->
         <div>
             <strong><h5>Nombre y apellidos del alumno*</h5></strong>
-            <input id="PersonaNombreCompleto" class="form-control" label= "Nombre y apellidos del alumno*" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
+            <input id="PersonaNombreCompleto" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
             <input id="PersonaId" name="data[Persona][persona_id]" type="text" style="display:none;">
             <div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -77,38 +72,91 @@
             }
             */
             echo $this->Form->input('legajo_nro', array('type' => 'hidden'));
-      ?><br>
+      ?>
     </div>
-      <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
+  </div>
+  <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos del Alta</h3></strong><hr />
-      <!--<?php
-            echo $this->Form->input('fecha_alta', array('label' => 'Fecha de Alta*', 'type' => 'text', 'between' => '<br>', 'class' => 'datepicker form-control', 'Placeholder' => 'Ingrese una fecha...'));
-      ?><br>-->
+      <?php
+            $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
+            echo $this->Form->input('tipo_inscripcion', array('label'=>'Tipo de inscripción*', 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+      ?><br>
+    <div><hr />
+    <span class="input-group-addon"><h4>Indique según tipo de inscripción seleccionado:</h4></span><hr />
+    <strong><h5>Hermano de Alumno Regular</h5></strong>
+    <input id="AutocompelteAlumno" class="form-control" placeholder="Indique Alumno por DNI, nombre y/o apellido">
+    <div class="alert alert-danger" role="alert" id="AutocompleteAlumnoError" style="display:none;">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        No se encontraron resultados de busqueda
+    </div>
+    </div> 
+    <hr />
+    <script>
+        $( function() {
+            $( "#AutocompelteAlumno" ).autocomplete({
+                source: "<?php echo $this->Html->url(array('controller'=>'Alumnos', 'action'=>'autocompleteNombreAlumno'));?>",
+                minLength: 2,
+                select: function( event, ui ) {
+                    var nombre_completo = ui.item.Persona.apellidos +" "+ ui.item.Persona.nombres +' - ' +ui.item.Persona.documento_nro;
+                    $("#AutocompelteAlumno").val( nombre_completo );
+                    window.location.href = "<?php echo $this->Html->url(array('controller'=>'alumnos','action'=>'view'));?>/"+ui.item.Alumno.id;
+                    return false;
+                },
+                response: function(event, ui) {
+                    if (ui.content.length === 0)
+                    {
+                        $("#AutocompleteAlumnoError").show();
+                    } else {
+                        $("#AutocompleteAlumnoError").hide();
+                    }
+                }
+            }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+                var nombre_completo = item.Persona.apellidos +" "+ item.Persona.nombres +' - ' +item.Persona.documento_nro;
+                return $( "<li>" )
+                    .append( "<div>" +nombre_completo+ "</div>" )
+                    .appendTo( ul );
+            };
+        });
+    </script>
+    <!-- End Autocomplete -->
+    <div>
+      <strong><h5>Pase</h5></strong>
+      <input id="AutocompleteForm" class="form-control" placeholder="Indique institucion origen por nombre o CUE">
+      <input id="centroId" type="hidden" name="Centro.id">
+      </div><hr />
+      <script>
+         $( function() {
+            $( "#AutocompleteForm" ).autocomplete({
+               source: "<?php echo $this->Html->url(array('controller'=>'centros', 'action'=>'autocompleteCentro'));?>",
+               minLength: 2,
+               select: function( event, ui ) {
+                  $("#AutocompleteForm").val( ui.item.Centro.sigla );
+                  $('#centroId').val(ui.item.Centro.id);
+                  return false;
+               }
+            }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+               return $( "<li>" )
+                   .append( "<div>" +item.Centro.sigla + "</div>" )
+                   .appendTo( ul );
+            };
+            $("#formularioBusqueda").submit(function(e){
+               e.preventDefault();
+
+               var centroId = $('#centroId').val();
+               window.location.href = "<?php echo $this->Html->url(array('controller'=>'centros','action'=>'view'));?>/"+centroId;
+            });
+         });
+      </script>
+      <!-- End Autocomplete -->
+      <?php
+            $situaciones_sociales = array('Mudanza de la familia' => 'Mudanza de la familia', 'Pasó a educación de jóvenes y adultos' => 'Pasó a educación de jóvenes y adultos', 'Pasó a educación especial' => 'Pasó a educación especial', 'No le gustaba la escuela' => 'No le gustaba la escuela', 'Tenía muchas materias previas' => 'Tenía muchas materias previas', 'Problemas disciplinarios' => 'Problemas disciplinarios',  'Decisión de la escuela' => 'Decisión de la escuela', 'Problemas de salud' =>  'Problemas de salud', 'Cambio en la situación económica' => 'Cambio en la situación económica', 'Comenzó a trabajar' => 'Comenzó a trabajar', 'Quedó embarazada' => 'Quedó embarazada', 'Debe colaborar en la casa' => 'Debe colaborar en la casa');
+            echo $this->Form->input('situacion_social', array('label' => 'Situación social', 'empty' => 'Ingrese una opción...', 'options' => $situaciones_sociales, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+      ?>      
       <!--<?php
             $tipos_alta = array('Regular' => 'Regular', 'Equivalencia'=>'Equivalencia');
             echo $this->Form->input('tipo_alta', array('label' => 'Alta tipo*', 'default' => 'Ingrese un tipo...', 'options' => $tipos_alta, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?><br>-->
-<span class="input-group-addon">
-  <h4> Documentación presentada:</h4>
-</span>
-<div class="row">
-  <br>
-    <div class="input-group">
-      <span class="input-group-addon">
-        <?php echo $this->Form->input('fotocopia_dni', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
-      </span>
-    </div>
-      <div class="input-group">
-        <span class="input-group-addon">
-         <?php echo $this->Form->input('certificado_septimo', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
-        </span>
-      </div>
-    <div class="input-group">
-      <span class="input-group-addon">
-        <?php echo $this->Form->input('analitico', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Analítico</label>'));?>
-      </span>
-    </div>
-</div><br>
 <!--<?php
     if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
           echo $this->Form->input('estado', array('type' => 'hidden'));
@@ -129,15 +177,51 @@
       ?>-->
     </div>
   </div>
-</div>
-
+<div class="col-md-4 col-sm-6 col-xs-12">
+  <div class="unit"><strong><h3>Documentación Presentada</h3></strong><hr />
   <div class="row">
-    <div class="unit">
-      <div class="col-md-12 col-sm-6 col-xs-12">
-        <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
+  <br>
+  <div class="input-group">
+      <span class="input-group-addon">
+        <?php echo $this->Form->input('fotocopia_dni', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
+      </span>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">
+       <?php echo $this->Form->input('certificado_septimo', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
+      </span>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">
+        <?php echo $this->Form->input('analitico', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Analítico</label>'));?>
+      </span>
+    </div>    
+    <div class="input-group">
+      <span class="input-group-addon">
+        <?php echo $this->Form->input('partida_nacimiento_alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
+      </span>
+    </div>
+      <div class="input-group">
+        <span class="input-group-addon">
+         <?php echo $this->Form->input('partida_nacimiento_tutor', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Tutor</label>'));?>
+        </span>
       </div>
+    <div class="input-group">
+      <span class="input-group-addon">
+        <?php echo $this->Form->input('libreta_sanitaria', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Libreta Sanitaria</label>'));?>
+      </span>
+      </div>
+     </div><br>
     </div>
   </div>
+</div>
+<div class="row">
+  <div class="unit">
+    <div class="col-md-12 col-sm-6 col-xs-12">
+      <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
+    </div>
+  </div>
+</div>
   <script type="text/javascript">
         $('#datetimepicker1').datetimepicker({
         useCurrent: true, //this is important as the functions sets the default date value to the current value

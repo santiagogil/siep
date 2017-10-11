@@ -26,7 +26,7 @@ class CursosInscripcionsController extends AppController {
  */
 	public function index() {
 		$this->CursosInscripcion->recursive = 1;
-		$this->paginate['CursosInscripcion']['limit'] = 8;
+		$this->paginate['CursosInscripcion']['limit'] = 6;
 		$this->paginate['CursosInscripcion']['order'] = array('CursosInscripcion.curso_id' => 'ASC');
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
 		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
@@ -99,7 +99,7 @@ class CursosInscripcionsController extends AppController {
         } else if (($userRole === 'usuario') && ($nivelCentroString === 'Común - Inicial - Primario')) {
 			$this->loadModel('Centro');
 			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-			$cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+			$cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('nombre_completo_curso', 'nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId), 'order'=>array('anio asc', 'division asc')));
 		} else if ($userRole === 'usuario') {
            	$this->loadModel('Centro');
 			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	

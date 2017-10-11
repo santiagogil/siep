@@ -199,10 +199,10 @@ class CursosController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Curso->read(null, $id);
 		}
-		
 		$centros = $this->Curso->Centro->find('list');
 		$titulacions = $this->Curso->Titulacion->find('list');
-		$ciclos = $this->Curso->Ciclo->find('list');
+		$this->loadModel('Ciclo');
+		$ciclos = $this->Ciclo->find('list');
 		$inscripcions = $this->Inscripcion->find('list');
 		$this->set(compact('centros', 'titulacions', 'modalidads', 'ciclos', 'inscripcions', $inscripcions));
 	}
