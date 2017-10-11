@@ -77,6 +77,7 @@
  		</div>
 	</div>
 <!-- end sidebar -->
+<?php /*
 <!--<div class="related">
 	<h3><?php echo __('Cargos Relacionados');?></h3>
 	<?php if (!empty($centro['Cargo'])):?>
@@ -145,6 +146,8 @@
 		</ul>
 	</div>
 </div>-->
+*/ ?>
+<?php /*
 <!-- Titulaciones Relacionadas -->
 <div id="click_03" class="titulo_acordeon">Titulaciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_03">
@@ -177,6 +180,7 @@
     </div>
 </div>
 <!-- end Titulaciones Relacionadas -->
+*/ ?>
 <!-- Cursos Relacionados -->
 <div id="click_04" class="titulo_acordeon">Secciones Relacionadas <span class="caret"></span></div>
 <div id="acordeon_04">
@@ -209,6 +213,7 @@
     </div>
 </div>
 <!-- end Cursos Relacionados -->
+<?php /*
 <!-- Inscripciones Relacionadas
 	<div id="click_02" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_02">
@@ -245,6 +250,7 @@
 	</div>
 </div>
 <!-- end Inscripciones Relacionadas -->
+*/ ?>
 <?php if($current_user['role'] == 'superadmin'): ?>
 <!-- Empleados Relacionados -->
 <div id="click_05" class="titulo_acordeon">Usuarios Relacionados <span class="caret"></span></div>
