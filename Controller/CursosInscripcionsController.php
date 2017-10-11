@@ -24,36 +24,114 @@ class CursosInscripcionsController extends AppController {
  *
  * @return void
  */
-	public function index() {
-		$this->CursosInscripcion->recursive = 1;
-		$this->paginate['CursosInscripcion']['limit'] = 8;
-		$this->paginate['CursosInscripcion']['order'] = array('CursosInscripcion.curso_id' => 'ASC');
+	public function index()
+	{
+		// Hachazo nivel Ninja Warrior!
+
+		// Datos del usuario
+		$userCentroId = $this->getUserCentroId();
+		$userRole = $this->Auth->user('role');
+		$cicloIdActual = $this->getActualCicloId();
+
+		// Modelos a utilizar
+		$this->loadModel('Centro');
+		$this->loadModel('Curso');
+		$this->loadModel('Ciclo');
+
+		// Abria que ver como cake gestiona estos joins de manera nativa en el ORM
+		$this->paginate['CursosInscripcion'] = array(
+			'fields' => array(
+				'CursosInscripcion.*',
+				'Inscripcion.*',
+				'Curso.*',
+				'Centro.*',
+				'Persona.*',
+				'Ciclo.nombre'
+			),
+			'limit' => 8,
+			'order' => array('CursosInscripcion.curso_id' => 'ASC'),
+			'joins' => array(
+				array(
+					'alias' => 'Alumno',
+					'table' => 'alumnos',
+					'type' => 'LEFT',
+					'conditions' => '`Alumno`.`id` = `Inscripcion`.`alumno_id`'
+				),
+				array(
+					'alias' => 'Persona',
+					'table' => 'personas',
+					'type' => 'LEFT',
+					'conditions' => '`Persona`.`id` = `Alumno`.`persona_id`'
+				),
+				array(
+					'alias' => 'Ciclo',
+					'table' => 'ciclos',
+					'type' => 'LEFT',
+					'conditions' => '`Ciclo`.`id` = `Inscripcion`.`ciclo_id`'
+				),
+				array(
+					'alias' => 'Centro',
+					'table' => 'centros',
+					'type' => 'LEFT',
+					'conditions' => '`Centro`.`id` = `Inscripcion`.`centro_id`'
+				)
+			)
+		);
 		/* PAGINACIÓN SEGÚN ROLES DE USUARIOS (INICIO).
 		*Sí el usuario es "admin" muestra los cursos del establecimiento. Sino sí es "usuario" externo muestra los cursos del nivel.
 		*/
-		//$cicloIdActual = $this->getLastCicloId();
-		$userCentroId = $this->getUserCentroId();
-		$this->loadModel('Centro');
-		$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-		$nivelCentroArray = $this->Centro->findById($userCentroId, 'nivel_servicio');
-		$nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
-		$userRole = $this->Auth->user('role');
-		$estado2 = array("COMPLETA", "PENDIENTE");
-		if ($this->Auth->user('role') === 'admin') {
-		//$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
-		$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.centro_id' => $userCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));	
-		} else if (($userRole === 'usuario') && ($nivelCentroString === 'Común - Inicial - Primario')) {
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA'));
-		} else if ($userRole === 'usuario') {
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.centro_id' => $nivelCentroId, 'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO-CONFIRMADA'));
+
+		// Se busca el nivel del servicio segun el centro_id del usuario
+		$nivelCentroServicio = $this->Centro->find('first', array(
+				'recursive' => -1,
+				'fields'=>array('Centro.nivel_servicio'),
+				'conditions'=>array('Centro.id'=>$userCentroId))
+		);
+
+		$nivelServicio = $nivelCentroServicio['Centro']['nivel_servicio'];
+
+		switch($userRole)
+		{
+			case 'admin':
+				$this->paginate['CursosInscripcion']['conditions'] = array(
+					'Inscripcion.centro_id' => $userCentroId,
+					'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
+				);
+			break;
+			case 'usuario':
+				if($nivelServicio === 'Común - Inicial - Primario')
+				{
+					$nivelCentroId = $this->Centro->find('list', array(
+						'fields'=>array('id'),
+						'conditions'=>array(
+							'nivel_servicio'=>array('Común - Inicial', 'Común - Primario')
+						)
+					));
+
+					$this->paginate['CursosInscripcion']['conditions'] = array(
+						'Inscripcion.centro_id' => $nivelCentroId,
+						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
+					);
+				} else
+				{
+					$nivelCentroId = $this->Centro->find('list', array(
+						'fields'=>array('id'),
+						'conditions'=>array('nivel_servicio'=>$nivelServicio))
+					);
+
+					$this->paginate['CursosInscripcion']['conditions'] = array(
+						'Inscripcion.centro_id' => $nivelCentroId,
+						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO-CONFIRMADA')
+					);
+				}
+				break;
 		}
 		/* FIN */
-        /* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
-		*Pagina según búsquedas simultáneas ya sea por CENTRO y/o CURSO y/o INSCRIPCIÓN.
-		*/
-  		$this->redirectToNamed();
+
+		/* PAGINACIÓN SEGÚN CRITERIOS DE BÚSQUEDAS (INICIO).
+        *Pagina según búsquedas simultáneas ya sea por CENTRO y/o CURSO y/o INSCRIPCIÓN.
+        */
+		$this->redirectToNamed();
 		$conditions = array();
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
@@ -70,67 +148,44 @@ class CursosInscripcionsController extends AppController {
 		if(!empty($this->params['named']['inscripcion_id'])) {
 			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
 		}
+
+		// Inicializa la paginacion segun las condiciones
 		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
+
+		/*
+		 * *********************
+		 * 		IMPORTANTE
+		 * *********************
+		 * Falta filtrar estos combobox segun el tipo de usuario logueado
+		 *
+		 */
+		$comboAnio = $this->Curso->find('list', array(
+			'recursive'=> -1,
+			'fields'=> array('Curso.anio','Curso.anio')
+		));
+
+		$comboDivision = $this->Curso->find('list', array(
+			'recursive'=> -1,
+			'fields'=> array('Curso.division','Curso.division')
+		));
+
+		$comboCiclo = $this->Ciclo->find('list', array(
+			'fields'=>array('Ciclo.id', 'Ciclo.nombre')
+		));
+
+		/*
+		 * ********************
+		 * 		IMPORTANTE
+		 * ********************
+		 * La seccion no la filtra bien, debido a que no se deberia filtrar por id, por ej:
+		 *  "1ro" tiene multiples cursos y deberia mostrar todos los primeros
+		 */
+		$comboSecciones = $this->Curso->find('list', array(
+			'fields'=>array('nombre_completo_curso','nombre_completo_curso')
+		));
+
+
 		/* FIN */
-		/* SETS DE DATOS PARA COMBOBOX BÚSQUEDA (INICIO). */
-        // Por ciclo...
-        $ciclosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('ciclo_id')));
-        $this->loadModel('Ciclo');
-        $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
-		$cicloIdActual = $this->getActualCicloId();
-		// Por centro...
-        $this->loadModel('Centro');
-		$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-		if ($userRole == 'superadmin') {
-			$centros = $this->Centro->find('list', array('fields'=>array('id', 'sigla')));
-		} else if (($userRole === 'usuario') && ($nivelCentroString === 'Común - Inicial - Primario')) {
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-			$centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
-		} else if ($userRole === 'usuario') {
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-			$centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));
-		} else if ($userRole == 'admin') {
-			$centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions'=>array('id'=>$nivelCentroId)));	
-		}
-		// Por sección...
-        $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
-        if ($userRole === 'admin') {
-          	$cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'conditions' => array('centro_id' => $userCentroId)));    
-        } else if (($userRole === 'usuario') && ($nivelCentroString === 'Común - Inicial - Primario')) {
-			$this->loadModel('Centro');
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-			$cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
-		} else if ($userRole === 'usuario') {
-           	$this->loadModel('Centro');
-			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-	        $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));  
-        } else {
-        	//Sí es "superadmin"
- 	        $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso')));
-        }
-        // Por código de inscripción...
-        $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
-        if ($userRole === 'admin') {
-          	$inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro'), 'conditions' => array('centro_id' => $userCentroId)));    
-        } else if (($userRole === 'usuario') && ($nivelCentroString === 'Común - Inicial - Primario')) {
-			$this->loadModel('Centro');
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario')))); 		
-			$inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro'), 'conditions' => array('centro_id' => $nivelCentroId)));
-		} else if ($userRole === 'usuario') {
-           	$this->loadModel('Centro');
-			$nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));	
-			$nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro))); 		
-			$inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro'), 'conditions' => array('centro_id' => $nivelCentroId)));  
-        } else {
-        	//Sí es "superadmin"
- 	        $inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro')));
-        }
-        $personaId = $this->CursosInscripcion->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
-		$this->loadModel('Persona');
-		$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
-		$centrosNombreTarjetas = $this->Centro->find('list', array('fields'=>array('id', 'sigla')));
-		/* FIN */
-		$this->set(compact('cursosInscripcions', 'cicloIdActual', 'cursos', 'inscripcions', 'ciclos', 'personaId', 'personaNombre', 'centros', 'materias', 'centrosNombreTarjetas'));
-   }
+		$this->set(compact('cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones'));
+	}
 }
