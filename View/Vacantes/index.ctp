@@ -7,6 +7,8 @@
         <tr>
           <th><?php echo $this->Paginator->sort('Centro.sigla', 'Centro');?>  </th>
           <th><?php echo $this->Paginator->sort('anio','Año');?></th>
+          <th><?php echo $this->Paginator->sort('plazasTotal', 'Plazas');?></th>
+          <th><?php echo $this->Paginator->sort('matricula', 'Matrícula');?></th>
           <th><?php echo $this->Paginator->sort('vacantesTotal', 'Vacantes');?></th>
           <th>Acciones</th>
         </tr>
@@ -19,6 +21,12 @@
             </td>
             <td>
               <?php echo $matricula['Curso']['anio']; ?>
+            </td>
+            <td>
+              <?php echo $matricula['Curso']['plazasTotal']; ?>
+            </td>
+            <td>
+              <?php echo $matricula['Curso']['matricula']; ?>
             </td>
             <td>
               <?php echo $matricula['Curso']['vacantesTotal']; ?>
