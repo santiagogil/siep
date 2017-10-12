@@ -218,17 +218,24 @@ class InscripcionsController extends AppController {
                  */
                 if ($this->Inscripcion->save($this->data)) {
                     /* ATUALIZA MATRÍCULA Y VACANTES (INICIO).
-                    *  Al registrarse una Inscripción sí es para el ciclo actual, actualiza valores de matrícula
-                    *  y vacantes del curso correspondiente en el modelo Curso.
+                    *  Al registrarse una Inscripción sí es para el ciclo actual o para un agrupamiento 
+                    *  para el próximo ciclo, actualiza valores de matrícula y vacantes del curso correspondiente.
                     */
+                    // Obtiene el ciclo id...
                     $this->loadModel('Ciclo');
                     $cicloIdActual = $this->getActualCicloId();
                     $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
                     $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
-                    if ($cicloId == $cicloIdActualString) {
-                        $this->loadModel('Curso');
-                        $cursoIdArray = $this->request->data['Curso'];
-                        $cursoIdString = $cursoIdArray['Curso'];
+                    // Obtiene la división del curso...
+                    $this->loadModel('Curso');
+                    $cursoIdArray = $this->request->data['Curso'];
+                    $cursoIdString = $cursoIdArray['Curso'];
+                    $divisionArray = $this->Curso->findById($cursoIdString, 'division');
+                    $divisionString = $divisionArray['Curso']['division'];
+                    if (($cicloId == $cicloIdActualString) || ($divisionString == '')) {
+                        //$this->loadModel('Curso');
+                        //$cursoIdArray = $this->request->data['Curso'];
+                        //$cursoIdString = $cursoIdArray['Curso'];
                         $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdString)));
                         $this->Curso->id=$cursoIdString;
                         $this->Curso->saveField("matricula", $matriculaActual);
@@ -337,6 +344,7 @@ class InscripcionsController extends AppController {
             $cursoIdArraySeleccionado = $this->request->data['Curso'];
             $cursoIdStringSeleccionado = $cursoIdArraySeleccionado['Curso'];
             // Obtiene el id del curso asignado anteriormente.
+            $id = $this->data['Inscripcion']['id'];            
             $this->loadModel('CursosInscripcion');
             $cursoInscripcionId = $this->CursosInscripcion->find('list', array('fields'=>array('id'), 'conditions'=>array('inscripcion_id'=>$id)));
             $cursoIdArrayAnterior = $this->CursosInscripcion->findById($cursoInscripcionId, 'curso_id');                
@@ -389,7 +397,6 @@ class InscripcionsController extends AppController {
         $alumnos = $this->Inscripcion->find('list', array('fields'=>array('alumno_id')));
         //$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$alumnos)));
         $personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'),'conditions'=>array('id'=>$alumnos)));
-        print_r($personaId[38]);
         $personasNombres = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'),'conditions'=>array('id'=>$personaId)));
         print_r($personasNombres[27]);
         $this->set(compact('alumnos', 'personaId', 'personasNombres'));
@@ -435,7 +442,7 @@ class InscripcionsController extends AppController {
             $cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
         } else if ($userRol === 'usuario') {
             $nivelCentroId = $this->Inscripcion->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-            $cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+            $cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
         } else if ($userRol == 'admin') {
 			$userCentroId = $this->getUserCentroId();
 			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId)));

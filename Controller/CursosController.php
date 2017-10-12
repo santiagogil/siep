@@ -180,6 +180,7 @@ class CursosController extends AppController {
                $this->redirect( array( 'action' => 'index' ));
 		  	}
 		  	//Antes de guardar sí el nivel_servicio del centro es INICIAL o PRIMARIO, obtiene la titulación.
+            /*
             $this->loadModel('Centro');
             $centroNivel = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$centroId)));
 			if ($centroNivel == 'INICIAL') {
@@ -187,6 +188,25 @@ class CursosController extends AppController {
 			} else if ($centroNivel == 'PRIMARIA') {
 				$this->request->data['Curso']['titulacion_id'] = 10;
 			}
+			*/
+			/* Sí cambia las plazas:
+            *  Actualiza valores de matrícula y vacantes del curso.
+            */
+            // Obtiene la plaza seleccionada.
+            $cursoPlazaStringSeleccionada = $this->request->data['Curso']['plazas'];
+            // Obtiene las plazas del curso asignado anteriormente.
+            $cursoPlazaArrayAnterior = $this->Curso->findById($id, 'plazas');                
+            $cursoPlazaStringAnterior = $cursoPlazaArrayAnterior['Curso']['plazas'];
+            // Sí las plazas de los cursos son diferentes, se trata de un cambio de plazas. 
+            if ($cursoPlazaStringSeleccionada != $cursoPlazaStringAnterior) { 
+               // Actualiza los valores de matrícula y vacantes de la sección.
+               $matriculaActual = $this->Curso->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$id)));
+               $this->Curso->id=$id;
+               $this->Curso->saveField("matricula", $matriculaActual);
+               $vacantesActual = $cursoPlazaStringSeleccionada - $matriculaActual;
+               $this->Curso->saveField("vacantes", $vacantesActual);
+            }
+            /* FIN */
 		  	if ($this->Curso->save($this->data)) {
 				$this->Session->setFlash('La sección ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));

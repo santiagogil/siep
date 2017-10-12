@@ -69,7 +69,9 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
-            <li><?php echo $this->Html->link(__('Alumnos por Unidad'), '/inscripcions_materias');?></li>
+            <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad'), '/inscripcions_materias');?></li>-->
+            <li><?php echo $this->Html->link(__('Matricula y Vacantes por Sección'), '/matriculas');?></li>
+            <li><?php echo $this->Html->link(__('Matricula y Vacantes por Agrupamiento'), '/vacantes');?></li>
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
             <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
             <!--<li><?php echo $this->Html->link(__('Gráficos'), '/graficos'); ?></li>-->

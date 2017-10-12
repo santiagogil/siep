@@ -9,7 +9,14 @@
         <?php
           echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'empty' => 'Ingrese un ciclo lectivo...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
         ?>
-  </div>      
+  </div>
+  <?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) { ?>      
+  <div class="col-xs-6 col-sm-3">
+        <?php
+          echo $this->Form->input('centro_id', array('label'=>'Institución*', 'empty' => 'Ingrese una institución...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+        ?>
+  </div>
+  <?php } ?>
   <div class="col-xs-6 col-sm-3">
       <?php
           $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA','BAJA'=>'BAJA','EGRESO'=>'EGRESO');

@@ -7,9 +7,9 @@
         <tr>
           <th><?php echo $this->Paginator->sort('Centro.sigla', 'Centro');?>  </th>
           <th><?php echo $this->Paginator->sort('anio','Año');?></th>
-          <th><?php echo $this->Paginator->sort('plazasTotal', 'Plazas');?></th>
-          <th><?php echo $this->Paginator->sort('matricula', 'Matrícula');?></th>
-          <th><?php echo $this->Paginator->sort('vacantesTotal', 'Vacantes');?></th>
+          <th><?php echo $this->Paginator->sort('plazas', 'Plaza');?></th>
+          <th><?php echo $this->Paginator->sort('matricula', 'Matricula');?></th>
+          <th><?php echo $this->Paginator->sort('vacantes', 'VACANTES');?></th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -23,13 +23,13 @@
               <?php echo $matricula['Curso']['anio']; ?>
             </td>
             <td>
-              <?php echo $matricula['Curso']['plazasTotal']; ?>
+              <?php echo $matricula['Curso']['plazas']; ?>
             </td>
             <td>
               <?php echo $matricula['Curso']['matricula']; ?>
             </td>
             <td>
-              <?php echo $matricula['Curso']['vacantesTotal']; ?>
+              <?php echo $matricula['Curso']['vacantes']; ?>
             </td>
             <td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Centros', 'action'=> 'view', $matricula['Centro']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
