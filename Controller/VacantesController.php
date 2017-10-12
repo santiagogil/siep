@@ -44,18 +44,12 @@ class VacantesController extends AppController
 
 
     public function index() {
+    
         $this->loadModel('Curso');
-
-        $conditions = [
-            'Curso.anio' => array('sala de 4 años', '1ro'),
-            'Curso.division !=' =>''
-        ];
-
+        $conditions = array('AND'=>array('Curso.anio' => array('sala de 4 años', '1ro'), 'Curso.division' =>''
+        ));
         // Es necesario hacer una columna virtual, para que despues se pueda ordenar en el datatable
-        $this->Curso->virtualFields['plazasTotal'] = 'SUM(Curso.plazas)';
-        $this->Curso->virtualFields['matricula'] = 'SUM(Curso.matricula)';
-        $this->Curso->virtualFields['vacantesTotal'] = 'plazasTotal' - 'matriculaTotal';
-        //$this->Curso->virtualFields['vacantesTotal'] = $this->Curso->find('count', array('fields'=>array('vacantes'), 'conditions'=>array('division !='=>' ')));
+        //$this->Curso->virtualFields['vacantesTotal'] = 'SUM(Curso.vacantes)';
         $this->paginate = array(
             'limit' => 10,
             'conditions' => $conditions,
@@ -64,9 +58,10 @@ class VacantesController extends AppController
                 'Centro.sigla',
                 'Centro.id',
                 'Curso.anio',
-                'Curso.plazasTotal',
+                'Curso.plazas',
                 'Curso.matricula',
-                'vacantesTotal',
+                'Curso.vacantes'
+                //'vacantesTotal',
             ),
             'group' => array(
                 'Centro.sigla',

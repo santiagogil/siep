@@ -89,7 +89,6 @@ class CursosInscripcionsController extends AppController {
 		);
 
 		$nivelServicio = $nivelCentroServicio['Centro']['nivel_servicio'];
-
 		switch($userRole)
 		{
 			case 'admin':
@@ -118,7 +117,6 @@ class CursosInscripcionsController extends AppController {
 						'fields'=>array('id'),
 						'conditions'=>array('nivel_servicio'=>$nivelServicio))
 					);
-
 					$this->paginate['CursosInscripcion']['conditions'] = array(
 						'Inscripcion.centro_id' => $nivelCentroId,
 						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO-CONFIRMADA')
