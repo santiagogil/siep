@@ -181,15 +181,16 @@ class CentrosController extends AppController {
 	}
 
 	// metodos privados.
-
+	/*
 	function __createCentroPDF($centro)
 	{
 		App::import(null,null,true,array(),'vendors/tcpdf/examples/example_001',false);
 		Configure::write('debug',0);
         $this->layout = 'pdf'; /* esto utilizara el layout 'pdf.ctp' */
-        /* Operaciones que deseamos realizar y variables que pasaremos a la vista. */
+        /* Operaciones que deseamos realizar y variables que pasaremos a la vista. 
         $this->render();
 	}
+	*/
 
 	public function autocompleteCentro() {
 		$term = null;

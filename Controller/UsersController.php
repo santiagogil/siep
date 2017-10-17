@@ -84,10 +84,12 @@ class UsersController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+        /*
         $this->pdfConfig = array(
             'download' => true,
             'filename' => 'user_' . $id .'.pdf'
         );
+        */
 		$this->set('user', $this->User->read(null, $id));
 		$this->set('user', $this->User->find('first', $options));
 	}
