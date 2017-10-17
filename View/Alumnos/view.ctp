@@ -28,12 +28,14 @@
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $alumno['Alumno']['id'])); ?></div>
        <?php if($current_user['role'] == 'superadmin'): ?>
         <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $alumno['Alumno']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $alumno['Alumno']['persona_id'])); ?></div>
+        <?php /*
         <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $alumno['Alumno']['id'], 'ext' => 'pdf')); ?></div>-->
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Familiar'), array('controller' => 'familiars', 'action' => 'add')); ?></div>-->
         <!--<div class="opcion"><?php echo $this->Html->link(__('Agregar Integracion'), array('controller' => 'integracions', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Servicio'), array('controller' => 'servicios', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Calificación'), array('controller' => 'notas', 'action' => 'add')); ?></div>
         <div class="opcion"><?php echo $this->Html->link(__('Agregar Inasistencia'), array('controller' => 'inasistencias', 'action' => 'add')); ?></div>-->
+        */ ?>
       <?php endif; ?>	
 	</div>
   </div>
@@ -83,12 +85,14 @@
 					<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
 					<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>
 					<?php echo '<b>Estado de la Inscripción:</b> '.$inscripcion['estado_inscripcion'];?><br>
+					<?php /*
 					<!--<?php echo '<b>Fecha de alta:</b> '.$this->Html->formatTime($inscripcion['fecha_alta']);?><br>-->
 					<!--<?php echo '<b>Cursa:</b> '.$inscripcion['cursa'];?><br>
 		            <?php echo '<b>Fecha de baja:</b> '.$this->Html->formatTime($inscripcion['fecha_baja']);?><br>
 					<?php echo '<b>Tipo de baja:</b> '.$inscripcion['tipo_baja'];?><br>
 		            <?php echo '<b>Fecha de egreso:</b> '.$this->Html->formatTime($inscripcion['fecha_egreso']);?><br>
 		            <!--<?php echo '<b>Nota:</b> '.$inscripcion['nota'];?><br>-->
+		            */ ?>
 		            <b>Documentación presentada:</b> <?php if($inscripcion['estado_documentacion'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado_documentacion']; ?></span><?php } ?></br>
 		            <hr>
 		            <div class="text-right">
@@ -143,6 +147,7 @@
 	</div>
 </div>
 <!-- end Pases Relacionados -->
+<?php /*
 <!-- Integraciones Relacionadas 
 	<div id="click_03" class="titulo_acordeon">Integraciones Relacionadas <span class="caret"></span></div>
 	<div id="acordeon_03">
@@ -263,6 +268,7 @@
     </div>
   </div>
 <!-- end Calificaciones Relacionadas -->
+*/ ?>
 </div>
 <!-- Initialize Swiper -->
     <script>
