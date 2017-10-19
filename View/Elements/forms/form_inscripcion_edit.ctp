@@ -44,6 +44,7 @@
             echo $this->Form->input('legajo_nro', array('type' => 'hidden'));
       ?><br>
     </div>
+    <?php /*
     <div class="unit"><strong><h3>Datos del Alta</h3></strong><hr />
       <?php
             $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
@@ -121,7 +122,8 @@
             $situaciones_sociales = array('Mudanza de la familia' => 'Mudanza de la familia', 'Pasó a educación de jóvenes y adultos' => 'Pasó a educación de jóvenes y adultos', 'Pasó a educación especial' => 'Pasó a educación especial', 'No le gustaba la escuela' => 'No le gustaba la escuela', 'Tenía muchas materias previas' => 'Tenía muchas materias previas', 'Problemas disciplinarios' => 'Problemas disciplinarios',  'Decisión de la escuela' => 'Decisión de la escuela', 'Problemas de salud' =>  'Problemas de salud', 'Cambio en la situación económica' => 'Cambio en la situación económica', 'Comenzó a trabajar' => 'Comenzó a trabajar', 'Quedó embarazada' => 'Quedó embarazada', 'Debe colaborar en la casa' => 'Debe colaborar en la casa');
             echo $this->Form->input('situacion_social', array('label' => 'Situación social', 'empty' => 'Ingrese una opción...', 'options' => $situaciones_sociales, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
-    </div>  
+    </div>
+    */ ?>  
   <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
     <div class="unit"><strong><h3>Documentación Presentada</h3></strong><hr />
       <!--<?php
