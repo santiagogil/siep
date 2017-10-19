@@ -10,7 +10,7 @@
             <div class="input select">
 
                 <?php
-                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo,'default'=>$cicloIdUltimo,'label'=>false, 'empty' => 'Ingrese un ciclo lectivo...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo /*'empty' => 'Ingrese un ciclo lectivo...'*/ , 'default'=>'3', 'readonly' => true, 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
                 ?>
             </div>
 
@@ -61,7 +61,6 @@
                 </select>
             </div>
         </div>
-
         <div class="col-xs-2">
             <div class="input select">
                 <select name="division" class="form-control" data-toggle="tooltip" data-placement="bottom">
@@ -91,7 +90,7 @@
 
 <br>
 
-<div class="TituloSec">Matriculas</div>
+<div class="TituloSec">Matriculas y Vacantes por Sección</div>
 <div id="ContenidoSec">
 
     <div class="table-responsive">
