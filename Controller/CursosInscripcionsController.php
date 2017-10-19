@@ -178,11 +178,28 @@ class CursosInscripcionsController extends AppController {
 		 * La seccion no la filtra bien, debido a que no se deberia filtrar por id, por ej:
 		 *  "1ro" tiene multiples cursos y deberia mostrar todos los primeros
 		 */
+		/*
 		$comboSecciones = $this->Curso->find('list', array(
-			'fields'=>array('nombre_completo_curso','nombre_completo_curso')
+			'fields'=>array('nombre_completo_curso','nombre_completo_curso'),
 		));
-
-
+		*/
+		$this->loadModel('Centro');
+		$this->loadModel('Curso');
+		$userCentroId = $this->getUserCentroId();
+        $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+        $userRol = $this->Auth->user('role');
+		if ($userRol == 'superadmin') {
+			$comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
+		} else if (($userRol === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
+            $nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
+            $comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId, 'status'=> '1')));
+        } else if ($userRol === 'usuario') {
+            $nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+            $comboSecciones = $this->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId, 'status' => '1')));
+        } else if ($userRol == 'admin') {
+			$userCentroId = $this->getUserCentroId();
+			$comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId, 'status' => '1')));
+		}
 		/* FIN */
 		$this->set(compact('cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones'));
 	}
