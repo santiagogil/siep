@@ -30,9 +30,9 @@ class InscripcionsMateriasController extends AppController {
 		$estado2 = array("COMPLETA", "PENDIENTE");
 		if($this->Auth->user('role') === 'admin') {
 			$userCentroId = $this->getUserCentroId();
-			$this->paginate['InscripcionsMateria']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
+			$this->paginate['InscripcionsMateria']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado_inscripcion' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
 		} else {
-			$this->paginate['InscripcionsMateria']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2);		
+			$this->paginate['InscripcionsMateria']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado_inscripcion' => $estado2);		
 		}
 		$ciclosId = $this->InscripcionsMateria->Inscripcion->find('list', array('fields'=>array('ciclo_id')));
         $this->loadModel('Ciclo');
