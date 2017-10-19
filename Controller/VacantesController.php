@@ -44,7 +44,12 @@ class VacantesController extends AppController
 
 
     public function index() {
-    
+
+        $this->loadModel('Ciclo');
+        $comboCiclo = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
+        $cicloIdUltimo = $this->getLastCicloId();
+
+
         $this->loadModel('Curso');
         $conditions = array('AND'=>array('Curso.anio' => array('sala de 4 años', 'sala de 4 años', '1ro', '2do'), 'Curso.division' =>''
         ));
@@ -58,6 +63,7 @@ class VacantesController extends AppController
                 'Centro.sigla',
                 'Centro.id',
                 'Curso.anio',
+                'Curso.turno',
                 'Curso.plazas',
                 'Curso.matricula',
                 'Curso.vacantes'
@@ -127,6 +133,6 @@ class VacantesController extends AppController
             $matriculas = $this->paginate('Curso',$conditions);
         }
 
-        $this->set(compact('matriculas'));
+        $this->set(compact('matriculas','cicloIdUltimo','comboCiclo'));
     }
 }
