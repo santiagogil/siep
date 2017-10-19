@@ -121,6 +121,7 @@ class InscripcionsController extends AppController {
         /* BOTÓN CANCELAR (INICIO).
         *abort if cancel button was pressed.
         */
+
         if (isset($this->params['data']['cancel'])) {
             $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect( array( 'action' => 'index' ));
@@ -211,7 +212,8 @@ class InscripcionsController extends AppController {
                         print_r("Error al registrar a la persona como alumno");
                         die;
                     }
-                } 
+                }
+
                 $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
                 /*
                  *  FIN VERIFICACION DE ALUMNO
@@ -472,7 +474,7 @@ class InscripcionsController extends AppController {
 			$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
 		}
 		/* FIN */
-		$this->set(compact('personaNombre', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
+		$this->set(compact('personaNombre', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual','cicloIdUltimo'));
 	}
 
 	private function __getCodigo($ciclo, $personaDocString){

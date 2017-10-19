@@ -8,16 +8,10 @@
         <div class="col-xs-2">
 
             <div class="input select">
-                <select name="ciclo" class="form-control" data-toggle="tooltip" data-placement="bottom">
-                    <option value="">Seleccione un ciclo...</option>
-                    <?php
-                    foreach($comboCiclo as $ciclo_id => $ciclo_value) :
-                    ?>
-                        <option value="<?php echo $ciclo_value;  ?>"><?php echo $ciclo_value; ?></option>
-                    <?php
-                    endforeach;
-                    ?>
-                </select>
+
+                <?php
+                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo,'default'=>$cicloIdUltimo,'label'=>false, 'empty' => 'Ingrese un ciclo lectivo...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                ?>
             </div>
 
         </div>

@@ -2,7 +2,7 @@
 <div class="row">
   <div class="col-xs-6 col-sm-3">
       <?php
-          echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'empty' => 'Ingrese un ciclo lectivo...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+          echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'default'=>$cicloIdUltimo, 'empty' => 'Ingrese un ciclo lectivo...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
       <?php echo $this->Form->input('usuario_id', array('type' => 'hidden')); ?>
   </div>
@@ -16,7 +16,7 @@
   <div class="col-xs-6 col-sm-3">
       <?php
           $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA');
-           echo $this->Form->input('estado_inscripcion', array('label'=>'Estado de la inscripción*', 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+           echo $this->Form->input('estado_inscripcion', array('default'=>'CONFIRMADA','label'=>'Estado de la inscripción*', 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
   </div>
 </div><hr />
@@ -85,6 +85,8 @@
   </div>
   <!-- End Datos generales -->
 
+    <?php
+    /*
    <!-- Datos de alta -->
    <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit">
@@ -194,14 +196,15 @@
             $tipos_fines = array('No' => 'No', 'Sí línea deudores de materias.' => 'Sí línea deudores de materias.', 'Sí línea trayectos educativos.' => 'Sí línea   trayectos educativos.');
             echo $this->Form->input('fines', array('label' => 'Fines*', 'empty' => 'Ingrese una opción...', 'options' => $tipos_fines, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
           }
-      */
+      * /
       ?>
 
 
     </div>
    </div>
    <!-- End Datos de alta -->
-
+    */
+    ?>
     <!-- Documentacion presentada -->
     <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="unit"><strong><h3>Documentación Presentada</h3></strong><hr />
