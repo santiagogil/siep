@@ -1,3 +1,15 @@
+<div class="TituloSec">Filtro</div>
+<div id="ContenidoSec">
+    <div class="row">
+        <div class="col-xs-2">
+            <div class="input select">
+                <?php
+                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo, 'default'=>$cicloIdUltimo, 'disabled' => true, 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="TituloSec">Matrículas y Vacantes por Agrupamientos</div>
 <div id="ContenidoSec">
@@ -7,6 +19,7 @@
         <tr>
           <th><?php echo $this->Paginator->sort('Centro.sigla', 'Centro');?>  </th>
           <th><?php echo $this->Paginator->sort('anio','Año');?></th>
+          <th><?php echo $this->Paginator->sort('turno','Turno');?></th>
           <th><?php echo $this->Paginator->sort('plazas', 'Plaza');?></th>
           <th><?php echo $this->Paginator->sort('matricula', 'Matricula');?></th>
           <th><?php echo $this->Paginator->sort('vacantes', 'VACANTES');?></th>
@@ -21,6 +34,9 @@
             </td>
             <td>
               <?php echo $matricula['Curso']['anio']; ?>
+            </td>
+            <td>
+              <?php echo $matricula['Curso']['turno']; ?>
             </td>
             <td>
               <?php echo $matricula['Curso']['plazas']; ?>
