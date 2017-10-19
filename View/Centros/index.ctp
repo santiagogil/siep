@@ -15,9 +15,17 @@
 			    </div>
 		<!-- end second nav -->
 				<div class="row">
-				    <?php foreach ($centros as $centro): ?>
-				    <?php echo $this->element('centro',array( 'centro' => $centro )); ?>
-				    <?php endforeach; ?>
+				    <?php
+						// Este FIX logra que las tarjetas no se desarmen
+						// Es necesario definir un puntero para el bucle $clear = 1
+						$clear = 1;
+						foreach ($centros as $centro) {
+							echo $this->element('centro',array( 'centro' => $centro ));
+
+							// El helper de Siep->clearfix se encarga de determinar cuando realizar el fix
+							$clear = $this->Siep->clearfix($clear);
+						}
+					?>
 			    </div>
 	  		    <div class="unit text-center">
 					<?php echo $this->element('pagination'); ?> 

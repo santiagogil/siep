@@ -70,12 +70,15 @@
         <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $persona['Persona']['id'])); ?></div>
        <?php if($current_user['role'] == 'superadmin'): ?> 
         <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $persona['Persona']['id']), null, sprintf(__('Esta seguro de borrar al alumno %s?'), $persona['Persona']['nombre_completo_persona'])); ?></div>
+        <?php /*
         <!--<div class="opcion"><?php echo $this->Html->link(__('Export to PDF'), array('action' => 'view', $persona['Persona']['id'], 'ext' => 'pdf')); ?></div>-->
+        */ ?>
       <?php endif; ?>
 	</div>
   </div>
 </div>
 <!-- end main -->
+<?php /*
 <!-- Familiares Relacionados
 <div id="click_01" class="titulo_acordeon">Familiares Relacionadas <span class="caret"></span></div>
 <div id="acordeon_01">
@@ -262,6 +265,7 @@
     </div>
   </div>
 <!-- end Calificaciones Relacionadas -->
+*/ ?>
 </div>
 <!-- Initialize Swiper -->
     <script>

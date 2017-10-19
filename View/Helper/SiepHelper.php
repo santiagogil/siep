@@ -24,4 +24,14 @@ class SiepHelper extends AppHelper
         $log = $modelo->getDataSource()->getLog(false, false);
         debug($log);
     }
+
+    public function clearfix($counter,$rows=2)
+    {
+        if($counter%$rows==0)
+        {
+            echo '<div class="clearfix"></div>';
+        }
+        $counter++;
+        return $counter;
+    }
 }

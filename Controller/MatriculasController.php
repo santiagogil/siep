@@ -54,7 +54,9 @@ class MatriculasController extends AppController
         $this->redirectToNamed();
         $conditions = array();
         if (!empty($this->params['named']['ciclo_id'])) {
-            $conditions['CursosInscripcions.ciclo_id ='] = $this->params['named']['ciclo_id'];
+
+            // Condicion para filtrar el ciclo_id
+            //$conditions['CursosInscripcions.ciclo_id ='] = $this->params['named']['ciclo_id'];
         }
         if(!empty($this->params['named']['centro_id']))
         {
@@ -70,6 +72,9 @@ class MatriculasController extends AppController
         // Cargo todos los cilos de la base de datos
         $this->loadModel('Ciclo');
         $comboCiclo = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
+
+        $cicloIdUltimo = $this->getLastCicloId();
+
         if($this->Siep->isAdmin()) {
             $conditions['Curso.centro_id'] = $userCentroId;
             $matriculas = $this->paginate('Curso',$conditions);
@@ -139,7 +144,7 @@ class MatriculasController extends AppController
             ));
         }
 
-        $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo'));
+        $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo','cicloIdUltimo'));
   	}
 
     /*

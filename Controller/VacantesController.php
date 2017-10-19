@@ -63,11 +63,13 @@ class VacantesController extends AppController
                 'Curso.vacantes'
                 //'vacantesTotal',
             ),
+            /*
             'group' => array(
                 'Centro.sigla',
                 'Centro.id',
                 'Curso.anio'
             ),
+            */
             'contain' => [
                 'Centro'
             ]

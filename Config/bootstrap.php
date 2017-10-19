@@ -47,10 +47,9 @@ Cache::config('default', array('engine' => 'File'));
 /**
  * As of 1.3, additional rules for the inflector are added below
  *
-Inflector::rules('singular', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
-Inflector::rules('plural', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
- *
- */
+*/
+//Inflector::rules('singular', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
+//Inflector::rules('plural', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
 // Load Composer autoload.
 require APP . 'Vendor/autoload.php';
 
@@ -64,10 +63,13 @@ Configure::write('Dispatcher.filters', array(
     'AssetDispatcher',
     'CacheDispatcher'
 ));
-CakePlugin::loadAll(array('CakePdf' => array('bootstrap' => true, 'routes' => true)));
+CakePlugin::loadAll();
+//CakePlugin::loadAll(array('CakePdf' => array('bootstrap' => true, 'routes' => true)));
 /**
  * Configuration CakePdf
- */
+ *
+*/ 
+/*
 define('DOMPDF_ENABLE_REMOTE', true);
 CakePlugin::load('CakePdf', array('bootstrap' => true, 'routes' => true));
 Configure::write('CakePdf', array(
@@ -75,4 +77,4 @@ Configure::write('CakePdf', array(
     'pageSize' => 'A4',
     'orientation' => 'portrait'
 ));
-//CakePlugin::load('FullCalendar');
+*/

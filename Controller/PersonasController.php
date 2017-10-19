@@ -76,10 +76,12 @@ class PersonasController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$options = array('conditions' => array('Persona.' . $this->Persona->primaryKey => $id));
+		/*
 		$this->pdfConfig = array(
 			'download' => true,
 			'filename' => 'persona_' . $id .'.pdf'
 		);
+		*/
 		$this->set('persona', $this->Persona->read(null, $id));
 
         //Evalúa si existe foto.

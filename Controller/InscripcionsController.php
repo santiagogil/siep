@@ -121,6 +121,7 @@ class InscripcionsController extends AppController {
         /* BOTÓN CANCELAR (INICIO).
         *abort if cancel button was pressed.
         */
+
         if (isset($this->params['data']['cancel'])) {
             $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
             $this->redirect( array( 'action' => 'index' ));
@@ -211,7 +212,8 @@ class InscripcionsController extends AppController {
                         print_r("Error al registrar a la persona como alumno");
                         die;
                     }
-                } 
+                }
+
                 $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
                 /*
                  *  FIN VERIFICACION DE ALUMNO
@@ -439,13 +441,13 @@ class InscripcionsController extends AppController {
 			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
 		} else if (($userRol === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
             $nivelCentroId = $this->Inscripcion->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
-            $cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+            $cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId, 'status'=> '1')));
         } else if ($userRol === 'usuario') {
             $nivelCentroId = $this->Inscripcion->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-            $cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId)));
+            $cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId, 'status' => '1')));
         } else if ($userRol == 'admin') {
 			$userCentroId = $this->getUserCentroId();
-			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId)));
+			$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId, 'status' => '1')));
 		}
 		//$materias = $this->Inscripcion->Materia->find('list');
     	/* Sí es "superadmin" o "usuario" ve combobox con todos los alumnos.
@@ -472,7 +474,7 @@ class InscripcionsController extends AppController {
 			$personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions'=>array('id'=>$personaId)));
 		}
 		/* FIN */
-		$this->set(compact('personaNombre', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
+		$this->set(compact('personaNombre', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual','cicloIdUltimo'));
 	}
 
 	private function __getCodigo($ciclo, $personaDocString){
