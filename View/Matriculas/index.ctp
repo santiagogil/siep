@@ -10,7 +10,7 @@
             <div class="input select">
 
                 <?php
-                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo /*'empty' => 'Ingrese un ciclo lectivo...'*/ , 'default'=>'3', 'readonly' => true, 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo /*'empty' => 'Ingrese un ciclo lectivo...'*/ , 'default'=>$cicloIdActual, 'disabled' => true, 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
                 ?>
             </div>
 
@@ -155,6 +155,14 @@
               }
             });
           });
+
+
+            // Quita el modo disabled del formulario, para enviar los datos!
+            $('form').submit(function(e) {
+                $(':disabled').each(function(e) {
+                    $(this).removeAttr('disabled');
+                })
+            });
         });
       </script>
     </div>

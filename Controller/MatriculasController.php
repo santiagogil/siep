@@ -74,6 +74,7 @@ class MatriculasController extends AppController
         $comboCiclo = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
 
         $cicloIdUltimo = $this->getLastCicloId();
+        $cicloIdActual = $this->getActualCicloId();
 
         if($this->Siep->isAdmin()) {
             $conditions['Curso.centro_id'] = $userCentroId;
@@ -144,7 +145,7 @@ class MatriculasController extends AppController
             ));
         }
 
-        $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo','cicloIdUltimo'));
+        $this->set(compact('matriculas','comboAnio','comboDivision','comboCiclo','cicloIdUltimo','cicloIdActual'));
   	}
 
     /*

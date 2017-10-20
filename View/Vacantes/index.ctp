@@ -1,3 +1,15 @@
+<div class="TituloSec">Filtro</div>
+<div id="ContenidoSec">
+    <div class="row">
+        <div class="col-xs-2">
+            <div class="input select">
+                <?php
+                echo $this->Form->input('ciclo_id', array('options'=>$comboCiclo, 'default'=>$cicloIdUltimo, 'disabled' => true, 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="TituloSec">Matrículas y Vacantes por Agrupamientos</div>
 <div id="ContenidoSec">
