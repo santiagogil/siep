@@ -16,7 +16,7 @@ class AppController extends Controller {
 	// sessions support
 	// authorization for login and logut redirect
     public $components = array(
-            'DebugKit.Toolbar',
+			'DebugKit.Toolbar', // Eliminar al habilitar variables de entorno
 			'RequestHandler',
 			'Session',
 		    'Auth' => array(
@@ -26,6 +26,19 @@ class AppController extends Controller {
 						'authorize' => array('Controller'),
 			),
 	);
+
+	public function __construct($request, $response)
+	{
+		parent::__construct($request, $response);
+
+		// Si existe la variable de entorno, incluye el DebugKit
+		/*
+		if (getenv('CAKEPHP_DEBUG')) {
+			$this->components[] = 'DebugKit.Toolbar';
+		}
+		*/
+
+	}
 
 	public $helpers = array('Form', 'Time', 'Js');
 
@@ -123,7 +136,7 @@ class AppController extends Controller {
 	}
 
 	/**
-	* Devuelve el nivel el id del Ciclo actual.  
+	* Devuelve el nivel el id del Ciclo actual.
 	*/
 	function getActualCicloId()
 	{
