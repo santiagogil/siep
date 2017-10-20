@@ -46,8 +46,9 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alumnado <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
             <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>
+            <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
+            <li><?php echo $this->Html->link(__('Familiares'), array('controller'=>'familiars', 'action'=>'add')); ?></li>
             <!--<li><?php echo $this->Html->link(__('Inasistencias'), '/inasistencias'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Calificaciones'), '/notas'); ?></li>-->
             <!--<li><?php echo $this->Html->link(__('Mesa de Exámenes'), '/mesaexamens'); ?></li>-->
@@ -68,10 +69,11 @@
       <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><?php echo $this->Html->link(__('Alumnos por Sección'), '/cursos_inscripcions');?></li>
-            <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad'), '/inscripcions_materias');?></li>-->
-            <li><?php echo $this->Html->link(__('Matricula y Vacantes por Sección'), '/matriculas');?></li>
-            <li><?php echo $this->Html->link(__('Matricula y Vacantes por Agrupamiento'), '/vacantes');?></li>
+            <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
+            <li><?php echo $this->Html->link(__('Alumnos por Sección [todos los ciclos]'), '/cursos_inscripcions');?></li>
+            <!--<li><?php echo $this->Html->link(__('Alumnos por Unidad Curricular'), '/inscripcions_materias');?></li>-->
+            <li><?php echo $this->Html->link(__('Matricula 2017'), '/matriculas');?></li>
+            <li><?php echo $this->Html->link(__('Matricula 2018'), '/vacantes');?></li>
             <!--<li><?php echo $this->Html->link('Respaldos', 'http://localhost/mybackups/import.php', array('target'=>'_blank'));?></li>-->
             <!--<li><?php echo $this->Html->link(__('Reportes'),'/report_manager/reports');?></li>-->
             <!--<li><?php echo $this->Html->link(__('Gráficos'), '/graficos'); ?></li>-->

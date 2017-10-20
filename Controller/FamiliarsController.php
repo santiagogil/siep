@@ -28,11 +28,13 @@ class FamiliarsController extends AppController {
         $personaOcupacion = $this->Persona->find('list', array('fields'=>array('id', 'ocupacion')));
         $personaLugarTrabaja = $this->Persona->find('list', array('fields'=>array('id', 'lugar_de_trabajo')));
         $personaCiudad = $this->Persona->find('list', array('fields'=>array('id', 'ciudad_id')));
+        $this->loadModel('Ciudad');
+        $ciudades = $this->Ciudad->find('list', array('fields'=>array('nombre')));
         $personaCalleNombre = $this->Persona->find('list', array('fields'=>array('id', 'calle_nombre')));
         $personaCalleNumero = $this->Persona->find('list', array('fields'=>array('id', 'calle_nro')));
         $personaTelefono = $this->Persona->find('list', array('fields'=>array('id', 'telefono_nro')));
         $personaEmail = $this->Persona->find('list', array('fields'=>array('id', 'email'))); 
-        $this->set(compact('personaNombre', 'personaNacionalidad', 'personaCuilCuit', 'personaOcupacion', 'personaLugarTrabaja', 'personaCiudad', 'personaCalleNombre', 'personaCalleNumero', 'personaTelefono', 'personaEmail'));
+        $this->set(compact('personaNombre', 'personaNacionalidad', 'personaCuilCuit', 'personaOcupacion', 'personaLugarTrabaja', 'personaCiudad', 'ciudades', 'personaCalleNombre', 'personaCalleNumero', 'personaTelefono', 'personaEmail'));
 	}
 
 	function add() {

@@ -14,7 +14,7 @@
 				<div>
 						<label for="AlumnoNombreCompleto">Nombres y Apellidos*: </label>
 						<br>
-						<input id="AlumnoNombreCompleto" value="<?php echo $this->data["Persona"]["nombre_completo_persona"]; ?>" class="form-control" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
+						<input id="AlumnoNombreCompleto" value="<?php echo $this->data["Persona"]["nombre_completo_persona"]; ?>" class="form-control" readonly=true data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo">
 						<input id="AlumnoPersonaId" value="<?php echo $this->data["Persona"]["id"]; ?>" name="data[Alumno][persona_id]" type="text" style="display:none;">
 
 						<div class="alert alert-danger" role="alert" id="AutocompleteError" style="display:none;">
