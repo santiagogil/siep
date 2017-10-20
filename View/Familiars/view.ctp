@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6">
                     <b>Ciudad:</b>
-                    <?php echo ($personaCiudad[$familiar['Familiar']['persona_id']]); ?><br>
+                    <?php echo ($ciudades[$personaCiudad[$familiar['Familiar']['persona_id']]]); ?><br>
                     <b>Domicilio:</b>
                     <?php echo ($personaCalleNombre[$familiar['Familiar']['persona_id']]). ' ' . ($personaCalleNumero[$familiar['Familiar']['persona_id']]); ?><br>
                     <b>Telefono:</b>
@@ -36,8 +36,10 @@
             <div class="subtitulo">Opciones</div>
             <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('action' => 'index', 'controller' => 'alumnos')); ?></div>
             <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $familiar['Familiar']['id'])); ?></div>
+          <?php if($current_user['role'] == 'superadmin'): ?>  
             <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $familiar['Familiar']['id'] ), null, sprintf(__('Esta seguro de borrar el familiar "'.$familiar['Familiar']['id'].'"'), $this->Form->value('Familiar.id'))); ?>
             </div>
+          <?php endif; ?>  
         </div>
     </div>	
   </div>

@@ -1,19 +1,16 @@
 <?php echo $this->Html->script(array('tooltip', 'moment', 'bootstrap-datetimepicker')); ?>
 <div class="row">
-	<div class="col-xs-6 col-sm-3">
-	    <?php echo $this->Form->input('created', array('label' => 'Creado*', 'id' => 'datetimepicker1', 'type' => 'text', 'class' => 'input-group date', 'class' => 'form-control', 'span class' => 'fa fa-calendar')); ?>
-    </div>
 </div><hr />
 <div class="row">
    	<div class="col-md-6 col-sm-6 col-xs-12">
 		<div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
+			<?php    
+	            echo $this->Form->input('persona_id', array('label'=>'Tutor*', 'empty' => 'Ingrese una persona como Tutor...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+	        ?><br>
 			<?php
 	            echo $this->Form->input('Alumno', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-	        ?><br>
-	        <?php    
-	            echo $this->Form->input('persona_id', array('label'=>'Tutor*', 'empty' => 'Ingrese una persona como Tutor...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
 	        ?>
-	  	</div>
+	    </div>
 	  	<?php echo '</div><div class="col-md-6 col-sm-6 col-xs-12">'; ?>
       	<div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />
         	<?php

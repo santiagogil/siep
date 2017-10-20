@@ -51,7 +51,7 @@ class VacantesController extends AppController
 
 
         $this->loadModel('Curso');
-        $conditions = array('AND'=>array('Curso.anio' => array('sala de 4 años', 'sala de 4 años', '1ro', '2do'), 'Curso.division' =>''
+        $conditions = array('AND'=>array('Curso.anio' => array('sala de 4 años', 'sala de 5 años', '1ro', '2do', '3ro', '4to', '5to', '6to'), 'Curso.division' =>''
         ));
         // Es necesario hacer una columna virtual, para que despues se pueda ordenar en el datatable
         //$this->Curso->virtualFields['vacantesTotal'] = 'SUM(Curso.vacantes)';
