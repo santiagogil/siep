@@ -32,7 +32,6 @@
 </div>
 
 <br>
-
 <div class="form-group">
     <div class="input select">
         <select name="ciclo_id" class="form-control" data-toggle="tooltip" data-placement="bottom">
@@ -47,13 +46,29 @@
         </select>
     </div>
 </div>
-
 <br>
 <div class="form-group">
    <?php
    		$turnos = array('Mañana' => 'Mañana', 'Tarde' =>'Tarde', 'Mañana Extendida' =>'Mañana Extendida', 'Tarde Extendida' => 'Tarde Extendida', 'Doble Extendida' =>'Doble Extendida', 'Vespertino' => 'Vespertino', 'Noche' =>'Noche', 'Otro' =>'Otro'); 
    		echo $this->Form->input('Curso.turno', array('label' => false, 'empty'=>'Ingrese un turno...', 'options'=>$turnos, 'class' => 'form-control'));	?>
+</div>
+<div class="form-group">
+   <?php
+        if ($current_user['role'] == 'superadmin') {
+            $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+          } else if ($current_user['puesto'] == 'Dirección Jardín') {
+              $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años');
+          } else if ($current_user['puesto'] == 'Dirección Escuela Primaria') {
+              $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+          } else if ($current_user['puesto'] == 'Supervisión Inicial/Primaria') {
+              $anios = array('Sala de 3 años' => 'Sala de 3 años', 'Sala de 4 años' => 'Sala de 4 años', 'Sala de 5 años' => 'Sala de 5 años', '1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
+          } else {
+              $anios = array('1ro ' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');  
+          }
+        echo $this->Form->input('anio', array('label' =>false, 'empty' => 'Ingrese un año...', 'options' => $anios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
+    ?>
 </div><br>
+<?php /*
 <div class="form-group">
     <div class="input select">
         <select name="seccion" class="form-control" data-toggle="tooltip" data-placement="bottom">
@@ -68,6 +83,7 @@
         </select>
     </div>
 </div><br>
+*/ ?>
 <hr />
 <div class="text-center">
     <span class="link"><?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> BUSCAR', array('class' => 'submit', 'class' => 'btn btn-primary')); ?>

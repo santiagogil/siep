@@ -140,8 +140,8 @@ class CursosInscripcionsController extends AppController {
 		if(!empty($this->params['named']['turno'])) {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
 		}
-		if(!empty($this->params['named']['curso_id'])) {
-			$conditions['CursosInscripcion.curso_id ='] = $this->params['named']['curso_id'];
+		if(!empty($this->params['named']['anio'])) {
+			$conditions['Curso.anio ='] = $this->params['named']['anio'];
 		}
 		if(!empty($this->params['named']['inscripcion_id'])) {
 			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
