@@ -19,8 +19,15 @@ spec:
         io.kompose.service: siep-nginx
     spec:
       containers:
-      - image: decyt/siep-nginx
-        name: siep-nginx
+      - name: siep-nginx
+        image: "decyt/siep-nginx:{{ .Values.siepNginxVersion}}"
+        command: ["/bin/sh"]
+        args: ["-c", "envsubst '$MEMCACHED $UPSTREAM' < /etc/nginx/conf.d/siep.tpl > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+        env:
+        - name: MEMCACHED
+          value: {{ .Release.Name}}-memcached:11211
+        - name: UPSTREAM
+          value: {{ .Release.Name}}-siep-php-fpm:9000
         ports:
         - containerPort: 80
         resources: {}

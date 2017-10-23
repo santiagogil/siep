@@ -18,8 +18,11 @@ spec:
         io.kompose.service: siep-php-fpm
     spec:
       containers:
-      - image: decyt/siep-php-fpm
+      - image: "decyt/siep-php-fpm:{{ .Values.siepPhpFpmVersion}}"
         name: siep-php-fpm
+        env:
+        - name: MEMCACHED
+          value: {{ .Release.Name}}-memcached:11211
         resources: {}
       restartPolicy: Always
 status: {}

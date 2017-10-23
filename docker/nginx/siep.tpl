@@ -35,11 +35,11 @@ server {
     # }
     location ~ \.php$ {
         set $memcached_key '$request_uri';
-        memcached_pass siep-memcached:11211;
+        memcached_pass ${MEMCACHED};
         default_type       text/html;
         error_page 404 405 502 = @no_cache;
     }    location @no_cache {
-        fastcgi_pass siep-php-fpm:9000;
+        fastcgi_pass ${UPSTREAM};
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         # fastcgi_param PHP_VALUE "error_log=/var/www/myapp/logs/php_errors.log";
