@@ -44,7 +44,7 @@
 <!-- Familiares Relacionados -->
 <div id="click_01" class="titulo_acordeon">Familiares Relacionados <span class="caret"></span></div>
 <div id="acordeon_01">
-	<div class="row">
+	<div class="row">			
 	<?php if (!empty($alumno['Familiar'])):?>
 		<div class="col-xs-12 col-sm-6 col-md-8">
 			<?php foreach ($alumno['Familiar'] as $familiar): ?>

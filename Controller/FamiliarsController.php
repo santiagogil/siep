@@ -1,4 +1,7 @@
 <?php
+
+App::uses('AppController', 'Controller');
+
 class FamiliarsController extends AppController {
 
 	var $name = 'Familiars';
@@ -11,7 +14,7 @@ class FamiliarsController extends AppController {
         if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
 	        $this->Auth->allow();
 	    } elseif ($this->Auth->user('role') === 'usuario') { 
-	        $this->Auth->allow('index', 'view');
+	        $this->Auth->allow('view', 'edit');
 	    }
     }
 
@@ -45,6 +48,22 @@ class FamiliarsController extends AppController {
 		  }
    		  if (!empty($this->data)) {
 			$this->Familiar->create();
+			
+			/* Guarda el id de persona del padre/tutor */
+			//Obtengo personaId
+            $personaId = $this->request->data['Persona']['persona_id'];
+            // Propone guardar el id de persona en el campo persona_id. 
+            $this->request->data['Familiar']['persona_id'] = $personaId;
+            // Obtengo el id de persona del alumno.
+			$alumnoPersonaIdArrayDos = $this->request->data['Alumno'];
+			$alumnoPersonaIdArrayUno = $alumnoPersonaIdArrayDos['Alumno']; 
+			// Obtengo el id del alumno relacionado a esa persona.
+			$alumnoIdArrayDos = $this->Familiar->Alumno->find('list', array('fields'=>array('id'), 'conditions'=>array('persona_id'=>$alumnoPersonaIdArrayUno)));
+			$alumnoIdArrayUno = $this->Familiar->Alumno->findById($alumnoIdArrayDos, 'id');
+			$alumnoIdString	= $alumnoIdArrayUno['Alumno']['id'];
+			$this->request->data['Alumno'] = $alumnoIdArrayDos;
+			//print_r($this->request->data['Alumno']);
+
 			if ($this->Familiar->save($this->data)) {
 				$this->Session->setFlash('El familiar ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Familiar->id;
@@ -54,11 +73,10 @@ class FamiliarsController extends AppController {
 			}
 		}
 		$centroId = $this->getUserCentroId();
-		$alumnoId = $this->Familiar->Alumno->find('list', array('fields'=>array('id', 'persona_id'), 'conditions'=>array('centro_id'=>$centroId)));
+		$alumnoPersonaId = $this->Familiar->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('centro_id'=>$centroId)));
         $this->loadModel('Persona');
-        $alumnos = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
-        $personas = $this->Familiar->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions'=>array('familiar'=>1)));
-        $this->set(compact('alumnos', 'personas'));
+        $alumnosNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona'), 'conditions' => array('id' => $alumnoPersonaId)));
+        $this->set(compact('alumnosNombre'));
     }
 
 	function edit($id = null) {
@@ -103,6 +121,45 @@ class FamiliarsController extends AppController {
 		}
 		$this->Session->setFlash('Familiar no fue borrado', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('controller' => 'personas', 'action' => 'index'));
+	}
+
+	/* AUTOCOMPLETE PARA EL FORMULARIO DE AGREGACIÓN (INICIO).
+	*  Sólo muestra las personas con perfíl de familiar.
+	*/
+	public function autocompleteNombrePersona() {
+
+		$conditions = array();
+		$term = $this->request->query('term');
+
+		if(!empty($term))
+		{
+			// Si se busca un numero de documento.. se raliza el siguiente filtro
+			if(is_numeric($term)) {
+				$conditions[] = array('Persona.documento_nro LIKE' => $term . '%');
+			} else {
+				// Se esta buscando por nombre y/o apellidos
+				$terminos = explode(' ', trim($term));
+				$terminos = array_diff($terminos,array(''));
+
+				// Esto es posible porque nombre_completo_persona esta definido en el modelo como virtual
+				foreach($terminos as $termino) {
+					$conditions[] = array('nombre_completo_persona LIKE' => '%' . $termino . '%');
+				}
+			}
+
+			$this->loadModel('Persona');
+			$personaId = $this->Persona->find('list', array('fields'=>array('id'), 'conditions'=>array('familiar'=>1)));
+			$personas = $this->Persona->find('all', array(
+					'recursive'	=> -1,
+					// Condiciona la búsqueda también por id de persona con perfil de alumno.
+					'conditions' => array($conditions, 'id' => $personaId),
+					'fields' 	=> array('id', 'nombre_completo_persona','documento_nro'))
+			);
+
+			echo json_encode($personas);
+		}
+
+		$this->autoRender = false;
 	}
 }
 ?>

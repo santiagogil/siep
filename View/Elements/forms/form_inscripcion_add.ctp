@@ -207,45 +207,43 @@
     ?>
     <!-- Documentacion presentada -->
     <div class="col-md-4 col-sm-6 col-xs-12">
-          <div class="unit"><strong><h3>Documentación Presentada</h3></strong><hr />
-              <div class="row">
-                  <br>
-                  <div class="input-group">
-      <span class="input-group-addon">
-        <?php echo $this->Form->input('fotocopia_dni', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
-      </span>
-                  </div>
-                  <div class="input-group">
-      <span class="input-group-addon">
-       <?php echo $this->Form->input('certificado_septimo', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
-      </span>
-                  </div>
-                  <div class="input-group">
-      <span class="input-group-addon">
-        <?php echo $this->Form->input('analitico', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Analítico</label>'));?>
-      </span>
-                  </div>
-                  <div class="input-group">
-      <span class="input-group-addon">
-        <?php echo $this->Form->input('partida_nacimiento_alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
-      </span>
-                  </div>
-                  <div class="input-group">
-        <span class="input-group-addon">
-         <?php echo $this->Form->input('partida_nacimiento_tutor', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Tutor</label>'));?>
-        </span>
-                  </div>
-                  <div class="input-group">
-      <span class="input-group-addon">
-        <?php echo $this->Form->input('libreta_sanitaria', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Libreta Sanitaria</label>'));?>
-      </span>
-                  </div>
-              </div><br>
+      <div class="unit"><strong><h3>Documentación Presentada</h3></strong><hr />
+        <div class="row"><br>
+          <div class="input-group">
+            <span class="input-group-addon">
+              <?php echo $this->Form->input('fotocopia_dni', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Fotocopia DNI</label>'));?>
+            </span>
           </div>
-      </div>
-    <!-- End documentacion presentada -->
-
-<div class="row">
+          <div class="input-group">
+            <span class="input-group-addon">
+             <?php echo $this->Form->input('certificado_septimo', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Primario Completo</label>'));?>
+            </span>
+          </div>
+        <div class="input-group">
+          <span class="input-group-addon">
+            <?php echo $this->Form->input('analitico', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Certificado Analítico</label>'));?>
+          </span>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">
+            <?php echo $this->Form->input('partida_nacimiento_alumno', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Alumno</label>'));?>
+          </span>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">
+           <?php echo $this->Form->input('partida_nacimiento_tutor', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Partida de Nacimiento Tutor</label>'));?>
+          </span>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">
+            <?php echo $this->Form->input('libreta_sanitaria', array('between' => '<br>', 'class' => 'form-control', 'label' => false, 'type' => 'checkbox', 'before' => '<label class="checkbox">', 'after' => '<br><i></i><br>Libreta Sanitaria</label>'));?>
+          </span>
+        </div>
+      </div><br>
+    </div>
+  </div>
+  <!-- End documentacion presentada -->
+  <div class="row">
     <div class="col-md-12 col-sm-6 col-xs-12">
       <?php echo $this->Form->input('observaciones', array('label'=>'Observaciones', 'type' => 'textarea', 'between' => '<br>', 'class' => 'form-control')); ?>
     </div>

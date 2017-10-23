@@ -4,6 +4,7 @@ App::uses('AppController', 'Controller');
 class AlumnosController extends AppController {
 
 	var $name = 'Alumnos';
+	public $uses = array('Alumno', 'Familiar');
 	var $paginate = array('Alumno' => array('limit' => 4, 'order' => 'Alumno.created DESC'));
 
     public function beforeFilter() {
@@ -24,7 +25,7 @@ class AlumnosController extends AppController {
 		$this->paginate = array(
 			'limit' => 10,
 			'order' => array('Alumno.id' => 'ASC' ),
-			'recursive' => 0,
+			'recursive' => 1,
 			'contain' => [
 				'Persona'
 			]
@@ -63,7 +64,6 @@ class AlumnosController extends AppController {
 		}
 		*/
 		$alumnos = $this->paginate('Alumno', $conditions);
-
 	    $this->set(compact('alumnos'));
 	}
 
@@ -72,7 +72,7 @@ class AlumnosController extends AppController {
 			$this->Session->setFlash('Alumno no valido', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
 		}
-		$options = array('conditions' => array('Alumno.' . $this->Alumno->primaryKey => $id));
+		//$options = array('conditions' => array('Alumno.' . $this->Alumno->primaryKey => $id));
 		/*
 		$this->pdfConfig = array(
 			'download' => true,
@@ -103,7 +103,7 @@ class AlumnosController extends AppController {
 		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$notaMateriaId)));
 		*/
 		//Familiares relacionados.
-        $this->loadModel('Persona');
+		$this->loadModel('Persona');
         $familiarNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
         /*
         $familiarVinculo = $this->Persona->Familiar->find('list', array('fields' => array('vinculo'), 'conditions' => array('id' => $alumnoId)));
@@ -111,7 +111,7 @@ class AlumnosController extends AppController {
         $familiarTelefono = $this->Persona->find('list', array('fields' => array('telefono_nro')));
         $familiarEmail = $this->Persona->find('list', array('fields' => array('email')));
 		*/
-		$this->set(compact( 'familiar', 'alumnos', 'alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', '$familiarCuilCuit', '$familiarTelefono', '$familiarEmail'));
+		$this->set(compact('alumnoNombre', 'alumnoDocumentoTipo', 'alumnoDocumentoNumero', 'alumnoEdad', 'centroNombre', 'cicloNombre', 'personaId', 'personaNombre', 'foto', 'materiaAlia', 'barrioNombre', 'familiarNombre', '$familiarCuilCuit', '$familiarTelefono', '$familiarEmail'));
     }
 
 	public function add() {
