@@ -1,6 +1,17 @@
 <?php echo $this->Form->create('CursosInscripcion',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
 
 <div class="form-group">
+    <div class="input select">
+        <select name="modo" class="form-control" data-toggle="tooltip" data-placement="bottom">
+            <option value="">Ver resultados como tarjetas</option>
+            <option value="lista">Ver resultados como una lista</option>
+            ?>
+        </select>
+    </div>
+</div>
+<br>
+
+<div class="form-group">
     <?php
     // Si la persona que navega no es Admin, muestro autocomplete de todas las secciones
     if(!$this->Siep->isAdmin()) :

@@ -26,8 +26,6 @@ class CursosInscripcionsController extends AppController {
  */
 	public function index()
 	{
-		// Hachazo nivel Ninja Warrior!
-
 		// Datos del usuario
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
@@ -147,6 +145,8 @@ class CursosInscripcionsController extends AppController {
 			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
 		}
 
+		$modoLista = ($this->params['named']['modo'] == 'lista') ? true : false;
+
 		// Inicializa la paginacion segun las condiciones
 		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
 
@@ -201,6 +201,6 @@ class CursosInscripcionsController extends AppController {
 			$comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId, 'status' => '1')));
 		}
 		/* FIN */
-		$this->set(compact('cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones'));
+		$this->set(compact('cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones','modoLista'));
 	}
 }
