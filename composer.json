@@ -19,8 +19,6 @@
     },
     "require": {
         "cakephp/cakephp": "^2.9.5",
-        "friendsofcake/cakepdf": "1.*.*",
-        "josegonzalez/cakephp-upload": "1.*.*",
         "cakedc/migrations":"^2.5",
         "roave/security-advisories": "dev-master"
     },
