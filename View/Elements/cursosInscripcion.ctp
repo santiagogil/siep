@@ -1,10 +1,10 @@
 <div class="col-md-4">
         <div class="unit">
         <!--<div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
-        <?php if($inscripcion['Inscripcion']['estado'] == true): ?>
+        <?php if($cursosInscripcion['Inscripcion']['estado'] == true): ?>
         <span class="checked"></span><?php echo $this->Html->image('../img/inscription_image.png', array('class' => 'img-thumbnail img-responsive')); ?>
         <?php endif; ?>
-        <?php if($inscripcion['Inscripcion']['estado'] == false): ?>
+        <?php if($cursosInscripcion['Inscripcion']['estado'] == false): ?>
         <span class="error"></span><?php echo $this->Html->image('../img/inscription_image.png', array('class' => 'img-thumbnail img-responsive')); ?>
         <?php endif; ?>
         </div>-->
