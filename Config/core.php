@@ -34,8 +34,8 @@
  */
 
 	// Descomentar para tomar el valor desde el environment
-	//$debugMode = getenv('CAKEPHP_DEBUG');
-	$debugMode = '2'; // Puede ser string o integer
+  $debugMode = getenv('CAKEPHP_DEBUG');
+	// $debugMode = '2'; // Puede ser string o integer
 
 	if($debugMode!=null) {
 		// Si existe la variable de entorno obtiene su valor como entero
