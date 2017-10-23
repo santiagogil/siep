@@ -31,13 +31,12 @@ class AppController extends Controller {
 	{
 		parent::__construct($request, $response);
 
-		// Si existe la variable de entorno, incluye el DebugKit
+		// Convierte la variable de entorno a entero, si es mayor a 0 incluye el DebugKit
 		/*
-		if (getenv('CAKEPHP_DEBUG')) {
+		if (intval(getenv('CAKEPHP_DEBUG'))>0) {
 			$this->components[] = 'DebugKit.Toolbar';
 		}
 		*/
-
 	}
 
 	public $helpers = array('Form', 'Time', 'Js');

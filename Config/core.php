@@ -33,15 +33,21 @@
  * In development mode, you need to click the flash message to continue.
  */
 
-	Configure::write('debug', 0);
-	// Habilita el debug segun la variable de entorno
-	/*
-	if (getenv('CAKEPHP_DEBUG')) {
-		Configure::write('debug', 2);
-	} else {
-		Configure::write('debug', 0);
+	// Descomentar para tomar el valor desde el environment
+	//$debugMode = getenv('CAKEPHP_DEBUG');
+	$debugMode = '2'; // Puede ser string o integer
+
+	if($debugMode!=null) {
+		// Si existe la variable de entorno obtiene su valor como entero
+		$debugMode = intval($debugMode);
 	}
-	*/
+
+	// Si en este punto debugMode no es un resultado numerico, por defecto desactiva el debug
+	if(!is_numeric($debugMode)) {
+		$debugMode = 0;
+	}
+
+	Configure::write('debug', $debugMode);
 
 /**
  * Configure the Error handler used to handle errors for your application.  By default
