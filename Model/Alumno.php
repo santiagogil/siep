@@ -6,25 +6,7 @@ class Alumno extends AppModel {
 	var $name = 'Alumno';
     //var $displayField = 'apellido';
 	//public $virtualFields = array('nombre_completo_alumno'=> 'CONCAT(Alumno.apellidos, " ", Alumno.nombres)');
-    /*
-	public $actsAs = array(
-			'Upload.Upload' => array(
-				'foto' => array(
-					'fields' => array(
-						'dir' => 'foto_dir'
-					),
-					'thumbnailMethod' => 'php',
-					'thumbnailSizes' => array(
-						'vga' => '640x480',
-						'thumb' => '150x150'
-					),
-					'deleteOnUpdate' => true,
-					'deleteFolderOnDelete' => true
-				)
-			)
-		);
-	*/
-
+    
     var $belongsTo = array(
 		'Persona' => array(
 			'className' => 'Persona',
@@ -125,8 +107,8 @@ class Alumno extends AppModel {
 		'Familiar' => array(
 			'className' => 'Familiar',
 			'joinTable' => 'alumnos_familiars',
-			'foreignKey' => 'familiar_id',
-			'associationForeignKey' => 'alumno_id',
+			'foreignKey' => 'alumno_id',
+			'associationForeignKey' => 'familiar_id',
 			'unique' => true,
 			'conditions' => '',
 			'fields' => '',

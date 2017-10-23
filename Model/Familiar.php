@@ -19,8 +19,8 @@ class Familiar extends AppModel {
     'Alumno' => array(
       'className' => 'Alumno',
       'joinTable' => 'alumnos_familiars',
-      'foreignKey' => 'alumno_id',
-      'associationForeignKey' => 'familiar_id',
+      'foreignKey' => 'familiar_id',
+      'associationForeignKey' => 'alumno_id',
       'unique' => true,
       'conditions' => '',
       'fields' => '',
@@ -42,6 +42,20 @@ class Familiar extends AppModel {
       'message' => 'Indicar una de las opciones de la lista.'
       )
     ),
+    'conviviente' => array(
+      'boolean' => array(
+      'rule' => array('boolean'),
+      'allowEmpty' => true,
+      'message' => 'Indicar una opción'
+      )
+    ),
+    'autorizado_retirar' => array(
+      'boolean' => array(
+      'rule' => array('boolean'),
+      'allowEmpty' => true,
+      'message' => 'Indicar una opción'
+      )
+    )
 	);
 }
 ?>

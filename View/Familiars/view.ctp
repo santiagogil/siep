@@ -1,3 +1,4 @@
+<?php echo $this->Html->script(array('acordeon', 'slider')); ?>
 <div class="TituloSec">Familiares </div>
 <div id="ContenidoSec">	
     <div class="row"><div class="col-md-8">
@@ -42,5 +43,29 @@
           <?php endif; ?>  
         </div>
     </div>	
-  </div>
 </div>
+<!-- Alumnos Relacionados -->
+<div id="click_01" class="titulo_acordeon">Alumnos Relacionados <span class="caret"></span></div>
+<div id="acordeon_01">
+    <div class="row">
+    <?php if (!empty($familiar['Alumno'])):?>
+    <div class="col-xs-12 col-sm-6 col-md-8">
+    <?php foreach ($familiar['Alumno'] as $alumno): ?>
+        <div class="col-md-4">
+            <div class="unit">
+                <?php echo '<b>Id:</b> '.$alumno['id'];?><br>
+                <hr>
+                <div class="text-right">
+                <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-edit"></i>'), array('controller' => 'alumnos', 'action' => 'edit', $alumno['id']), array('class' => 'btn btn-warning', 'escape' => false)); ?>
+                <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'alumnos', 'action' => 'view', $alumno['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+                <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-trash"></i>'), array('controller' => 'alumnos', 'action' => 'delete', $alumno['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
+    <?php endif; ?>
+    </div>
+</div>  
+<!-- end Alumnos Relacionados -->
