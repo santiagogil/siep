@@ -118,12 +118,28 @@ class PersonasController extends AppController {
 			// Genera el nombre completo en mayúsculas y se deja en los datos que se intentaran guardar
 			$this->request->data['Persona']['apellidos'] = $apellidosMayuscula;
 			$this->request->data['Persona']['nombres'] = $nombresMayuscula;
-			// Antes de guardar calcula la edad
-			$day = $this->request->data['Persona']['fecha_nac']['day'];
-			$month = $this->request->data['Persona']['fecha_nac']['month'];
-			$year = $this->request->data['Persona']['fecha_nac']['year'];
-			// Calcula la edad y se deja en los datos que se intentaran guardar
-			$this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);
+
+			// Antes de guardar calcula la edad, por algun motivo no puedo usar en la vista el nombre fecha_nac
+			$fechaNacimiento = $this->request->data['Persona']['fecha_nacimiento'];
+
+			if(!empty($fechaNacimiento))
+			{
+			  $fechaNacimiento = explode('/',$fechaNacimiento);
+
+			  $day = $fechaNacimiento[0];
+			  $month = $fechaNacimiento[1];
+			  $year = $fechaNacimiento[2];
+
+			  $this->request->data['Persona']['fecha_nac'] = [
+				  'month' => $month,
+				  'day' => $day,
+				  'year' => $year
+			  ];
+
+				// Calcula la edad y se deja en los datos que se intentaran guardar
+			  $this->request->data['Persona']['edad'] = $this->__getEdad($day, $month, $year);
+			}
+
 			if ($this->Persona->save($this->data)) {
 				$this->Session->setFlash('La persona ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Persona->id;
