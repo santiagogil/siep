@@ -23,6 +23,8 @@ spec:
         env:
         - name: MEMCACHED
           value: {{ .Release.Name}}-memcached:11211
+        - name: CAKEPHP_DEBUG
+          value: {{ .Values.cakephpDebug | quote}}
         resources: {}
       restartPolicy: Always
 status: {}
