@@ -145,7 +145,10 @@ class CursosInscripcionsController extends AppController {
 			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
 		}
 
-		$modoLista = ($this->params['named']['modo'] == 'lista') ? true : false;
+		$modoLista = (
+			!empty($this->params['named']['modo']) &&
+			$this->params['named']['modo'] == 'lista'
+		) ? true : false;
 
 		// Inicializa la paginacion segun las condiciones
 		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
