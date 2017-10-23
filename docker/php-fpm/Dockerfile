@@ -13,7 +13,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php \
     && php -r "unlink('composer-setup.php');"
 COPY composer.json composer.lock ./
-RUN php composer.phar install
+RUN php composer.phar install --no-dev
 COPY Config/  ./Config/
 COPY Controller/ ./Controller/
 COPY logs/ ./logs/
