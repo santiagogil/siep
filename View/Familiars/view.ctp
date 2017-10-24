@@ -53,12 +53,15 @@
     <?php foreach ($familiar['Alumno'] as $alumno): ?>
         <div class="col-md-4">
             <div class="unit">
-                <?php echo '<b>Id:</b> '.$alumno['id'];?><br>
+                <?php echo '<b>Documento:</b> '.$personaDocumentoTipo[$alumnoPersonaId[$alumno['id']]]. ' '.$personaDocumentoNro[$alumnoPersonaId[$alumno['id']]];?><br>
+                <?php echo '<b>Nombre Completo:</b> '.$personaNombre[$alumnoPersonaId[$alumno['id']]];?><br>
                 <hr>
                 <div class="text-right">
                 <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-edit"></i>'), array('controller' => 'alumnos', 'action' => 'edit', $alumno['id']), array('class' => 'btn btn-warning', 'escape' => false)); ?>
                 <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'alumnos', 'action' => 'view', $alumno['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+              <?php if($current_user['role'] == 'superadmin'): ?>  
                 <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-trash"></i>'), array('controller' => 'alumnos', 'action' => 'delete', $alumno['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+              <?php endif; ?>  
                 </div>
             </div>
         </div>

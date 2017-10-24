@@ -24,6 +24,7 @@ class FamiliarsController extends AppController {
 			$this->redirect(array('controller' => 'personas', 'action' => 'index'));
 		}
 		$this->set('familiar', $this->Familiar->read(null, $id));
+		/* SETS DE DATOS PARA PERSONAS (INICIO). */
 		$this->loadModel('Persona');
 		$personaNombre = $this->Persona->find('list', array('fields'=>array('id', 'nombre_completo_persona')));
         $personaNacionalidad = $this->Persona->find('list', array('fields'=>array('id', 'nacionalidad')));        
@@ -37,7 +38,15 @@ class FamiliarsController extends AppController {
         $personaCalleNumero = $this->Persona->find('list', array('fields'=>array('id', 'calle_nro')));
         $personaTelefono = $this->Persona->find('list', array('fields'=>array('id', 'telefono_nro')));
         $personaEmail = $this->Persona->find('list', array('fields'=>array('id', 'email'))); 
-        $this->set(compact('personaNombre', 'personaNacionalidad', 'personaCuilCuit', 'personaOcupacion', 'personaLugarTrabaja', 'personaCiudad', 'ciudades', 'personaCalleNombre', 'personaCalleNumero', 'personaTelefono', 'personaEmail'));
+        /* FIN */
+        /* SETS DE DATOS PARA ALUMNOS RELACIONADOS (INICIO). */
+        $this->loadModel('Alumno');
+   		$alumnoId = $this->Familiar->AlumnosFamiliar->find('list', array('fields'=>array('alumno_id'), 'conditions'=>array('familiar_id'=>$id)));
+   		$alumnoPersonaId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$alumnoId)));
+        $personaDocumentoTipo = $this->Persona->find('list', array('fields'=>array('id', 'documento_tipo')));
+        $personaDocumentoNro = $this->Persona->find('list', array('fields'=>array('id', 'documento_nro')));
+        /* FIN */
+        $this->set(compact('personaNombre', 'personaNacionalidad', 'personaCuilCuit', 'personaOcupacion', 'personaLugarTrabaja', 'personaCiudad', 'ciudades', 'personaCalleNombre', 'personaCalleNumero', 'personaTelefono', 'personaEmail', 'alumnoPersonaId', 'personaDocumentoTipo', 'personaDocumentoNro'));
 	}
 
 	function add() {
