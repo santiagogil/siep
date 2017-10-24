@@ -31,7 +31,9 @@
 		<?php
 			$options = array( 'label' => 'Fecha de nacimiento', 'class' => 'form-control', 'dateFormat' => 'DMY',	'minYear' => date('Y') - 100, 'maxYear' => date('Y'), 'empty' => array('day' => 'Día', 'month' => 'Mes', 'year' => 'Año'));
 			echo $this->Form->input('fecha_nac', $options);
-			echo $this->Form->input('pcia_nac', array('label' => 'Pcia de Nacimiento*', 'between' => '<br>', 'class' => 'form-control', 'Placeholder' => 'Ingrese un nombre de pcia...'));
+			echo $this->Form->input('pcia_nac', array('label' => 'Lugar de Nacimiento*', 'between' => '<br>', 'class' => 'form-control', 'Placeholder' => 'Ingrese un nombre de pcia...'));
+		    $divisionesTipos = array('Provincia'=>'Provincia','Departamento'=>'Departamento','Partido'=>'Partido','Ciudad'=>'Ciudad','Estado'=>'Estado','Comunidad'=>'Comunidad','Condado'=>'Condado','Tierra'=>'Tierra');
+          	echo $this->Form->input('division_politica', array('label' => 'División Política*', 'default' => 'Provincia', 'options' => $divisionesTipos, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción...'));
 		    $nacionalidades = array(
 		        'América del Sur' => array( 'Argentino' => 'Argentino', 'Boliviana' => 'Boliviana', 'Brasileña' => 'Brasileña', 'Chilena' => 'Chilena', 'Colombiana' => 'Colombiana', 'Ecuatoriana' => 'Ecuatoriana', 'Guyanesa' => 'Guyanesa', 'Paraguaya' => 'Paraguaya', 'Peruana' => 'Peruana', 'Surinamesa' => 'Surinamesa', 'Uruguaya' => 'Uruguaya', 'Venezolana' => 'Venezolana'),
 			   'América Central' => array( 'Beliceña' => 'Beliceña', 'Costarricense' => 'Costarricense', 'Guatemalteca' => 'Guatemalteca', 'Hondureña' => 'Hondureña', 'Nicaragüense' => 'Nicaragüense', 'Salvadoreña' => 'Salvadoreña'),

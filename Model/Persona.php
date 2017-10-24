@@ -115,12 +115,19 @@ class Persona extends AppModel {
                 'required' => array(
                 'rule' => 'notBlank',
                 'required' => true,
-                'message' => 'Indicar una provincia.'
+                'message' => 'Indicar un lugar de nacimiento.'
                 ),
                 'alphaBet' => array(
                 'rule' => '/^[ a-zA-ZñÑ]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 ),
+            ),
+            'division_politica' => array(
+                'required' => array(
+                'rule' => array('inList', array('Provincia','Departamento','Partido','Ciudad','Estado','Comunidad','Condado','Tierra')),
+                'required' => true,
+                'message' => 'Indicar una división politica.'
+                )
             ),
             'nacionalidad' => array(
                 'required' => array(
