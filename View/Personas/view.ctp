@@ -32,7 +32,9 @@
                     <?php echo ($persona['Persona']['edad']); ?></p>
 	                </div>
                     <div class="col-md-8 col-sm-6 col-xs-8">
-                    <b><?php echo __('Localidad: '); ?></b>
+                    <b><?php echo __('División Política: '); ?></b>
+                    <?php echo ($persona['Persona']['division_politica']); ?></p>
+                    <b><?php echo __('Lugar de Nacimiento: '); ?></b>
                     <?php echo ($ciudadNombre[$persona['Persona']['ciudad_id']]); ?></p>
                     <b><?php echo __('Direccion: '); ?></b>
                     <?php echo $persona['Persona']['calle_nombre'].' N° '.$persona['Persona']['calle_nro']; ?></p>
