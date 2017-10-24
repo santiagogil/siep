@@ -60,7 +60,9 @@
                 <div class="text-right">
                     <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'familiars', 'action' => 'view', $familiar['id']), array('class' => 'btn btn-success','escape' => false)); ?>
                     <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'familiars', 'action' => 'edit', $familiar['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+                   <?php if($current_user['role'] == 'superadmin'): ?> 
                     <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'familiars', 'action' => 'delete', $familiar['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+                   <?php endif; ?> 
                 </div>
 		    </div>
 	    </div>
