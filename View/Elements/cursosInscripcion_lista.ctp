@@ -4,8 +4,8 @@
             <tr>
                 <th><?php echo $this->Paginator->sort('ciclo_id', 'Ciclo');?></th>
                 <th><?php echo $this->Paginator->sort('centro_id', 'Centro');?></th>
-                <th><?php echo $this->Paginator->sort('persona_id', 'Persona');?></th>
                 <th><?php echo $this->Paginator->sort('curso_id', 'Curso');?></th>
+                <th><?php echo $this->Paginator->sort('persona_id', 'Alumno');?></th>
             </tr>
         </thead>
         <tbody>
@@ -13,8 +13,8 @@
             <tr>
                 <td><?php echo $cursosInscripcion['Ciclo']['nombre']; ?> </td>
                 <td><?php echo $cursosInscripcion['Centro']['nombre']; ?> </td>
-                <td><?php echo $cursosInscripcion['Persona']['nombres']." ".$cursosInscripcion['Persona']['apellidos']; ?> </td>
                 <td><?php echo $cursosInscripcion['Curso']['anio']." ".$cursosInscripcion['Curso']['division']; ?> </td>
+                <td><?php echo $cursosInscripcion['Persona']['nombres']." ".$cursosInscripcion['Persona']['apellidos']; ?> </td>
             </tr>
             <?php endforeach ?>
         </tbody>
