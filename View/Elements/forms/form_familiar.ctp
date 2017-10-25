@@ -1,9 +1,3 @@
-<?php /*
-debug($alumnos);
-debug($personas);
-die;
-*/?>
-
 <?php echo $this->Html->script(array('tooltip', 'moment', 'bootstrap-datetimepicker')); ?>
 <div class="row">
 </div><hr />
@@ -59,11 +53,52 @@ die;
                                 .appendTo( ul );
                         };
                     });
-            </script>
+            </script><br>
            <!-- End Autocomplete -->
-        <?php 
+        <?php  
+            if ($current_user['role'] == 'admin') { 
               echo $this->Form->input('Alumno', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'options'=>$alumnosNombre ,'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-        ?>
+            } else if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) {
+          ?>
+          <!-- Autocomplete -->
+            <div>
+                <strong><h5>Nombre Completo del Alumno*</h5></strong>
+                <input id="AutocompleteAlumno" class="form-control" placeholder="Buscar alumno por DNI, nombre y/o apellido">
+                <div class="alert alert-danger" role="alert" id="AutocompleteAlumnoError" style="display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    No se encontraron resultados de busqueda
+                </div>
+            </div>
+            <hr />
+            <script>
+                $( function() {
+                    $( "#AutocompleteAlumno" ).autocomplete({
+                        source: "<?php echo $this->Html->url(array('action'=>'autocompleteNombreAlumno'));?>",
+                        minLength: 2,
+                        select: function( event, ui ) {
+                            var nombre_completo = ui.item.Persona.apellidos +" "+ ui.item.Persona.nombres +' - ' +ui.item.Persona.documento_nro;
+                            $("#AutocompleteAlumno").val( nombre_completo );
+                            return false;
+                        },
+                        response: function(event, ui) {
+                            if (ui.content.length === 0)
+                            {
+                                $("#AutocompleteAlumnoError").show();
+                            } else {
+                                $("#AutocompleteAlumnoError").hide();
+                            }
+                        }
+                    }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+                        var nombre_completo = item.Persona.apellidos +" "+ item.Persona.nombres +' - ' +item.Persona.documento_nro;
+                        return $( "<li>" )
+                            .append( "<div>" +nombre_completo+ "</div>" )
+                            .appendTo( ul );
+                    };
+                });
+            </script>
+            <!-- End Autocomplete -->
+        <?php } ?>
         </div>
 	  	<?php echo '</div><div class="col-md-6 col-sm-6 col-xs-12">'; ?>
       	<div class="unit"><strong><h3>Datos Específicos</h3></strong><hr />
