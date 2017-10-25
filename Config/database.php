@@ -68,7 +68,7 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => 'siep-mysql',
+		'host' => '',
 		'login' => 'siep',
 		'password' => 'siep',
 		'database' => 'siep',
@@ -87,4 +87,10 @@ class DATABASE_CONFIG {
 		//'encoding' => 'utf8',
 	);
 	*/
+  public function __construct() {
+        $this->default['host']       = getenv("MYSQL_HOST");
+        // $this->default['login']      = getenv("LOGIN");
+        // $this->default['password']   = getenv("PASSWORD");
+        // $this->default['database']   = getenv("DATABASE");
+    }
 }

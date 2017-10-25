@@ -6,7 +6,7 @@ metadata:
     kompose.version: 1.1.0 (36652f6)
   creationTimestamp: null
   labels:
-    io.kompose.service: siep-php-fpm
+    io.kompose.service: {{ .Release.Name}}-siep-php-fpm
   name: {{ .Release.Name}}-siep-php-fpm
 spec:
   clusterIP: None
@@ -15,6 +15,6 @@ spec:
     port: 55555
     targetPort: 0
   selector:
-    io.kompose.service: siep-php-fpm
+    io.kompose.service: {{ .Release.Name}}-siep-php-fpm
 status:
   loadBalancer: {}

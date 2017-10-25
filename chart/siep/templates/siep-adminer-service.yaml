@@ -7,15 +7,15 @@ metadata:
     kompose.version: 1.1.0 (36652f6)
   creationTimestamp: null
   labels:
-    io.kompose.service: siep-adminer
-  name: siep-adminer
+    io.kompose.service: {{ .Release.Name}}-siep-adminer
+  name: {{ .Release.Name}}-siep-adminer
 spec:
   ports:
   - name: "8080"
     port: 8080
     targetPort: 8080
   selector:
-    io.kompose.service: siep-adminer
+    io.kompose.service: {{ .Release.Name}}-siep-adminer
   type: NodePort
 status:
   loadBalancer: {}

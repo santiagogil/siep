@@ -6,8 +6,8 @@ metadata:
     kompose.version: 1.1.0 (36652f6)
   creationTimestamp: null
   labels:
-    io.kompose.service: siep-mysql
-  name: siep-mysql
+    io.kompose.service: {{ .Release.Name}}-siep-mysql
+  name: {{ .Release.Name}}-siep-mysql
 spec:
   replicas: 1
   strategy:
@@ -16,7 +16,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: siep-mysql
+        io.kompose.service: {{ .Release.Name}}-siep-mysql
     spec:
       containers:
       - env:
@@ -29,16 +29,16 @@ spec:
         - name: MYSQL_USER
           value: siep
         image: mysql:5.7
-        name: siep-mysql
+        name: {{ .Release.Name}}-siep-mysql
         ports:
         - containerPort: 3306
         resources: {}
         volumeMounts:
         - mountPath: /var/lib/mysql
-          name: siep-mysql
+          name: {{ .Release.Name}}-siep-mysql
       restartPolicy: Always
       volumes:
-      - name: siep-mysql
+      - name: {{ .Release.Name}}-siep-mysql
         persistentVolumeClaim:
-          claimName: siep-mysql
+          claimName: {{ .Release.Name}}-siep-mysql
 status: {}
