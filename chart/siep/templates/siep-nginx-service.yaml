@@ -7,15 +7,15 @@ metadata:
     kompose.version: 1.1.0 (36652f6)
   creationTimestamp: null
   labels:
-    io.kompose.service: siep-nginx
-  name: siep-nginx
+    io.kompose.service: {{ .Release.Name}}-siep-nginx
+  name: {{ .Release.Name}}-siep-nginx
 spec:
   ports:
   - name: "80"
     port: 80
     targetPort: 80
   selector:
-    io.kompose.service: siep-nginx
+    io.kompose.service: {{ .Release.Name}}-siep-nginx
   type: NodePort
 status:
   loadBalancer: {}

@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: siep-mysql
-  name: siep-mysql
+    io.kompose.service: {{ .Release.Name}}-siep-mysql
+  name: {{ .Release.Name}}-siep-mysql
 spec:
   accessModes:
   - ReadWriteOnce
