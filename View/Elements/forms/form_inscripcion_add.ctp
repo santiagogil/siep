@@ -85,8 +85,6 @@
   </div>
   <!-- End Datos generales -->
 
-    <?php
-    /*
    <!-- Datos de alta -->
    <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit">
@@ -94,16 +92,16 @@
         <hr />
       <?php
             $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
-            echo $this->Form->input('tipo_inscripcion', array('id'=>'tipoInscripcion','label'=>'Tipo de inscripción*', 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+            echo $this->Form->input('tipo_inscripcion', array('id'=>'tipoInscripcion','default'=>'Hermano de alumno regular', 'label'=>'Tipo de inscripción*', 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
 
     <hr>
     <!-- Autocomplete -->
-    <div id="formHermanoDeAlumnoRegular" style="display:none;">
+    <div id="formHermanoDeAlumnoRegular">
         <strong><h5>Hermano de Alumno Regular</h5></strong>
-        <input id="AutocompleteAlumno" class="form-control" placeholder="Indique Alumno por DNI, nombre y/o apellido">
-        <input id="AutocompleteAlumnoId" type="hidden" name="Alumno.id">
-        <div class="alert alert-danger" role="alert" id="AutocompleteAlumnoError" style="display:none;">
+        <input id="AutocompleteHermanoAlumno" class="form-control" placeholder="Indique Alumno por DNI, nombre y/o apellido">
+        <input id="AutocompleteHermanoAlumnoId" type="hidden" name="data[Inscripcion][hermano_id]">
+        <div class="alert alert-danger" role="alert" id="AutocompleteHermanoAlumnoError" style="display:none;">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             No se encontraron resultados de busqueda
@@ -111,26 +109,26 @@
     </div>
     <script>
         $( function() {
-            $( "#AutocompleteAlumno" ).autocomplete({
+            $( "#AutocompleteHermanoAlumno" ).autocomplete({
                 source: "<?php echo $this->Html->url(array('controller'=>'Alumnos', 'action'=>'autocompleteNombreAlumno'));?>",
                 minLength: 2,
                 select: function( event, ui ) {
-                    var nombre_completo = ui.item.Persona.apellidos +" "+ ui.item.Persona.nombres +' - ' +ui.item.Persona.documento_nro;
-                    $("#AutocompleteAlumno").val( nombre_completo );
-                    $("#AutocompleteAlumnoId").val(ui.item.Alumno.id);
+                    var nombre_completo = ui.item.Persona.nombres +" "+ ui.item.Persona.apellidos;
+                    $("#AutocompleteHermanoAlumno").val( nombre_completo );
+                    $("#AutocompleteHermanoAlumnoId").val(ui.item.Alumno.id);
                     //window.location.href = "<?php echo $this->Html->url(array('controller'=>'alumnos','action'=>'view'));?>/"+ui.item.Alumno.id;
                     return false;
                 },
                 response: function(event, ui) {
                     if (ui.content.length === 0)
                     {
-                        $("#AutocompleteAlumnoError").show();
+                        $("#AutocompleteHermanoAlumnoError").show();
                     } else {
-                        $("#AutocompleteAlumnoError").hide();
+                        $("#AutocompleteHermanoAlumnoError").hide();
                     }
                 }
             }).autocomplete( "instance" )._renderItem = function( ul, item ) {
-                var nombre_completo = item.Persona.apellidos +" "+ item.Persona.nombres +' - ' +item.Persona.documento_nro;
+                var nombre_completo = item.Persona.nombres +" "+ item.Persona.apellidos +' - ' +item.Persona.documento_nro;
                 return $( "<li>" )
                     .append( "<div>" +nombre_completo+ "</div>" )
                     .appendTo( ul );
@@ -142,7 +140,7 @@
     <div id="formPase" style="display:none;">
       <strong><h5>Pase</h5></strong>
       <input id="AutocompleteForm" class="form-control" placeholder="Indique institucion origen por nombre o CUE">
-      <input id="centroId" type="hidden" name="Centro.id">
+      <input id="centroId" type="hidden" name="data[Inscripcion][centro_origen_id]">
     </div>
       <script>
          $( function() {
@@ -196,15 +194,14 @@
             $tipos_fines = array('No' => 'No', 'Sí línea deudores de materias.' => 'Sí línea deudores de materias.', 'Sí línea trayectos educativos.' => 'Sí línea   trayectos educativos.');
             echo $this->Form->input('fines', array('label' => 'Fines*', 'empty' => 'Ingrese una opción...', 'options' => $tipos_fines, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
           }
-      * /
+      */
       ?>
 
 
     </div>
    </div>
    <!-- End Datos de alta -->
-    */
-    ?>
+
     <!-- Documentacion presentada -->
     <div class="col-md-4 col-sm-6 col-xs-12">
       <div class="unit"><strong><h3>Documentación Presentada</h3></strong><hr />
@@ -268,6 +265,11 @@
                 $('#formHermanoDeAlumnoRegular').hide();
                 $('#formPase').hide();
                 $('#formSituacionSocial').hide();
+
+                // Resetea los formularios al cambiar el tipo de carga
+                $('#formHermanoDeAlumnoRegular input').val('');
+                $('#formPase input').val('');
+                $('#formSituacionSocial select').val('');
 
                 var opt = $( this ).val();
                 switch(opt) {
