@@ -214,6 +214,32 @@ class InscripcionsController extends AppController {
                     }
                 }
 
+
+                switch($this->request->data['Inscripcion']['tipo_inscripcion'])
+                {
+                    case 'Hermano de alumno regular':
+
+                        $hermano  = $this->Alumno->findById($this->request->data['Inscripcion']['hermano_id']);
+
+                        if (count($hermano) == 0) {
+                            $this->Session->setFlash('No se localizo al hermano como alumno.', 'default', array('class' => 'alert alert-danger'));
+                            $this->redirect($this->referer());
+                        }
+                    break;
+                    case 'Pase':
+
+                        $this->loadModel('Centro');
+                        $this->Centro->recursive = 0;
+                        $centroOrigen = $this->Centro->findById($this->request->data['Inscripcion']['centro_origen_id']);
+
+                        // Aca puede ir la logica de que nivel de servicio es necesario para guardar la inscripcion por pase
+                        if (count($centroOrigen) == 0) {
+                            $this->Session->setFlash('No se localizo el centro origen para el pase', 'default', array('class' => 'alert alert-danger'));
+                            $this->redirect($this->referer());
+                        }
+                    break;
+                }
+
                 $this->request->data['Inscripcion']['alumno_id'] = $alumno['Alumno']['id'];
                 /*
                  *  FIN VERIFICACION DE ALUMNO

@@ -15,3 +15,5 @@
 !app/webroot/.htaccess
 .idea/*
 \.docker-compose\.yml\.swp
+
+mysql/
