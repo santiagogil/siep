@@ -49,11 +49,13 @@
                         <div id="click_04" class="titulo_acordeon_datos">Datos del Alta <span class="caret"</span></div>
                         <div id="acordeon_04">
                             <div class="unit">
-                                <!--<b><?php echo __('Tipo:'); ?></b>
-                                <?php echo ($inscripcion['Inscripcion']['tipo_alta']); ?></p>-->
                                 <b><?php echo __('Fecha:'); ?></b>
                                 <?php echo $this->Html->formatTime($inscripcion['Inscripcion']['fecha_alta']);
                                  ?></p>
+                                <?php  if($inscripcion['Inscripcion']['hermano_id']): ?>
+                                    <b><?php echo __('Hermano de:'); ?></b></p>
+                                    <b><?php echo ($this->Html->link($personaNombre[$personaId[$inscripcion['Inscripcion']['hermano_id']]], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['Inscripcion']['hermano_id']))); ?><?php //endif; ?></b>
+                                <?php endif; ?></p>
                                 <b><?php echo __('Documentación:'); ?></b>
                                   <ul>
                                     <?php if(!$inscripcion['Inscripcion']['fotocopia_dni'] == 1): ?>

@@ -99,7 +99,7 @@ class Curso extends AppModel {
                     ),
                    'turno' => array(
                         'valid' => array(
-						'rule' => array('inList', array('Mañana','Tarde','Mañana Extendida','Tarde Extendida','Doble Extendida','Vespertino','Noche','Otro')),
+						'rule' => array('inList', array('Mañana','Tarde','Mañana Extendida','Tarde Extendida','Doble Extendida','Vespertino','Noche','Otro','Bachiller','Tecnico')),
 						'message' => 'Ingrese un turno válido',
 						'allowEmpty' => false
 						)	
