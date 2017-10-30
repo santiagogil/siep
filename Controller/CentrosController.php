@@ -15,7 +15,7 @@ class CentrosController extends AppController {
         if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
-	        $this->Auth->allow('index', 'view', 'autocompleteCentro');
+	        $this->Auth->allow('index', 'view', 'autocompleteCentro','autocompleteSeccionDependiente');
 	    }
     }
 
@@ -222,9 +222,27 @@ class CentrosController extends AppController {
 			'conditions' => $conditions,
 			'fields' 	=> array('id', 'sigla'))
 			);
-		
+
+
+		$this->RequestHandler->respondAs('json'); // Responde con el header correspondiente a json
 		echo json_encode($centro);
 		$this->autoRender = false;
+	}
+
+	public function autocompleteSeccionDependiente() {
+		$id = $this->request->query('id');
+
+		$this->loadModel('Curso');
+		$secciones = $this->Curso->find('list', array(
+			'recursive'=>-1,
+			'fields'=>array('id','nombre_completo_curso'),
+			'conditions'=>array(
+				'centro_id'=>$id)
+		));
+
+		$this->RequestHandler->respondAs('json'); // Responde con el header correspondiente a json
+		$this->autoRender = false;
+		echo json_encode($secciones);
 	}
 }
 ?>
