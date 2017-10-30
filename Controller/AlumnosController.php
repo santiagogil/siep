@@ -20,8 +20,10 @@ class AlumnosController extends AppController {
     }
 
     public function index() {
-
+    	$this->paginate['Alumno']['limit'] = 6;
+		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
 		// Esta paginacion incluye al modelo Persona relacionado al Alumno Id
+		/*
 		$this->paginate = array(
 			'limit' => 10,
 			'order' => array('Alumno.id' => 'ASC' ),
