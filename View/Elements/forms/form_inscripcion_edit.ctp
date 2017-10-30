@@ -10,13 +10,6 @@
           echo $this->Form->input('ciclo_id', array('label'=>'Ciclo lectivo*', 'empty' => 'Ingrese un ciclo lectivo...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
         ?>
   </div>
-  <?php if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) { ?>      
-  <div class="col-xs-6 col-sm-3">
-        <?php
-          echo $this->Form->input('centro_id', array('label'=>'Institución*', 'empty' => 'Ingrese una institución...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
-        ?>
-  </div>
-  <?php } ?>
   <div class="col-xs-6 col-sm-3">
       <?php
           $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA','BAJA'=>'BAJA','EGRESO'=>'EGRESO');
@@ -28,13 +21,20 @@
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
-      <!--<div>
-            <input class="form-control" disabled="disabled" label= "Nombre y apellidos del alumno*" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo" value="<?php echo $editar['Persona']['nombre_completo_persona'];?>">
-      </div><br>-->
+      <div>
+            <input class="form-control" disabled="disabled" label= "Nombre y apellidos del alumno*" data-toggle="tooltip" data-placemente="bottom" placeholder="Ingrese el nombre completo" value="<?php echo $alumno['Persona']['nombre_completo_persona'];?>">
+      </div><br>
       <?php
-          echo $this->Form->input('alumno_id', array('label'=>'Nombres y apellidos del Alumno*', 'readonly' => true, 'options'=>$personaId, 'between' => '<br>', 'class' => 'form-control'));
-      ?><br>
-      <?php
+/*          echo $this->Form->input('alumno_id', array('label'=>'Nombres y apellidos del Alumno*', 'disabled' => true, 'options'=>$, 'between' => '<br>', 'class' => 'form-control'));*/
+      ?>
+
+        <?php
+            if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) {
+                echo $this->Form->input('centro_id', array('label'=>'Institución*', 'empty' => 'Ingrese una institución...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                echo '<br>';
+            }
+        ?>
+        <?php
             echo $this->Form->input('Curso', array('multiple' => true, 'label'=>'Sección*', 'empty' => 'Ingrese una sección...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
             /*
             if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior') || ($current_user['puesto'] == 'Supervisión Secundaria')) {

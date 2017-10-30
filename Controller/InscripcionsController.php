@@ -284,23 +284,30 @@ class InscripcionsController extends AppController {
     }
 
 	public function edit($id = null) {
-		if (!$id && empty($this->data)) {
+        if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Inscripcion no valida.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
+
+        $this->loadModel('Inscripcions');
+        $inscripcion = $this->Inscripcions->findById($id);
+        $this->loadModel('Alumno');
+        $alumno = $this->Alumno->find('first',[
+            'recursive' => 0,
+            'contains' => 'Personas',
+            'conditions' => ['Alumno.id'=> $inscripcion['Inscripcions']['alumno_id']]
+        ]);
+        // En este punto tengo al alumno y a la persona relacionadas al id de inscripcion.
+        $alumnoId = $alumno['Alumno']['id'];
+        $personaId  = $alumno['Persona']['id'];
+
+        // Submit de formulario
     	if (!empty($this->data)) {
-		  //abort if cancel button was pressed
+            //abort if cancel button was pressed
             if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
 		    }
-            $this->loadModel('Inscripcions');
-            $inscripcion = $this->Inscripcions->findById($id);
-            $this->loadModel('Alumno');
-            $alumno = $this->Alumno->find('first',['recursive' => 0, 'contains' => 'Personas', 'conditions' => ['Alumno.id'=> $inscripcion['Inscripcions']['alumno_id']]]);
-            // En este punto tengo al alumno y a la persona relacionadas al id de inscripcion.
-            $alumnoId = $alumno['Alumno']['id'];
-            $personaId  = $alumno['Persona']['id'];
             //Antes de guardar genera el estado de la inscripción
             if(($this->request->data['Inscripcion']['fotocopia_dni'] == true) && ($this->request->data['Inscripcion']['certificado_septimo'] == true) && ($this->request->data['Inscripcion']['analitico'] == true) && ($this->request->data['Inscripcion']['partida_nacimiento_alumno'] == true) && ($this->request->data['Inscripcion']['partida_nacimiento_tutor'] == true) && ($this->request->data['Inscripcion']['libreta_sanitaria'] == true)) {
                 $estadoDocumentacion = "COMPLETA";
@@ -407,27 +414,9 @@ class InscripcionsController extends AppController {
 				$this->Session->setFlash('La inscripcion no fue grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-		if (empty($this->data)) {
-            $this->loadModel('Alumno');
-            $editar = $this->Alumno->find('first', array(
-                'recursive' => 0,
-                'contains' => array('personas')
-            ));
-            $this->set(compact('editar'));
-            $this->data = $this->Inscripcion->read(null, $id);
-		}
-        /*
-        $alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id')));
-        $personaId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
-        $personasNombres = $this->Alumno->Persona->find('list', array('fields'=>array('apellidos')));
-        $this->set(compact('alumnos', 'personaId', 'personasNombres'));    
-	    */
-        $alumnos = $this->Inscripcion->find('list', array('fields'=>array('alumno_id')));
-        //$personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$alumnos)));
-        $personaId = $this->Alumno->find('list', array('fields'=>array('persona_id'),'conditions'=>array('id'=>$alumnos)));
-        $personasNombres = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'),'conditions'=>array('id'=>$personaId)));
-        print_r($personasNombres[27]);
-        $this->set(compact('alumnos', 'personaId', 'personasNombres'));
+        // End submit de formulario
+
+        $this->set(compact('alumno', 'personaId'));
     }
 
     public function delete($id = null) {
