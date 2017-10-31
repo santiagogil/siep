@@ -1,4 +1,37 @@
-<?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker')); ?>
+<?php echo $this->Html->css(array('/js/select2/select2.min')); ?>
+<?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker','select2/select2.min')); ?>
+
+<script>
+    $(function(){
+        $('.s2_centro').select2();
+        $('.s2_seccion').select2();
+
+        $('.s2_centro').on("change", function(){
+            getSeccionDependiente($(this).val());
+        });
+
+        // Previo a la carga, se completan las secciones dependientes al centro
+        getSeccionDependiente(<?php echo $alumno['Alumno']['centro_id']; ?>);
+
+        function getSeccionDependiente(centro_id) {
+            // Remueve datos de secciones
+            $(".s2_seccion").empty();
+            // Obtener secciones dependientes al centro
+            $.ajax({
+                type:"GET",
+                url: "/centros/autocompleteSeccionDependiente?id=" + centro_id,
+                success: function(lista){
+                    $(".s2_centro").append('<option value="' +''+ '"> ' + 'Seleccione una sección'+ '</option>');
+                    for (var key  in lista) {
+                        $(".s2_seccion").append('<option value="' +key+ '"> ' + lista[key] + '</option>');
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+
 <div class="row">
   <div class="col-xs-6 col-sm-3">
       <?php 
@@ -18,6 +51,7 @@
       <?php echo $this->Form->input('usuario_id', array('type' => 'hidden')); ?>
   </div>
 </div><hr />
+
 <div class="row">
   <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="unit"><strong><h3>Datos Generales</h3></strong><hr />
@@ -30,12 +64,12 @@
 
         <?php
             if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) {
-                echo $this->Form->input('centro_id', array('label'=>'Institución*', 'empty' => 'Ingrese una institución...', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                echo $this->Form->input('centro_id', array('default'=>$alumno['Alumno']['centro_id'],'label'=>'Institución*', 'empty' => 'Ingrese una institución...', 'class' => 's2_centro form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
                 echo '<br>';
             }
         ?>
         <?php
-            echo $this->Form->input('Curso', array('multiple' => true, 'label'=>'Sección*', 'empty' => 'Ingrese una sección...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+            echo $this->Form->input('Curso', array('multiple' => true, 'label'=>'Sección*', 'empty' => 'Ingrese una sección...', 'between' => '<br>', 'class' => 's2_seccion form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
             /*
             if (($current_user['role'] == 'superadmin') || ($current_user['puesto'] == 'Dirección Colegio Secundario') || ($current_user['puesto'] == 'Supervisión Secundaria') || ($current_user['puesto'] == 'Dirección Instituto Superior') || ($current_user['puesto'] == 'Supervisión Secundaria')) {
               echo $this->Form->input('Inscripcion.Materia', array('multiple' => true, 'label'=>'Unidades Curriculares*', 'empty' => 'Ingrese una unidad...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
