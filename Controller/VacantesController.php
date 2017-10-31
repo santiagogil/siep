@@ -62,6 +62,7 @@ class VacantesController extends AppController
             'fields' => array(
                 'Centro.sigla',
                 'Centro.id',
+                'Curso.id',
                 'Curso.anio',
                 'Curso.turno',
                 'Curso.plazas',
