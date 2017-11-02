@@ -83,6 +83,17 @@ class Inscripcion extends AppModel {
 				'message' => 'Indicar un alumno válido.'
 			)
 	   ),
+	   'centro_id' => array(
+			   'required' => array(
+			   'rule' => 'notBlank',
+			   'required' => 'create',
+			   'message' => 'Indicar un Centro.'
+			 ),
+			 'numeric' => array(
+				'rule' => 'naturalNumber',
+				'message' => 'Indicar un centro válido.'
+			)
+	   ),
 	   'legajo_nro' => array(
 			   'required' => array(
 			   'rule' => 'notBlank',
