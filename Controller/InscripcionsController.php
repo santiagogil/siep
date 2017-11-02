@@ -152,8 +152,23 @@ class InscripcionsController extends AppController {
             }
             // Luego de seleccionar el ciclo, se deja en los datos que se intentarán guardar.
             $cicloId = $this->request->data['Inscripcion']['ciclo_id'];
+            $this->Inscripcion->Ciclo->recursive = 0;
             $ciclos = $this->Inscripcion->Ciclo->findById($cicloId, 'nombre');
             $ciclo = substr($ciclos['Ciclo']['nombre'], -2);
+
+            // Obtiene la división del curso...
+            $this->loadModel('Curso');
+            $cursoIdArray = $this->request->data['Curso'];
+            $cursoIdString = $cursoIdArray['Curso'];
+            $divisionArray = $this->Curso->findById($cursoIdString, 'division');
+            $divisionString = $divisionArray['Curso']['division'];
+
+            // No hay que continuar con la inscripcion si no se definio el centro_id, y el curso!
+            if (count($divisionArray)<=0) {
+                $this->Session->setFlash('No definio la sección.', 'default', array('class' => 'alert alert-danger'));
+                $this->redirect($this->referer());
+            }
+
             /*
              *  VERIFICACION DE PERSONA
              */
@@ -254,12 +269,20 @@ class InscripcionsController extends AppController {
                     $cicloIdActual = $this->getActualCicloId();
                     $cicloIdActualArray = $this->Ciclo->findById($cicloIdActual, 'id');
                     $cicloIdActualString = $cicloIdActualArray['Ciclo']['id'];
-                    // Obtiene la división del curso...
-                    $this->loadModel('Curso');
-                    $cursoIdArray = $this->request->data['Curso'];
-                    $cursoIdString = $cursoIdArray['Curso'];
-                    $divisionArray = $this->Curso->findById($cursoIdString, 'division');
-                    $divisionString = $divisionArray['Curso']['division'];
+
+                    /*
+                     * __ LINEAS PARA DEBUG __
+                    echo '<pre>';
+                    print_r($cicloId); // Siclo 2018
+                    print_r($cicloIdActualString); // Siclo 2017
+                    print_r($divisionString); // Celeste
+
+                    // Si 2018 == 2017 o Celeste = ''
+                    print_r(($cicloId == $cicloIdActualString) || ($divisionString == ''));
+                    echo '</pre>';
+                    */
+
+                    // Como las inscripciones son para el 2018, y el ciclo actual es 2017, no ingresa en la siguiente logica
                     if (($cicloId == $cicloIdActualString) || ($divisionString == '')) {
                         //$this->loadModel('Curso');
                         //$cursoIdArray = $this->request->data['Curso'];
@@ -271,9 +294,30 @@ class InscripcionsController extends AppController {
                         $plazasString = $plazasArray['Curso']['plazas'];
                         $vacantesActual = $plazasString - $matriculaActual;
                         $this->Curso->saveField("vacantes", $vacantesActual);
+
+                        /*
+                         * __ LINEAS PARA DEBUG __
+                        echo '<pre>';
+                        print_r($matriculaActual);
+                        print_r($plazasArray);
+                        print_r($this->request->data);
+                        echo '</pre>';
+                        echo '<br> END MATRICULAS <br>';
+                        die;
+                        */
                     }
                     /* FIN */
                     $inserted_id = $this->Inscripcion->id;
+
+                    /*
+                     * __ LINEAS PARA DEBUG __
+                    echo '<pre>';
+                    print_r($inserted_id);
+                    print_r($this->request->data);
+                    echo '</pre>';
+                    die;
+                    */
+
                     $this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
                     $this->redirect(array('action' => 'view', $inserted_id));
                 } else {
