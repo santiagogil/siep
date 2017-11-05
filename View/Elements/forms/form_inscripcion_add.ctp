@@ -48,7 +48,7 @@
   <div class="col-xs-6 col-sm-3">
       <?php
           $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA');
-           echo $this->Form->input('estado_inscripcion', array('label'=>'Estado de la inscripción*', 'default'=>'CONFIRMADA', 'disabled' => true, 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+           echo $this->Form->input('estado_inscripcion', array('label'=>'Estado de la inscripción*', 'default'=>'NO CONFIRMADA', 'disabled' => true, 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
   </div>
 </div><hr />
@@ -133,11 +133,12 @@
         <hr />
       <?php
             $tipos_inscripcion = array('Común'=>'Común','Hermano de alumno regular'=>'Hermano de alumno regular','Pase'=>'Pase','Situación social'=>'Situación social', 'Integración'=>'Integración');
-            echo $this->Form->input('tipo_inscripcion', array('id'=>'tipoInscripcion','disabled'=>true,'default'=>'Hermano de alumno regular', 'label'=>'Tipo de inscripción*', 'disabled' => true, 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+            echo $this->Form->input('tipo_inscripcion', array('id'=>'tipoInscripcion','disabled'=>true,'default'=>'Común', 'label'=>'Tipo de inscripción*', 'disabled' => true, 'empty' => 'Ingrese un tipo de inscripción...', 'options'=>$tipos_inscripcion, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
 
     <hr>
     <!-- Autocomplete -->
+    <?php /*
     <div id="formHermanoDeAlumnoRegular">
         <strong><h5>Hermano de Alumno Regular</h5></strong>
         <input id="AutocompleteHermanoAlumno" class="form-control" placeholder="Indique Alumno por DNI, nombre y/o apellido">
@@ -213,8 +214,8 @@
             echo $this->Form->input('situacion_social', array('label' => 'Situación social', 'empty' => 'Ingrese una opción...', 'options' => $situaciones_sociales, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
     </div>
-
-      <?php
+    */ ?>   
+    <?php
       /*
             $tipos_alta = array('Regular' => 'Regular', 'Equivalencia'=>'Equivalencia');
             echo $this->Form->input('tipo_alta', array('label' => 'Alta tipo*', 'default' => 'Ingrese un tipo...', 'options' => $tipos_alta, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
