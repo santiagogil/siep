@@ -87,11 +87,11 @@ class AlumnosController extends AppController {
 		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre')));
         //Datos personales del Alumno
 		$alumnoId = $this->Alumno->find('list', array('fields'=>array('persona_id')));
-        $this->loadModel('Persona');
-        $alumnoNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
-        $alumnoDocumentoTipo = $this->Persona->find('list', array('fields'=>array('documento_tipo'), 'conditions' => array('id' => $alumnoId)));
-        $alumnoDocumentoNumero = $this->Persona->find('list', array('fields'=>array('documento_nro'), 'conditions' => array('id' => $alumnoId)));
-        $alumnoEdad = $this->Persona->find('list', array('fields'=>array('edad'), 'conditions' => array('id' => $alumnoId)));
+        $alumnoNombre = $this->Alumno->Persona->find('list', array('fields'=>array('nombre_completo_persona'), array('conditions' => array('id' => $alumnoId, 'recursive' => -1))));
+        //$alumnoNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona'), 'conditions' => array('id' => $alumnoId)));
+        $alumnoDocumentoTipo = $this->Alumno->Persona->find('list', array('fields'=>array('documento_tipo'), array('conditions' => array('id' => $alumnoId, 'recursive' => -1))));
+        $alumnoDocumentoNumero = $this->Alumno->Persona->find('list', array('fields'=>array('documento_nro'), array('conditions' => array('id' => $alumnoId, 'recursive' => -1))));
+        $alumnoEdad = $this->Alumno->Persona->find('list', array('fields'=>array('edad'), array('conditions' => array('id' => $alumnoId, 'recursive' => -1))));
     	// Datos relacionados.
     	$centroId = $this->Alumno->find('list', array('fields'=>array('centro_id'), 'conditions'=>array('id'=>$id)));
 		$this->loadModel('Centro');

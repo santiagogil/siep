@@ -42,7 +42,7 @@ class FamiliarsController extends AppController {
         /* SETS DE DATOS PARA ALUMNOS RELACIONADOS (INICIO). */
         $this->loadModel('Alumno');
    		$alumnoId = $this->Familiar->AlumnosFamiliar->find('list', array('fields'=>array('alumno_id'), 'conditions'=>array('familiar_id'=>$id)));
-   		$alumnoPersonaId = $this->Alumno->find('list', array('fields'=>array('persona_id'), 'conditions'=>array('id'=>$alumnoId)));
+   		$alumnoPersonaId = $this->Alumno->find('list', array('fields'=>array('persona_id'), array('conditions' => array('id' => $alumnoId, 'recursive' => -1))));
         $personaDocumentoTipo = $this->Persona->find('list', array('fields'=>array('id', 'documento_tipo')));
         $personaDocumentoNro = $this->Persona->find('list', array('fields'=>array('id', 'documento_nro')));
         /* FIN */
