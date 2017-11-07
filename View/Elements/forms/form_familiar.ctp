@@ -1,4 +1,12 @@
-<?php echo $this->Html->script(array('tooltip', 'moment', 'bootstrap-datetimepicker')); ?>
+<?php echo $this->Html->css(array('/js/select2/select2.min')); ?>
+<?php echo $this->Html->script(array('tooltip', 'datepicker', 'moment', 'bootstrap-datetimepicker','select2/select2.min')); ?>
+
+<script>
+    $(function(){
+        $('.s2_alumno').select2();
+    });
+</script>
+
 <div class="row">
 </div><hr />
 <div class="row">
@@ -57,7 +65,7 @@
            <!-- End Autocomplete -->
         <?php  
             if ($current_user['role'] == 'admin') { 
-              echo $this->Form->input('Alumno', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'options'=>$alumnosNombre ,'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+              echo $this->Form->input('Alumno', array('label'=>'Alumno*', 'empty' => 'Ingrese un alumno...', 'options'=>$alumnosNombre ,'between' => '<br>', 'class' => 's2_alumno form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
             } else if (($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')) {
           ?>
           <!-- Autocomplete -->
