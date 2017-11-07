@@ -45,16 +45,44 @@ class VacantesController extends AppController
 
     public function index() {
 
+        $this->loadModel('Centro');
+
+        $this->Centro->recursive = -1;
+        $comboSectorDb = $this->Centro->find('all', array('fields'=>'DISTINCT sector'));
+        // Sanatizo el combo sector, a una simple lista
+        $comboSector = [];
+        while (list($c, $v) = each($comboSectorDb)) {
+            $sector = $v['Centro']['sector'];
+            $comboSector[$sector] = $sector;
+        }
+
+        $this->loadModel('Ciudad');
+        $comboCiudad = $this->Ciudad->find('list', array('fields'=>array('id', 'nombre')));
+
         $this->loadModel('Ciclo');
         $comboCiclo = $this->Ciclo->find('list', array('fields'=>array('id', 'nombre')));
         $cicloIdUltimo = $this->getLastCicloId();
 
-
         $this->loadModel('Curso');
-        $conditions = array('AND'=>array('Curso.anio' => array('sala de 4 años', 'sala de 5 años', '1ro', '2do', '3ro', '4to', '5to', '6to'), 'Curso.division' =>''
+        $conditions = array('AND'=>array(
+            'Curso.anio' => array('sala de 4 años', 'sala de 5 años', '1ro', '2do', '3ro', '4to', '5to', '6to'),
+            'Curso.division' =>''
         ));
         // Es necesario hacer una columna virtual, para que despues se pueda ordenar en el datatable
-        //$this->Curso->virtualFields['vacantesTotal'] = 'SUM(Curso.vacantes)';
+        $this->Curso->virtualFields['por_hermanos'] = '
+                        (
+                select count(ins.id) as hermanos
+                from  cursos_inscripcions as curi
+                
+                left join inscripcions as ins on ins.id = curi.inscripcion_id
+                
+                where
+                   ins.tipo_inscripcion = \'Hermano de alumno regular\' 
+                 and ins.centro_id = Centro.id 
+                
+                and   curi.curso_id = Curso.id
+                ) 
+        ';
         $this->paginate = array(
             'limit' => 10,
             'conditions' => $conditions,
@@ -62,13 +90,15 @@ class VacantesController extends AppController
             'fields' => array(
                 'Centro.sigla',
                 'Centro.id',
+                'Centro.sector',
+                'Centro.ciudad_id',
                 'Curso.id',
                 'Curso.anio',
                 'Curso.turno',
                 'Curso.plazas',
                 'Curso.matricula',
-                'Curso.vacantes'
-                //'vacantesTotal',
+                'Curso.vacantes',
+                'por_hermanos',
             ),
             /*
             'group' => array(
@@ -92,6 +122,16 @@ class VacantesController extends AppController
         if(!empty($this->params['named']['anio']))
         {
             $conditions['Curso.anio = '] = $this->params['named']['anio'];
+        }
+
+        if(!empty($this->params['named']['ciudad_id']))
+        {
+            $conditions['Centro.ciudad_id = '] = $this->params['named']['ciudad_id'];
+        }
+
+        if(!empty($this->params['named']['sector']))
+        {
+            $conditions['Centro.sector = '] = $this->params['named']['sector'];
         }
 
         $userCentroId = $this->getUserCentroId();
@@ -134,6 +174,6 @@ class VacantesController extends AppController
             $matriculas = $this->paginate('Curso',$conditions);
         }
 
-        $this->set(compact('matriculas','cicloIdUltimo','comboCiclo'));
+        $this->set(compact('matriculas','cicloIdUltimo','comboCiclo','comboCiudad','comboSector'));
     }
 }

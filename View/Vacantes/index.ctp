@@ -1,5 +1,6 @@
 <div class="TituloSec">Filtro</div>
 <div id="ContenidoSec">
+    <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
     <div class="row">
         <div class="col-xs-2">
             <div class="input select">
@@ -8,7 +9,30 @@
                 ?>
             </div>
         </div>
+        <div class="col-xs-2">
+            <div class="input select">
+                <?php
+                echo $this->Form->input('sector', array('options'=>$comboSector, 'empty'=>'- Todos los sectores -', 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                ?>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="input select">
+                <?php
+                echo $this->Form->input('ciudad_id', array('options'=>$comboCiudad, 'empty'=>'- Todas las ciudades -', 'label'=>false, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+                ?>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="text-center">
+                <span class="link">
+                    <?php echo $this->Form->button('<span class="glyphicon glyphicon-search"></span> Aplicar filtro', array('class' => 'btn btn-primary')); ?>
+                </span>
+            </div>
+        </div>
     </div>
+    <?php echo $this->Form->end(); ?>
 </div>
 
 <div class="TituloSec">Matrículas y Vacantes por Agrupamientos</div>
@@ -22,6 +46,7 @@
           <th><?php echo $this->Paginator->sort('turno','Turno');?></th>
           <th><?php echo $this->Paginator->sort('plazas', 'Plaza');?></th>
           <th><?php echo $this->Paginator->sort('matricula', 'Matricula');?></th>
+          <th><?php echo $this->Paginator->sort('por_hermanos', 'Por Hermanos');?></th>
           <th><?php echo $this->Paginator->sort('vacantes', 'VACANTES');?></th>
           <th>Acciones</th>
         </tr>
@@ -43,6 +68,9 @@
             </td>
             <td>
               <?php echo $matricula['Curso']['matricula']; ?>
+            </td>
+            <td>
+                <?php echo $matricula['Curso']['por_hermanos']; ?>
             </td>
             <td>
               <?php echo $matricula['Curso']['vacantes']; ?>
