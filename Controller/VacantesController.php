@@ -176,4 +176,96 @@ class VacantesController extends AppController
 
         $this->set(compact('matriculas','cicloIdUltimo','comboCiclo','comboCiudad','comboSector'));
     }
+
+    public function recuento()
+    {
+        // Antes que nada devuelvo a cero todas las matriculas, y las vacantes son el total de plazas
+        $this->loadModel('Cursos');
+
+        // Esta lista obtiene las divisiones agrupadas, se filtran los cursos sin division, y con turno que no sea "Otro"
+        $lista = $this->Cursos->query("
+            select 
+                id,
+                centro_id,
+                division,
+                anio,
+                turno,
+                plazas,
+                matricula,
+                vacantes
+            from cursos
+            
+            where
+            
+            division = '' and
+            turno <> 'otro' 
+            
+            order by
+            
+            centro_id        
+        ");
+
+        foreach($lista as $item)
+        {
+            // Realiza el calculo de cuantas plazas, matriculas y vacantes hay en las divisiones != ''
+            $cantidades = $this->cuantificarRecuento(
+                $item['cursos']['centro_id'],
+                $item['cursos']['anio'],
+                $item['cursos']['turno']
+            );
+
+            // Si existen divisiones != '' para ese centro, año y turno
+            if(count($cantidades)>0)
+            {
+                $el = $cantidades[0][0];
+
+                $plazas = $el['plazas'];
+                $matricula = $el['matricula'];
+                $vacantes = $el['vacantes'];
+
+                $update = array(
+                    'plazas' => $plazas,
+                    'matricula' => $matricula,
+                    'vacantes' => $vacantes
+                );
+
+                // Actualiza los datos del curso agrupado con los datos cuantitativos de los cursos con division
+                $this->Cursos->id = $item['cursos']['id'];
+                $this->Cursos->save($update);
+            }
+        }
+
+        $this->autoRender = false;
+        $this->redirect(array('action' => 'index'));
+
+//        $this->response->type('json');
+
+//        $json = json_encode($lista);
+//        $this->response->body($lista);
+    }
+
+    private function cuantificarRecuento($centro_id,$anio,$turno)
+    {
+        $query = "
+          SELECT 
+            turno,
+            SUM(plazas) as plazas,
+            SUM(matricula) as matricula,
+            SUM(vacantes) as vacantes
+            
+          FROM `cursos` 
+          WHERE
+            centro_id = $centro_id and
+            division <> '' and
+            anio = '$anio' and
+            turno = '$turno'
+            
+            group by
+            turno";
+
+        $this->loadModel('Cursos');
+        $lista = $this->Cursos->query($query);
+
+        return $lista;
+    }
 }
