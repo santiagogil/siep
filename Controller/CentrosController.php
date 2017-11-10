@@ -15,7 +15,7 @@ class CentrosController extends AppController {
         if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) {
-	        $this->Auth->allow('index', 'view', 'autocompleteCentro','autocompleteSeccionDependiente');
+	        $this->Auth->allow('index', 'view', 'autocompleteCentro', 'autocompleteSeccionDependiente');
 	    }
     }
 

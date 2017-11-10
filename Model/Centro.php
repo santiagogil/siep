@@ -258,7 +258,7 @@ class Centro extends AppModel {
 		 							'rule' => 'naturalNumber',
 		 						)
 									 ),
-
+									 /*
 									 'barrio_id' => array(
 
 										'required' => array(
@@ -271,6 +271,7 @@ class Centro extends AppModel {
 										'message' => 'Indicar número sin puntos ni comas ni espacios.'
 									)
 										),
+									*/	
 
                    'telefono' => array(
                            'minLength' => array(

@@ -48,7 +48,7 @@
   <div class="col-xs-6 col-sm-3">
       <?php
           $estados_inscripcion = array('CONFIRMADA'=>'CONFIRMADA','NO CONFIRMADA'=>'NO CONFIRMADA');
-           echo $this->Form->input('estado_inscripcion', array('label'=>'Estado de la inscripción*', 'default'=>'NO CONFIRMADA', 'disabled' => true, 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
+           echo $this->Form->input('estado_inscripcion', array('label'=>'Estado de la inscripción*', /*'default'=>'NO CONFIRMADA', 'disabled' => true,*/ 'empty' => 'Ingrese un estado de la inscripción...', 'options'=>$estados_inscripcion, 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
       ?>
   </div>
 </div><hr />
