@@ -13,9 +13,11 @@ class InscripcionsController extends AppController {
         */
         if ($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
-	    } elseif (($this->Auth->user('role') === 'usuario') || ($this->Auth->user('role') === 'admin')) {
+	    } elseif ($this->Auth->user('role') === 'usuario') {
 	        $this->Auth->allow('index', 'add', 'view', 'edit');
-	    }
+	    } else if ($this->Auth->user('role') === 'admin') {
+            $this->Auth->allow('index', 'view');
+        }
 	    /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
         *Si se ejecutan las acciones add/edit activa la función privada "lists".
