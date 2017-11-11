@@ -11,6 +11,7 @@ class InscripcionsController extends AppController {
 		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */
+        /*
         if ($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif ($this->Auth->user('role') === 'usuario') {
@@ -18,6 +19,7 @@ class InscripcionsController extends AppController {
 	    } else if ($this->Auth->user('role') === 'admin') {
             $this->Auth->allow('index', 'view');
         }
+        */
 	    /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
         *Si se ejecutan las acciones add/edit activa la función privada "lists".
@@ -27,6 +29,44 @@ class InscripcionsController extends AppController {
 		}
 		/* FIN */
     }
+
+
+    /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+        *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+    */
+    
+    public function isAuthorized($user)
+    {
+        if ($this->Auth->user('role') === 'superadmin') {
+            if (in_array($this->action, array('index', 'view', 'add', 'edit', 'delete'))) {
+                return true;
+            } else {
+                if ($this->Auth->user('id')) {
+                    $this->Session->setFlash('No puede acceder', 'default', array('class' => 'alert alert-danger'));
+                    $this->redirect($this->Auth->redirect());
+                }
+            }
+        } else if ($this->Auth->user('role') === 'usuario') {
+            if (in_array($this->action, array('index', 'view', 'add', 'edit'))) {
+                return true;
+            } else {
+                if ($this->Auth->user('id')) {
+                    $this->Session->setFlash('No puede acceder', 'default', array('class' => 'alert alert-danger'));
+                    $this->redirect($this->Auth->redirect());
+                }
+            }
+        } else if ($this->Auth->user('role') === 'admin') {
+            if (in_array($this->action, array('index', 'view'))) {
+                return true;
+            } else {
+                if ($this->Auth->user('id')) {
+                    $this->Session->setFlash('No puede acceder', 'default', array('class' => 'alert alert-danger'));
+                    $this->redirect($this->Auth->redirect());
+                }
+            }
+        }
+        return parent::isAuthorized($user);
+    } 
 
 	public function index() {
 		$this->Inscripcion->recursive = 1;
