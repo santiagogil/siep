@@ -16,7 +16,7 @@ class AppController extends Controller {
 	// sessions support
 	// authorization for login and logut redirect
     public $components = array(
-			'DebugKit.Toolbar', // Eliminar al habilitar variables de entorno
+			// 'DebugKit.Toolbar', // Eliminar al habilitar variables de entorno
 			'RequestHandler',
 			'Session',
 		    'Auth' => array(
@@ -27,7 +27,6 @@ class AppController extends Controller {
 			),
 	);
 
-	/*
 	public function __construct($request, $response)
 	{
 		parent::__construct($request, $response);
@@ -39,7 +38,6 @@ class AppController extends Controller {
     }
     
 	}
-	*/
 
 	public $helpers = array('Form', 'Time', 'Js');
 
@@ -63,6 +61,7 @@ class AppController extends Controller {
     		$this->Auth->logout();
     		$this->redirect('login');
         }
+	    return true;
 	}
 
 	/**
