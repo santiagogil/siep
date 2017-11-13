@@ -151,7 +151,7 @@ class VacantesController extends AppController
                 $nivelCentroId = $this->Curso->Centro->find('list', array(
                     'fields' => array('id'),
                     'conditions' => array(
-                        'nivel_servicio' => array('Común - Inicial', 'Común - Primario')
+                        'nivel_servicio' => array('Común - Inicial', 'Común - Primario', 'Común - Inicial - Primario')
                     )
                 ));
 
