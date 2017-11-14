@@ -113,6 +113,10 @@ class InscripcionsController extends AppController {
             $this->redirect(array('action' => 'index'));
         }
         $this->set('inscripcion', $this->Inscripcion->read(null, $id));
+        $this->pdfConfig = array(
+            'download' => true,
+            'filename' => 'inscripcion_' . $id .'.pdf'
+        );
         $personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
         $this->loadModel('Persona');
         $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));

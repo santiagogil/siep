@@ -63,13 +63,12 @@ Configure::write('Dispatcher.filters', array(
     'AssetDispatcher',
     'CacheDispatcher'
 ));
-CakePlugin::loadAll();
-//CakePlugin::loadAll(array('CakePdf' => array('bootstrap' => true, 'routes' => true)));
+//CakePlugin::loadAll();
+CakePlugin::loadAll(array('CakePdf' => array('bootstrap' => true, 'routes' => true)));
 /**
  * Configuration CakePdf
  *
 */ 
-/*
 define('DOMPDF_ENABLE_REMOTE', true);
 CakePlugin::load('CakePdf', array('bootstrap' => true, 'routes' => true));
 Configure::write('CakePdf', array(
@@ -77,4 +76,3 @@ Configure::write('CakePdf', array(
     'pageSize' => 'A4',
     'orientation' => 'portrait'
 ));
-*/
