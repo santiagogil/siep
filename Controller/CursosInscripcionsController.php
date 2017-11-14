@@ -8,13 +8,13 @@ class CursosInscripcionsController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        /* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
+		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */
         if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) { 
-	        $this->Auth->allow('index');
+	        $this->Auth->allow('index','confirmarAlumnos');
 	    }
 	    /* FIN */ 
     } 
@@ -205,5 +205,26 @@ class CursosInscripcionsController extends AppController {
 		}
 		/* FIN */
 		$this->set(compact('cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones','modoLista'));
+	}
+
+	public function confirmarAlumnos() {
+		$this->loadModel('Inscripcion');
+		$this->Inscripcion->recursive = -1;
+
+		// ID seleccionadas en el formulario de confirmar alumnos
+		$inscripciones_id = $this->request->data['id'];
+
+		$updateLista = [];
+		foreach($inscripciones_id as $id)
+		{
+			$updateLista[] = ['id' => $id, 'estado_inscripcion' => 'CONFIRMADA'];
+		}
+
+		if(count($updateLista)>0)
+		{
+			$update = $this->Inscripcion->saveMany($updateLista);
+		}
+
+		$this->redirect($this->referer());
 	}
 }
