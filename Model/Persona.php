@@ -118,7 +118,7 @@ class Persona extends AppModel {
                 'message' => 'Indicar un lugar de nacimiento.'
                 ),
                 'alphaBet' => array(
-                'rule' => '/^[ a-zA-ZñÑ]{3,}$/i',
+                'rule' => '/^[ áÁéÉíÍóÓúÚ a-zA-ZñÑ]{3,}$/i',
                 'message' => 'Sólo letras, mínimo tres caracteres'
                 ),
             ),

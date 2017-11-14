@@ -13,9 +13,11 @@ class InscripcionsController extends AppController {
         */
         if ($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
-	    } elseif (($this->Auth->user('role') === 'usuario') || ($this->Auth->user('role') === 'admin')) {
+	    } elseif ($this->Auth->user('role') === 'usuario') {
 	        $this->Auth->allow('index', 'add', 'view', 'edit');
-	    }
+	    } else if ($this->Auth->user('role') === 'admin') {
+            $this->Auth->allow('index', 'view');
+        }
 	    /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
         *Si se ejecutan las acciones add/edit activa la función privada "lists".
@@ -111,6 +113,10 @@ class InscripcionsController extends AppController {
             $this->redirect(array('action' => 'index'));
         }
         $this->set('inscripcion', $this->Inscripcion->read(null, $id));
+        $this->pdfConfig = array(
+            'download' => true,
+            'filename' => 'inscripcion_' . $id .'.pdf'
+        );
         $personaId = $this->Inscripcion->Alumno->find('list', array('fields'=>array('persona_id')));
         $this->loadModel('Persona');
         $personaNombre = $this->Persona->find('list', array('fields'=>array('nombre_completo_persona')));
