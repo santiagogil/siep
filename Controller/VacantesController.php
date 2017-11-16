@@ -177,6 +177,7 @@ class VacantesController extends AppController
         $this->set(compact('matriculas','cicloIdUltimo','comboCiclo','comboCiudad','comboSector'));
     }
 
+    /*
     public function recuento()
     {
         // Antes que nada devuelvo a cero todas las matriculas, y las vacantes son el total de plazas
@@ -268,4 +269,5 @@ class VacantesController extends AppController
 
         return $lista;
     }
+*/
 }
