@@ -11,12 +11,19 @@ class CursosInscripcionsController extends AppController {
 		/* ACCESOS SEGÚN ROLES DE USUARIOS (INICIO).
         *Si el usuario tiene un rol de superadmin le damos acceso a todo. Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         */
-        if($this->Auth->user('role') === 'superadmin') {
-	        $this->Auth->allow();
-	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'usuario')) { 
-	        $this->Auth->allow('index','confirmarAlumnos');
-	    }
-	    /* FIN */ 
+		switch($this->Auth->user('role'))
+		{
+			case 'superadmin':
+				$this->Auth->allow();
+				break;
+			case 'admin':
+				$this->Auth->allow('index');
+				break;
+			case 'usuario':
+				$this->Auth->allow('index','confirmarAlumnos');
+				break;
+		}
+	    /* FIN */
     } 
 
 /**
@@ -117,7 +124,7 @@ class CursosInscripcionsController extends AppController {
 					);
 					$this->paginate['CursosInscripcion']['conditions'] = array(
 						'Inscripcion.centro_id' => $nivelCentroId,
-						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO-CONFIRMADA')
+						'Inscripcion.estado_inscripcion' =>array('CONFIRMADA','NO CONFIRMADA')
 					);
 				}
 				break;
