@@ -17,7 +17,7 @@ class CursosInscripcionsController extends AppController {
 				$this->Auth->allow();
 				break;
 			case 'admin':
-				$this->Auth->allow('index');
+				$this->Auth->allow('index','confirmarAlumnos');
 				break;
 			case 'usuario':
 				$this->Auth->allow('index','confirmarAlumnos');
