@@ -134,6 +134,7 @@
           <div class="col-md-4">
               <div class="unit">
  			      <div class="subtitulo">Opciones</div>
+                  <div class="opcion"><?php echo $this->Html->link(__('Constancia de Inscripción'), array('action' => 'constanciaPdf', $inscripcion['Inscripcion']['id'])); ?></div>
                   <div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('action' => 'index')); ?></div>
                   <div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $inscripcion['Inscripcion']['id'])); ?> </div>
                 <?php if($current_user['role'] == 'superadmin'): ?> 
