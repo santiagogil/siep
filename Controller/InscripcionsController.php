@@ -601,17 +601,22 @@ class InscripcionsController extends AppController {
 
     public function constanciaPdf($id)
     {
-        $httpSocket = new HttpSocket();
-        $response = $httpSocket->get("http://web:3000/api/constancia/$id");
-        $response = $response->body;
+        try {
+            $httpSocket = new HttpSocket();
+            $response = $httpSocket->get("http://web:3000/api/constancia/$id");
+            $response = $response->body;
 
-        $api = json_decode($response);
-        if( isset($api->error)) {
-            $this->Session->setFlash($api->error, 'default', array('class' => 'alert alert-warning'));
+            $api = json_decode($response);
+            if( isset($api->error)) {
+                $this->Session->setFlash($api->error, 'default', array('class' => 'alert alert-warning'));
+                $this->redirect(array('action' => 'index'));
+            } else {
+                header("content-type: application/pdf");
+                echo $response;
+            }
+        } catch(\Exception $ex){
+            $this->Session->setFlash($ex->getMessage(), 'default', array('class' => 'alert alert-warning'));
             $this->redirect(array('action' => 'index'));
-        } else {
-            header("content-type: application/pdf");
-            echo $response;
         }
     }
 }
