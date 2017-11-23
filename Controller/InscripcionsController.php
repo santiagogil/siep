@@ -14,9 +14,9 @@ class InscripcionsController extends AppController {
         if ($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
 	    } elseif ($this->Auth->user('role') === 'usuario') {
-	        $this->Auth->allow('index', 'add', 'view', 'edit');
+	        $this->Auth->allow('index', 'add', 'view', 'edit','constanciaPdf');
 	    } else if ($this->Auth->user('role') === 'admin') {
-            $this->Auth->allow('index', 'view');
+            $this->Auth->allow('index', 'view','constanciaPdf');
         }
 	    /* FIN */
         /* FUNCIÓN PRIVADA "LISTS" (INICIO).
@@ -26,6 +26,7 @@ class InscripcionsController extends AppController {
 			$this->__lists();
 		}
 		/* FIN */
+        App::uses('HttpSocket', 'Network/Http');
     }
 
 	public function index() {
@@ -577,6 +578,22 @@ class InscripcionsController extends AppController {
 	private function __getCodigo($ciclo, $personaDocString){
 		$legajo = $personaDocString."-".$ciclo;
 		return $legajo;
+    }
+
+    public function constanciaPdf($id)
+    {
+        $httpSocket = new HttpSocket();
+        $response = $httpSocket->get("http://web:3000/api/constancia/$id");
+        $response = $response->body;
+
+        $api = json_decode($response);
+        if( isset($api->error)) {
+            $this->Session->setFlash($api->error, 'default', array('class' => 'alert alert-warning'));
+            $this->redirect(array('action' => 'index'));
+        } else {
+            header("content-type: application/pdf");
+            echo $response;
+        }
     }
 }
 ?>
