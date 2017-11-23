@@ -231,7 +231,6 @@ class InscripcionsController extends AppController {
                     }
                 }
 
-
                 switch($this->request->data['Inscripcion']['tipo_inscripcion'])
                 {
                     case 'Hermano de alumno regular':
@@ -368,9 +367,10 @@ class InscripcionsController extends AppController {
             //Se genera el estado y se deja en los datos que se intentaran guardar
 			$this->request->data['Inscripcion']['estado_documentacion'] = $estadoDocumentacion;
 			// Se define el id del centro.
-            $userCentroId = $this->getUserCentroId();
+            //$userCentroId = $this->getUserCentroId();
             //Se obtiene el rol del usuario
             $userRole = $this->Auth->user('role');
+            // Se define el id del centro en función del rol.
             switch($userRole) {
                 case 'superadmin':
                 case 'usuario':
@@ -383,28 +383,27 @@ class InscripcionsController extends AppController {
                     $this->request->data['Inscripcion']['centro_id'] = $userCentroId ;
                 break;
             }
-
             // Obtiene la división del curso "Seleccionado"
             $cursoIdArray = $this->request->data['Curso'];
             $cursoIdString = $cursoIdArray['Curso'];
-
             $this->loadModel('Curso');
             $this->Curso->recursive = -1;
             $nuevoCurso = $this->Curso->findById($cursoIdString);
-
             // Es necesario tener una seccion definida para la edicion
             if (count($nuevoCurso) <= 0 || !is_numeric($nuevoCurso['Curso']['id'])) {
                 $this->Session->setFlash('No definio la sección.', 'default', array('class' => 'alert alert-danger'));
                 $this->redirect($this->referer());
             }
-
+            /* METODOLOGÍAS DE PASE SEGÚN PERFILES DE USUARIOS*/
+            /* Sí es admin, primero debe generar desde su institución (centro origen) y con el módulo PASE, la propuesta de pase.
+            *  Luego la institución destino, podrá acceder a la inscripción del alumno y actualizando el centro y la sección.
+            */
+            if ($userRole == 'admin') {
             /* Se trata de un pase externo, sí se identifica un cambio en el id del centro.
             *  Actualiza el id del centro del Alumno.
             *  Actualiza valores de matrícula y vacantes.
             *  Actualiza a confirmado el estado del pase.
             */
-
-            // Si el usuario cambia de centro... ingresa a esta logica. (Pendiente de revision)
             if ($cursoInscripcion['Inscripcion']['centro_id'] != $userCentroId) {
                 /* Actualiza el id del centro del Alumno. */
                 $this->loadModel('Alumno');
@@ -430,14 +429,38 @@ class InscripcionsController extends AppController {
                 $vacantesActual = $plazasString - $matriculaActual;
                 $this->Curso->saveField("vacantes", $vacantesActual);
                 /* FIN */
-            }
+                }
+            } else {
+                /* Síno sí es superadmin o usuario , generara el pase directamente con la edición de la Inscripción */
+                if ($userRole == 'superadmin' || $userRole == 'usuario') {
+                    if ($cursoInscripcion['Inscripcion']['centro_id'] != $userCentroId) {
+                        /* Actualiza el id del centro del Alumno. */
+                        $this->loadModel('Alumno');
+                        $alumnoIdArray = $this->Alumno->findByPersonaId($personaId);
+                        $alumnoIdString = $alumnoIdArray['Alumno'];
+                        $this->Alumno->id=$alumnoIdString;
+                        $this->Alumno->saveField("centro_id", $userCentroId);
+                        /* ATUALIZA MATRÍCULA Y VACANTES (INICIO). */
+                        $this->loadModel('Curso');
+                        $cursoIdArray = $this->request->data['Curso'];
+                        $cursoIdString = $cursoIdArray['Curso'];
+                        $matriculaActual = $this->Inscripcion->CursosInscripcion->find('count', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoIdString)));
+                        $this->Curso->id=$cursoIdString;
+                        $this->Curso->saveField("matricula", $matriculaActual);
+                        $plazasArray = $this->Curso->findById($cursoIdString, 'plazas');
+                        $plazasString = $plazasArray['Curso']['plazas'];
+                        $vacantesActual = $plazasString - $matriculaActual;
+                        $this->Curso->saveField("vacantes", $vacantesActual);
+                        /* FIN */
+                    }
+                }
+            }    
             /* Sino sí cambia de sección, se trata de un pase interno.
             *  Actualiza valores de matrícula y vacantes del curso origen.
             *  Actualiza valores de matrícula y vacantes del curso destino.
             */
             $cursoIdAnterior = $cursoInscripcion['Curso']['id'];
             $cursoIdNew = $nuevoCurso['Curso']['id'];
-
             // Sí los id de los cursos son diferentes, se trata de un cambio de sección.
             if ($cursoIdNew != $cursoIdAnterior) {
                 // Actualiza los valores de matrícula y vacantes tanto de la sección origen como de la sección destino.
