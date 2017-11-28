@@ -174,7 +174,30 @@ class VacantesController extends AppController
             $matriculas = $this->paginate('Curso',$conditions);
         }
 
+        // Loguea a los siguientes usuarios.
+        switch($this->Auth->user('username'))
+        {
+            case 'radriana':
+            case 'oramiro':
+                $this->Siep->logQuerySave(json_encode(
+                    [
+                        'Rol' => AuthComponent::user(),
+                        'Log' => $this->Siep->logQuery($this->Curso),
+                        'Matricula' => $matriculas
+                    ]
+                ));
+            break;
+        }
+
         $this->set(compact('matriculas','cicloIdUltimo','comboCiclo','comboCiudad','comboSector'));
+    }
+
+    public function logView($fecha)
+    {
+        $this->autoRender = false;
+        $log_dir_path = LOGS.'sql';
+        $archivo = $log_dir_path.'/'.$fecha.'.log';
+        $this->response->body(file_get_contents($archivo));
     }
 
     /*
