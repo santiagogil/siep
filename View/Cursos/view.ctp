@@ -14,6 +14,8 @@
 						 	<?php echo ($this->Html->link($curso['Titulacion']['nombre'], array('controller' => 'titulacions', 'action' => 'view', $curso['Titulacion']['id']))); ?></p>
 						<b><?php echo __('Turno: '); ?></b>
 							<?php echo ($curso['Curso']['turno']); ?></p>
+						<b><?php echo __('Tipo: '); ?></b>
+							<?php echo ($curso['Curso']['tipo']); ?></p>	
 						<b><?php echo __('Aula: '); ?></b>
 							<?php echo ($curso['Curso']['aula_nro']); ?></p>
 			            <b><?php echo __('Plazas: '); ?></b> 
