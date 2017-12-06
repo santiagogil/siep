@@ -188,8 +188,13 @@ class VacantesController extends AppController
                 ));
             break;
         }
-
-        $this->set(compact('matriculas','cicloIdUltimo','comboCiclo','comboCiudad','comboSector'));
+        $userCentroId = $this->getUserCentroId();
+        $this->loadModel('Centro');
+        $nivelCentro = $this->Centro->find('list', array('fields'=>array('id','nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+        $nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+        $nivelCentroArray = $this->Centro->findById($nivelCentroId, 'nivel_servicio');
+        $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
+        $this->set(compact('matriculas','cicloIdUltimo','comboCiclo','comboCiudad','comboSector', 'nivelCentroString'));
     }
 
     public function logView($fecha)

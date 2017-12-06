@@ -44,10 +44,14 @@
           <th><?php echo $this->Paginator->sort('Centro.sigla', 'Centro');?>  </th>
           <th><?php echo $this->Paginator->sort('anio','Año');?></th>
           <th><?php echo $this->Paginator->sort('turno','Turno');?></th>
+         <?php if ((($nivelCentroString != 'Común - Inicial') && ($nivelCentroString != 'Común - Primario'))) { ?> 
           <th><?php echo $this->Paginator->sort('plazas', 'Plaza');?></th>
+         <?php } ?> 
           <th><?php echo $this->Paginator->sort('matricula', 'Matricula');?></th>
+         <?php if ((($nivelCentroString != 'Común - Inicial') && ($nivelCentroString != 'Común - Primario'))) { ?> 
           <th><?php echo $this->Paginator->sort('por_hermanos', 'Por Hermanos');?></th>
           <th><?php echo $this->Paginator->sort('vacantes', 'VACANTES');?></th>
+         <?php } ?> 
           <th>Acciones</th>
         </tr>
       </thead>
@@ -63,18 +67,22 @@
             <td>
               <?php echo $matricula['Curso']['turno']; ?>
             </td>
+           <?php if ((($nivelCentroString != 'Común - Inicial') && ($nivelCentroString != 'Común - Primario'))) { ?> 
             <td>
               <?php echo $matricula['Curso']['plazas']; ?>
             </td>
+           <?php } ?> 
             <td>
               <?php echo $matricula['Curso']['matricula']; ?>
             </td>
+           <?php if ((($nivelCentroString != 'Común - Inicial') && ($nivelCentroString != 'Común - Primario'))) { ?> 
             <td>
                 <?php echo $matricula['Curso']['por_hermanos']; ?>
             </td>
             <td>
               <?php echo $matricula['Curso']['vacantes']; ?>
             </td>
+           <?php } ?> 
             <td >
               <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Cursos', 'action'=> 'view', $matricula['Curso']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
             </td>
