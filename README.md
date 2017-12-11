@@ -1,13 +1,13 @@
-# Sistema Integral de Educacion Provincial
+# Sistema Integral Educativo Provincial [SIEP]
 
-[Ingresar a beta](http://sieptdf.tk)
+[ACCEDER A SIEP](https://siep.tdf.educar.gob.ar/)
 ## Objetivos generales del proyecto:
 
-* Diseñar un software provincial y libre mediante el cual se puedan unificar criterios en el manejo  de la información a la hora de atender los requerimientos de gestión de todos los establecimientos educativos de Tierra del Fuego.
-* Alentar la creación de una comunidad de desarrollo de software para el ámbito educativo que colabore con el mantenimiento y actualización del sistema.
-* Extender y aprovechar la infraestructura de los Pisos Tecnológicos hacia el área administrativa de las instituciones.  
-* Generar la capacidad provincial de centralizar la información de las instituciones en una única base de datos provincial para poder realizar toda clase de estadísticas en tiempo real. 
-* Cargar y actualizar información en forma eficiente y segura.
+* Diseñar un SOFTWARE ABIERTO PROVINCIAL mediante el cual se puedan unificar criterios en el manejo de la información a la hora de atender los requerimientos de gestión de todos los establecimientos educativos de Tierra del Fuego.
+* Alentar la creación de una COMUNIDAD LOCAL DE DESARROLLO DE SOFTWARE para el ámbito educativo que colabore con el mantenimiento y actualización del sistema.
+* Extender y aprovechar la INFRAESTRUCTURA ACTUAL DE LOS PISOS TECNOLÓGICOS de las instituciones para su utilización en el área administrativa.  
+* Centralizar la información generada -desde las instituciones educativas- en una única BASE DE DATOS PROVINCIAL para poder realizar toda clase de relevamientos estadísticos en tiempo real. 
+* Cargar y actualizar información en forma eficiente y segura bajo el cumplimiento de LAS NORMATIVAS VIGENTES DE PROTECCIÓN DE DATOS PERSONALES y validando esos datos contra BASES DE DATOS NACIONALES.
 * Mejorar la Utilización de los recursos institucionales humanos y materiales.
 * Reducir los tiempos de acceso a registros históricos.
 
@@ -21,12 +21,12 @@ Permite visualizar el estado actual del desarrollo de este proyecto.
 
 ### Issues
 
-Permite visualizar la totalidad del trabajo de el equipo de desarrollo a travez de todos nuestros proyectos.
+Permite visualizar la totalidad del trabajo del equipo de desarrollo a través de todos nuestros proyectos.
 
 [https://pci-tdf.github.io/ubersicht/#decyt-tdf](https://pci-tdf.github.io/ubersicht/#decyt-tdf)
 
-## Instalación
-<!--  Por ejemplo npm install titulo  -->
+<!-- Instalación
+  Por ejemplo npm install titulo  -->
 
-## Tests
-<!-- Breve descripción de cómo correr la suit de tests  -->
+<!-- Tests
+ Breve descripción de cómo correr la suit de tests  -->
