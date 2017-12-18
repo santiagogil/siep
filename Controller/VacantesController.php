@@ -66,7 +66,8 @@ class VacantesController extends AppController
         $this->loadModel('Curso');
         $conditions = array('AND'=>array(
             'Curso.anio' => array('sala de 4 años', 'sala de 5 años', '1ro', '2do', '3ro', '4to', '5to', '6to'),
-            'Curso.division' =>''
+            'Curso.division' =>'',
+            'Curso.status' => 1 
         ));
         // Es necesario hacer una columna virtual, para que despues se pueda ordenar en el datatable
         $this->Curso->virtualFields['por_hermanos'] = '
@@ -188,8 +189,13 @@ class VacantesController extends AppController
                 ));
             break;
         }
-
-        $this->set(compact('matriculas','cicloIdUltimo','comboCiclo','comboCiudad','comboSector'));
+        $userCentroId = $this->getUserCentroId();
+        $this->loadModel('Centro');
+        $nivelCentro = $this->Centro->find('list', array('fields'=>array('id','nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
+        $nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
+        $nivelCentroArray = $this->Centro->findById($nivelCentroId, 'nivel_servicio');
+        $nivelCentroString = $nivelCentroArray['Centro']['nivel_servicio'];
+        $this->set(compact('matriculas','cicloIdUltimo','comboCiclo','comboCiudad','comboSector', 'nivelCentroString'));
     }
 
     public function logView($fecha)

@@ -48,7 +48,7 @@ class MatriculasController extends AppController
         $this->paginate = array(
             'contain' => array('Centro'),
             'limit' => 10,
-            'conditions' => array('Curso.division !=' => ''),
+            'conditions' => array('Curso.division !=' => '', 'Curso.status =' => 1),
             'order' => array('Curso.centro_id' => 'asc' )
         );
         $this->redirectToNamed();
