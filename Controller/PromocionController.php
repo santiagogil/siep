@@ -23,6 +23,7 @@ class PromocionController extends AppController {
 				break;
 		}
 	    /* FIN */
+		App::uses('HttpSocket', 'Network/Http');
     } 
 
 /**
@@ -35,13 +36,23 @@ class PromocionController extends AppController {
 		// Datos del usuario
 		$userCentroId = $this->getUserCentroId();
 		$userRole = $this->Auth->user('role');
-		$cicloIdActual = $this->getActualCicloId();
 
 		// Modelos a utilizar
 		$this->loadModel('CursosInscripcion');
 		$this->loadModel('Centro');
 		$this->loadModel('Curso');
+
 		$this->loadModel('Ciclo');
+
+		$hoyArray = getdate();
+		$hoyAñoString = $hoyArray['year'];
+		$cicloActual = $this->Ciclo->find('first', array(
+			'recursive' => -1,
+			'conditions' => array('nombre' => $hoyAñoString)
+		));
+
+		$cicloActual = array_pop($cicloActual);
+		$cicloSiguienteNombre = ((int)$cicloActual['nombre']) + 1;
 
 		// Abria que ver como cake gestiona estos joins de manera nativa en el ORM
 		$this->paginate['CursosInscripcion'] = array(
@@ -53,8 +64,8 @@ class PromocionController extends AppController {
 				'Persona.*',
 				'Ciclo.nombre'
 			),
-			'limit' => 8,
-			'order' => array('CursosInscripcion.curso_id' => 'ASC'),
+			'limit' => 30,
+			'order' => array('Alumno.apellido' => 'ASC'),
 			'joins' => array(
 				array(
 					'alias' => 'Alumno',
@@ -139,62 +150,16 @@ class PromocionController extends AppController {
 		if(!empty($this->params['named']['centro_id'])) {
 			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
 		}
-		if(!empty($this->params['named']['ciclo_id'])) {
-			$conditions['Inscripcion.ciclo_id ='] = $this->params['named']['ciclo_id'];
-		}
-		if(!empty($this->params['named']['turno'])) {
-			$conditions['Curso.turno ='] = $this->params['named']['turno'];
-		}
-		if(!empty($this->params['named']['anio'])) {
-			$conditions['Curso.anio ='] = $this->params['named']['anio'];
+		if(!empty($this->params['named']['curso_id'])) {
+			$conditions['CursosInscripcion.curso_id ='] = $this->params['named']['curso_id'];
 		}
 		if(!empty($this->params['named']['inscripcion_id'])) {
 			$conditions['CursosInscripcion.inscripcion_id ='] = $this->params['named']['inscripcion_id'];
 		}
 
-		$modoLista = (
-			!empty($this->params['named']['modo']) &&
-			$this->params['named']['modo'] == 'lista'
-		) ? true : false;
-
 		// Inicializa la paginacion segun las condiciones
 		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
 
-		/*
-		 * *********************
-		 * 		IMPORTANTE
-		 * *********************
-		 * Falta filtrar estos combobox segun el tipo de usuario logueado
-		 *
-		 */
-		$comboAnio = $this->Curso->find('list', array(
-			'recursive'=> -1,
-			'fields'=> array('Curso.anio','Curso.anio')
-		));
-
-		$comboDivision = $this->Curso->find('list', array(
-			'recursive'=> -1,
-			'fields'=> array('Curso.division','Curso.division')
-		));
-
-		$comboCiclo = $this->Ciclo->find('list', array(
-			'fields'=>array('Ciclo.id', 'Ciclo.nombre')
-		));
-
-		/*
-		 * ********************
-		 * 		IMPORTANTE
-		 * ********************
-		 * La seccion no la filtra bien, debido a que no se deberia filtrar por id, por ej:
-		 *  "1ro" tiene multiples cursos y deberia mostrar todos los primeros
-		 */
-		/*
-		$comboSecciones = $this->Curso->find('list', array(
-			'fields'=>array('nombre_completo_curso','nombre_completo_curso'),
-		));
-		*/
-		$this->loadModel('Centro');
-		$this->loadModel('Curso');
 		$userCentroId = $this->getUserCentroId();
         $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
         $userRol = $this->Auth->user('role');
@@ -210,28 +175,53 @@ class PromocionController extends AppController {
 			$userCentroId = $this->getUserCentroId();
 			$comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId, 'status' => '1')));
 		}
-		/* FIN */
-		$this->set(compact('cursosInscripcions','comboAnio','comboDivision','comboCiclo','cicloIdActual','comboSecciones','modoLista'));
+
+		$centro = $this->Centro->find('first', array(
+				'recursive' => -1,
+				'conditions'=>array('Centro.id'=>$this->params['named']['centro_id']))
+		);
+
+		$curso = $this->Curso->find('first', array(
+				'recursive' => -1,
+				'conditions'=>array('Curso.id'=>$this->params['named']['curso_id']))
+		);
+
+		$centro = array_pop($centro);
+		$curso = array_pop($curso);
+
+		$secciones = $this->Curso->find('list', array(
+			'recursive'=>-1,
+			'fields'=>array('id','nombre_completo_curso'),
+			'conditions'=>array(
+				'centro_id'=>$this->params['named']['centro_id'],
+				'division !='=> ''
+			)
+		));
+
+		$this->set(compact('centro','curso','cursosInscripcions','cicloActual','cicloSiguienteNombre','secciones'));
 	}
 
-	public function confirmarAlumnos() {
-		$this->loadModel('Inscripcion');
-		$this->Inscripcion->recursive = -1;
+	public function confirmarAlumnos()
+	{
+		try {
+			$httpSocket = new HttpSocket();
+			$request = array('header' => array('Content-Type' => 'application/json'));
+			$data = $this->request->data;
+			$data = json_encode($data);
+			$response = $httpSocket->post("http://192.168.1.33:3000/api/promocion", $data, $request);
+			$response = $response->body;
 
-		// ID seleccionadas en el formulario de confirmar alumnos
-		$inscripciones_id = $this->request->data['id'];
-
-		$updateLista = [];
-		foreach($inscripciones_id as $id)
-		{
-			$updateLista[] = ['id' => $id, 'estado_inscripcion' => 'CONFIRMADA'];
+			$apiResponse = json_decode($response);
+			if( isset($apiResponse->error)) {
+				$this->Session->setFlash($apiResponse->error, 'default', array('class' => 'alert alert-warning'));
+				$this->redirect($this->referer());
+			} else {
+				$this->Session->setFlash("Promocion realizada con exito", 'default', array('class' => 'alert alert-success'));
+				$this->redirect($this->referer());
+			}
+		} catch(\Exception $ex){
+			$this->Session->setFlash("Error: ".$ex->getMessage(), 'default', array('class' => 'alert alert-warning'));
+			$this->redirect($this->referer());
 		}
-
-		if(count($updateLista)>0)
-		{
-			$update = $this->Inscripcion->saveMany($updateLista);
-		}
-
-		$this->redirect($this->referer());
 	}
 }
