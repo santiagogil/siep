@@ -1,15 +1,12 @@
-<div id="app" class="table-responsive">
-    <?php echo $this->Form->create('CursosInscripcion',array('type'=>'post','url'=>'confirmarAlumnos', 'novalidate' => true));?>
-        <table class="table table-bordered table-hover table-striped table-condensed">
+<?php echo $this->Form->create('CursosInscripcion',array('type'=>'post','url'=>'confirmarAlumnos', 'novalidate' => true));?>
+
+<div id="app" class="col-sm-8 table-responsive">
+    <table class="table table-bordered table-hover table-striped table-condensed">
         <thead>
             <tr>
-                <th>
+                <th width="25px">
                     <input type="checkbox" id="checkAll"/>
                 </th>
-                <th><?php echo $this->Paginator->sort('ciclo_id', 'Ciclo');?></th>
-                <th><?php echo $this->Paginator->sort('centro_id', 'Centro');?></th>
-                <th><?php echo $this->Paginator->sort('curso_id', 'Curso');?></th>
-                <th><?php echo $this->Paginator->sort('turno', 'Turno');?></th>
                 <th><?php echo $this->Paginator->sort('documento_nro', 'DNI');?></th>
                 <th><?php echo $this->Paginator->sort('persona_id', 'Alumno');?></th>
                 <th></th>
@@ -19,36 +16,56 @@
             <?php foreach($cursosInscripcions as $cursosInscripcion) : ?>
             <tr>
                 <td>
-                    <?php  if($cursosInscripcion['Inscripcion']['estado_inscripcion']!='CONFIRMADA') : ?>
+                <?php
+                if(
+                    $cursosInscripcion['Inscripcion']['estado_inscripcion']=='CONFIRMADA' &&
+                    $cursosInscripcion['Inscripcion']['promocionado'] != 1
+                ) :
+                ?>
                     <input type="checkbox" class="toggle_checkbox" name="id[]" value="<?php echo $cursosInscripcion['Inscripcion']['id']; ?>">
-                    <?php  endif;  ?>
+                <?php  endif;  ?>
                 </td>
-                <td><?php echo $cursosInscripcion['Ciclo']['nombre']; ?> </td>
-                <td><?php echo $cursosInscripcion['Centro']['nombre']; ?> </td>
-                <td><?php echo $cursosInscripcion['Curso']['anio']." ".$cursosInscripcion['Curso']['division']; ?> </td>
-                <td><?php echo $cursosInscripcion['Curso']['turno']; ?> </td>
                 <td><?php echo $cursosInscripcion['Persona']['documento_nro']; ?> </td>
-                <td><?php echo $cursosInscripcion['Persona']['nombres']." ".$cursosInscripcion['Persona']['apellidos']; ?> </td>
-                <td>
+                <td><?php echo $cursosInscripcion['Persona']['apellidos']." ".$cursosInscripcion['Persona']['nombres']; ?> </td>
+                <td width="60px">
                     <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-eye-open"></i>', array('controller' => 'Inscripcions', 'action'=> 'view', $cursosInscripcion['Inscripcion']['id']), array('class' => 'btn btn-default', 'escape' => false)); ?></span>
                 </td>
             </tr>
             <?php endforeach ?>
-            <tr id="tdConfirmar" style="display:none;">
-                <td colspan="6">
-                    <div class="text-center">
-                        <input type="submit" class="btn btn-primary" value="Promocionar a los seleccionados" />
-                    </div>
-                </td>
-            </tr>
         </tbody>
     </table>
-    <?php echo $this->Form->end(); ?>
 </div>
 
+<div class="col-sm-4">
+    <div class="unit">
+        <div class="subtitulo">Opciones de promocion</div>
+
+        <h5>Desde</h5>
+        Ciclo: <b><?php echo $cicloActual['nombre']; ?></b>
+        Seccion: <b><?php echo $curso['anio']." ".$curso['division']." ".$curso['turno']; ?></b>
+
+        <input type="hidden" name="centro_id" value="<?php echo $centro['id'];?>">
+        <input type="hidden" name="curso_id" value="<?php echo $curso['id'];?>">
+
+        <div class="showConfirmar" style="display:none;margin-top:2px;border-top:1px solid #636363;">
+            <h5>Hacia</h5>
+            Ciclo: <b><?php echo $cicloSiguienteNombre;?></b>
+            <?php
+            echo $this->Form->input('seccion', array('name'=>'curso_id_promocion','label'=>false,'empty' => '- Seleccionar seccion - ', 'options' => $secciones, 'class' => 'form-control'));
+            ?>
+        </div>
+        <hr>
+        <div class="showConfirmar text-center">
+            <input type="submit" class="btn btn-primary" value="Confirmar promocion" />
+        </div>
+    </div>
+</div>
+
+<?php echo $this->Form->end(); ?>
 
 <script>
     $(function() {
+        var seleccionados = 0;
 
         toggleConfirmButton();
 
@@ -69,13 +86,12 @@
     });
 
     function toggleConfirmButton() {
-        let seleccionados = $('.toggle_checkbox:checked').length;
+        seleccionados = $('.toggle_checkbox:checked').length;
         if(seleccionados>0) {
-            $('#tdConfirmar').show();
+            $('.showConfirmar').show();
         } else {
             $("#checkAll").prop('checked', false);
-            $('#tdConfirmar').hide();
+            $('.showConfirmar').hide();
         }
-
     }
 </script>
