@@ -151,12 +151,13 @@ class AppController extends Controller {
 	*/
 	function getTwoLastCicloNombres($cicloIdActual, $cicloIdUltimo)
 	{
+		$this->loadModel('Ciclo');
 	    if ($cicloIdActual != $cicloIdUltimo) {
-			$this->loadModel('Ciclo');
 	        $cicloNombresDosUltimos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => array($cicloIdActual, $cicloIdUltimo))));
 	        return $cicloNombresDosUltimos;
 		} else {
-			return $cicloNombreActual;			
+			$cicloNombreActual = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => array($cicloIdActual))));
+			return $cicloNombreActual;
 		}
 	}	
 }
