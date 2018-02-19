@@ -45,16 +45,16 @@ class PromocionController extends AppController {
 		$this->loadModel('Ciclo');
 
 		$hoyArray = getdate();
-		$hoyAñoString = $hoyArray['year'];
-		$cicloActual = $this->Ciclo->find('first', array(
+		$hoyAñoString = $hoyArray['year'] - 1; // Al restar un año... se relizan las promociones en Marzo, con los alumnos del año anterior.
+		$cicloaPromocionar = $this->Ciclo->find('first', array(
 			'recursive' => -1,
 			'conditions' => array('nombre' => $hoyAñoString)
 		));
 
-		$cicloActual = array_pop($cicloActual);
-		$cicloSiguienteNombre = ((int)$cicloActual['nombre']) + 1;
+		$cicloaPromocionar = array_pop($cicloaPromocionar);
+		$cicloSiguienteNombre = ((int)$cicloaPromocionar['nombre']) + 1;
 
-		// Abria que ver como cake gestiona estos joins de manera nativa en el ORM
+		// Habria que ver como cake gestiona estos joins de manera nativa en el ORM
 		$this->paginate['CursosInscripcion'] = array(
 			'fields' => array(
 				'CursosInscripcion.*',
@@ -64,7 +64,7 @@ class PromocionController extends AppController {
 				'Persona.*',
 				'Ciclo.nombre'
 			),
-			'limit' => 30,
+			'limit' => 50,
 			'order' => array('Alumno.apellido' => 'ASC'),
 			'joins' => array(
 				array(
@@ -160,22 +160,6 @@ class PromocionController extends AppController {
 		// Inicializa la paginacion segun las condiciones
 		$cursosInscripcions = $this->paginate('CursosInscripcion', $conditions);
 
-		$userCentroId = $this->getUserCentroId();
-        $nivelCentro = $this->Centro->find('list', array('fields'=>array('nivel_servicio'), 'conditions'=>array('id'=>$userCentroId)));
-        $userRol = $this->Auth->user('role');
-		if ($userRol == 'superadmin') {
-			$comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
-		} else if (($userRol === 'usuario') && ($nivelCentro === 'Común - Inicial - Primario')) {
-            $nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>array('Común - Inicial', 'Común - Primario'))));
-            $comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId, 'status'=> '1')));
-        } else if ($userRol === 'usuario') {
-            $nivelCentroId = $this->Centro->find('list', array('fields'=>array('id'), 'conditions'=>array('nivel_servicio'=>$nivelCentro)));
-            $comboSecciones = $this->Curso->find('list', array('fields'=>array('nombre_completo_curso'), 'conditions'=>array('centro_id'=>$nivelCentroId, 'status' => '1')));
-        } else if ($userRol == 'admin') {
-			$userCentroId = $this->getUserCentroId();
-			$comboSecciones = $this->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id'=>$userCentroId, 'status' => '1')));
-		}
-
 		$centro = $this->Centro->find('first', array(
 				'recursive' => -1,
 				'conditions'=>array('Centro.id'=>$this->params['named']['centro_id']))
@@ -198,29 +182,41 @@ class PromocionController extends AppController {
 			)
 		));
 
-		$this->set(compact('centro','curso','cursosInscripcions','cicloActual','cicloSiguienteNombre','secciones'));
+		$this->set(compact('centro','curso','cursosInscripcions','cicloaPromocionar','cicloSiguienteNombre','secciones'));
 	}
 
 	public function confirmarAlumnos()
 	{
 		try {
+			$userId = $this->Auth->user('id');
+
 			$httpSocket = new HttpSocket();
 			$request = array('header' => array('Content-Type' => 'application/json'));
+			$this->request->data['user_id'] = $userId;
 			$data = $this->request->data;
 			$data = json_encode($data);
-			$response = $httpSocket->post("http://192.168.1.33:3000/api/promocion", $data, $request);
-			$response = $response->body;
 
+			//$response = $httpSocket->post("https://constancia.sieptdf.tk/api/promocion", $data, $request);
+			//$response = $httpSocket->post("http://192.168.1.40:3000/api/promocion", $data, $request);
+			$response = $httpSocket->post("http://web:3000/api/promocion", $data, $request);
+
+			$response = $response->body;
 			$apiResponse = json_decode($response);
+
 			if( isset($apiResponse->error)) {
-				$this->Session->setFlash($apiResponse->error, 'default', array('class' => 'alert alert-warning'));
+				$this->Session->setFlash("API: ".$apiResponse->error, 'default', array('class' => 'alert alert-danger'));
 				$this->redirect($this->referer());
 			} else {
-				$this->Session->setFlash("Promocion realizada con exito", 'default', array('class' => 'alert alert-success'));
-				$this->redirect($this->referer());
+				if( isset($apiResponse->done)) {
+					$this->Session->setFlash("Promocion realizada con exito", 'default', array('class' => 'alert alert-success'));
+					$this->redirect($this->referer());
+				} else {
+					$this->Session->setFlash("API: No se determinó si la operación se efectuo con exito", 'default', array('class' => 'alert alert-warning'));
+					$this->redirect($this->referer());
+				}
 			}
 		} catch(\Exception $ex){
-			$this->Session->setFlash("Error: ".$ex->getMessage(), 'default', array('class' => 'alert alert-warning'));
+			$this->Session->setFlash("Error: ".$ex->getMessage(), 'default', array('class' => 'alert alert-danger'));
 			$this->redirect($this->referer());
 		}
 	}

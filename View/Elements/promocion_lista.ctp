@@ -41,7 +41,7 @@
         <div class="subtitulo">Opciones de promocion</div>
 
         <h5>Desde</h5>
-        Ciclo: <b><?php echo $cicloActual['nombre']; ?></b>
+        Ciclo: <b><?php echo $cicloaPromocionar['nombre']; ?></b>
         Seccion: <b><?php echo $curso['anio']." ".$curso['division']." ".$curso['turno']; ?></b>
 
         <input type="hidden" name="centro_id" value="<?php echo $centro['id'];?>">
