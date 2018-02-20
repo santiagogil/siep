@@ -38,7 +38,7 @@
 		    <div class="unit">
 		 		<div class="subtitulo">Opciones</div>
 				<div class="opcion"><?php echo $this->Html->link(__('Listar Secciones'), array('action' => 'index')); ?></div>
-				<?php if($current_user['role']): ?>
+				<?php if($current_user['role'] == "superadmin"): ?>
 					<div class="opcion"><?php echo $this->Html->link(__('Promocionar'), array('action' => 'index','controller' => 'Promocion',
 							'centro_id'=>$curso['Centro']['id'],
 							'curso_id'=>$curso['Curso']['id']
